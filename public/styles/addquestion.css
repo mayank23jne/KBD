@@ -1,0 +1,353 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgb(14, 15, 39);
+}
+
+.form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 30px;
+    background-color: rgb(57, 15, 79);
+    width: 550px;
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(246, 190, 63, 0.75);
+    -moz-box-shadow: 0px 0px 15px 5px rgba(246, 190, 63, 0.75);
+    box-shadow: 0px 0px 15px 5px rgba(246, 190, 63, 0.75);
+}
+
+#header {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 0px;
+    color: rgb(246, 190, 63);
+}
+
+#form-messages {
+    background-color: rgb(255, 232, 232);
+    border: 1px solid red;
+    color: red;
+    display: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 10px 25px;
+    max-width: 100%;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    margin: 10px 0px 5px 0px;
+    color: rgb(246, 190, 63);
+}
+
+input[type='text'],
+select {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+#status {
+    background-color: rgb(232, 255, 232);
+    border: 1px solid green;
+    color: green;
+    display: none;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px 25px;
+    max-width: 100%;
+}
+
+.form li {
+    list-style: none;
+}
+
+button {
+    display: block;
+    padding: 10px 20px;
+    background-color: transparent;
+    color: rgb(246, 190, 63);
+    box-shadow: none;
+    border-style: none;
+    width: 100%;
+    margin-top: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    border: 2px solid rgb(246, 190, 63);
+}
+
+@media screen and (max-width: 768px) {
+    .form {
+        width: 350px;
+        padding: 10px 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .form {
+        width: 300px;
+    }
+}
+
+
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#language-select {
+    width: 20%;
+    align-items: center;
+} */
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #1a1a40, #3a1c71);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Form Container */
+.form {
+    background: rgba(30, 30, 60, 0.95);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(255, 105, 180, 0.3);
+    animation: fadeIn 0.8s ease-in-out;
+    transition: transform 0.3s ease;
+}
+
+.form:hover {
+    transform: translateY(-5px);
+}
+
+/* Header */
+#header {
+    font-size: 28px;
+    font-weight: bold;
+    /* margin-bottom: 30px; */
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ff7eb9;
+}
+
+/* Form Messages */
+#form-messages, #status {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    display: none; /* Hidden by default */
+}
+
+/* Error Message */
+#form-messages {
+    background: #ff4757;
+    color: white;
+    border-left: 5px solid #e84118;
+}
+
+/* Success Message */
+#status {
+    background: #2ed573;
+    color: white;
+    border-left: 5px solid #1e90ff;
+}
+
+/* Labels */
+label {
+    display: block;
+    font-size: 18px;
+    margin: 20px 0 8px;
+    font-weight: 600;
+    color: #f5a623;
+}
+
+/* Input Fields (Text, Email, Password, Select) */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+select {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    outline: none;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    margin: 20px 5px 8px;
+}
+
+/* Input Focus Effect */
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+select:focus {
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.7);
+    transform: scale(1.02);
+}
+
+/* Placeholder Text Style */
+input::placeholder {
+    color: #666;
+}
+
+/* Buttons */
+button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background 0.4s ease, transform 0.2s ease;
+}
+
+/* Primary Button */
+button.primary {
+    background: linear-gradient(45deg, #ff7eb9, #ff477e);
+    color: white;
+    border: none;
+}
+
+/* Hover Effect for Primary Button */
+button.primary:hover {
+    background: linear-gradient(45deg, #ff477e, #ff7eb9);
+    transform: translateY(-3px);
+}
+
+/* Secondary Button */
+button.secondary {
+    background: linear-gradient(45deg, #4facfe, #00f2fe);
+    color: white;
+    border: none;
+}
+
+/* Hover Effect for Secondary Button */
+button.secondary:hover {
+    background: linear-gradient(45deg, #00f2fe, #4facfe);
+    transform: translateY(-3px);
+}
+
+/* Danger Button */
+button.danger {
+    background: linear-gradient(45deg, #ff6b6b, #ff4757);
+    color: white;
+    border: none;
+}
+
+/* Hover Effect for Danger Button */
+button.danger:hover {
+    background: linear-gradient(45deg, #ff4757, #ff6b6b);
+    transform: translateY(-3px);
+}
+
+/* Header Container (For Language Select) */
+.header-container {
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+    /* margin-bottom: 20px; */
+}
+
+/* Language Selector */
+#language-select , #question_type {
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #f5a623, #ff6348);
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Hover Effect for Language Selector */
+#language-select:hover , #question_type:hover {
+    background: linear-gradient(45deg, #ff6348, #f5a623);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .form {
+        padding: 30px;
+        margin-top: 6rem !important;
+    }
+
+    #header {
+        font-size: 24px;
+        width: 100% !important;
+        margin-bottom: 0px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+    .header-container{
+        display: block;
+    }
+    body {
+        align-items: start;
+    };
+}
+
+@media screen and (max-width: 480px) {
+    .form {
+        padding: 20px;
+        max-width: 350px;
+    }
+
+    #header {
+        font-size: 20px;
+    }
+
+    input, select, button {
+        font-size: 14px;
+    }
+    #select_container{
+        width: 100% !important;
+    }
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

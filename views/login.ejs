@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Welcome to KBD</title>
+        <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            .input-container {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .input-container label {
+                width: 100px;
+            }
+
+            .input-container input {
+                flex: 1;
+                padding: 5px;
+            }
+
+            #password, #new-password, #confirm-password {
+                width: 150px;
+            }
+            #select_container{
+                display: flex;
+                gap: 0.5rem;
+                width: 60%;
+            }
+            #header {
+                width: 100%;
+            }
+            #question_type{
+                width: 60%;
+            }
+            #language-select{
+                width: 50%;
+            }
+
+            /* Login Button - Sunset Orange */
+button.login {
+    background: linear-gradient(135deg, #5762f8, #ff58fa);
+    color: white;
+}
+
+button.login:hover {
+    background: linear-gradient(135deg, #3f4bf7, #f14dec);
+    box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
+}
+
+/* Signup Button - Hot Pink */
+button.signup {
+    background: linear-gradient(135deg, #5762f8, #ff58fa);
+    color: white;
+}
+
+button.signup:hover {
+    background: linear-gradient(135deg, #3f4bf7, #f14dec);
+    box-shadow: 0 12px 35px rgba(248, 87, 166, 0.7);
+}
+
+        </style>
+    </head>
+    <body>
+        <div class="form">
+            <!-- Header and Language Selector -->
+            <div class="header-container">
+                <div id="header">Welcome to KBD</div>
+                <div id="select_container">
+                    <select name="question_type" id="question_type" onchange="handleQuestionTypeChange()">
+                        <option value="Basic" id="option-beginner">Basic</option>
+                        <option value="Chhahdhala" id="option-advance">Chhahdhala</option>
+                    </select>
+                    <select id="language-select" onchange="changeLanguage()">
+                        <option value="en" selected>English</option>
+                        <option value="hi">हिन्दी</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- User Type Selection (Visible in both modes) -->
+            <div class="user-type" id="user-type">
+                <label style="width: fit-content;">
+                    <input type="radio" name="userType" value="guest" onchange="toggleUserType('guest')" />
+                    Guest User
+                </label>
+                <label style="width: fit-content;">
+                    <input type="radio" name="userType" value="registered" onchange="toggleUserType('registered')" checked />
+                    Registered User
+                </label>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" style="margin-top: 10px;">
+                <div id="credentials-container">
+                    <div class="input-container">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" placeholder="Enter your username" />
+                    </div>
+
+                    <div class="input-container">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" placeholder="Enter your password" />
+                    </div>
+                </div>
+
+                <button type="submit" class="login" id="btn-login">Login</button>
+
+                <p style="margin-top: 10px;">Don't have an account? <a  style="color: #ff77b9;" href="#" onclick="showSignupForm()">Sign up here</a></p>
+            </div>
+
+            <!-- Signup Form (Initially Hidden) -->
+            <div id="signup-form" style="display: none;margin-top: 10px;">
+                <div class="input-container">
+                    <label for="new-username">Username:</label>
+                    <input type="text" id="new-username" placeholder="Choose a username" />
+                </div>
+
+                <div class="input-container">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="Enter your email" />
+                </div>
+
+                <div class="input-container">
+                    <label for="new-password">Password:</label>
+                    <input type="password" id="new-password" placeholder="Create a password" />
+                </div>
+
+                <div class="input-container">
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm your password" />
+                </div>
+
+                <button type="submit" class="signup" id="btn-signup">Sign Up</button>
+
+                <p style="margin-top: 10px;">Already have an account? <a style="color: #ff77b9;" href="#" onclick="showLoginForm()">Login here</a></p>
+            </div>
+        </div>
+
+        <script>
+            function handleQuestionTypeChange() {
+                const questionType = document.getElementById("question_type").value;
+                const languageSelect = document.getElementById("language-select");
+
+                // If "Chhahdhala" is selected, switch to Hindi
+                if (questionType === "Chhahdhala") {
+                    languageSelect.value = "hi";
+                    languageSelect.disabled = true;
+                }else{
+                    languageSelect.value = "en";
+                    languageSelect.disabled = false;
+                }
+                changeLanguage();
+            }
+            function changeLanguage() {
+                const lang = document.getElementById("language-select").value;
+                const header = document.getElementById("header");
+                header.textContent = lang === "hi" ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है" : "Welcome to KBD";
+            }
+
+            function toggleUserType(type) {
+                const credentialsContainer = document.getElementById("credentials-container");
+                if (type === 'guest') {
+                    credentialsContainer.style.display = "none";
+                } else {
+                    credentialsContainer.style.display = "block";
+                }
+            }
+
+            function showSignupForm() {
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("signup-form").style.display = "block";
+                document.getElementById("user-type").style.display = "none";
+            }
+
+            function showLoginForm() {
+                document.getElementById("signup-form").style.display = "none";
+                document.getElementById("login-form").style.display = "block";
+                document.getElementById("user-type").style.display = "block";
+            }
+        </script>
+        <script src="/js/adduser.js"></script>
+    </body>
+</html>

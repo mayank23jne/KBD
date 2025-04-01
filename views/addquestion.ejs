@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Add Question</title>
+        <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="form">
+            <div class="header-container">
+                <div id="header">Add a Question</div>
+                <select id="language-select" onchange="changeLanguage()">
+                    <option value="en" selected>English</option>
+                    <option value="hi">हिन्दी</option>
+                </select>
+            </div>
+
+            <ul id="form-messages"></ul>
+
+            <label for="question" id="label-question">Question: </label>
+            <input type="text" id="question" oninput="validateInput(this)" />
+
+            <label for="option1" id="label-option1">Option 1: </label>
+            <input type="text" id="option1" oninput="validateInput(this)" />
+
+            <label for="option2" id="label-option2">Option 2: </label>
+            <input type="text" id="option2" oninput="validateInput(this)" />
+
+            <label for="option3" id="label-option3">Option 3: </label>
+            <input type="text" id="option3" oninput="validateInput(this)" />
+
+            <label for="option4" id="label-option4">Option 4: </label>
+            <input type="text" id="option4" oninput="validateInput(this)" />
+
+            <label for="answer" id="label-answer">Answer: </label>
+            <input type="text" id="answer" placeholder="2" />
+
+            <label for="slot" id="label-slot">Slot: </label>
+            <select name="price" id="price">
+                <option value="1000">1000</option>
+                <option value="2000">2000</option>
+                <option value="3000">3000</option>
+                <option value="5000">5000</option>
+                <option value="10000">10000</option>
+                <option value="20000">20000</option>
+                <option value="40000">40000</option>
+                <option value="80000">80000</option>
+                <option value="160000">160000</option>
+                <option value="320000">320000</option>
+                <option value="640000">640000</option>
+                <option value="1250000">1250000</option>
+                <option value="2500000">2500000</option>
+                <option value="5000000">5000000</option>
+                <option value="10000000">10000000</option>
+                <option value="70000000">70000000</option>
+            </select>
+
+            <label for="label_question_type" id="label-question_type">Question Type: </label>
+            <select name="question_type" id="question_type">
+                <option value="Beginner" id="option-beginner">Beginner</option>
+                <option value="Advance" id="option-advance">Advance</option>
+            </select>
+
+            <ul id="status"></ul>
+
+            <button type="submit" id="btn-submit">Add Question</button>
+        </div>
+
+        <script>
+
+            async function changeLanguage() {
+                const language = document.getElementById('language-select').value;
+
+                const labels = {
+                    en: {
+                        header: 'Add a Question',
+                        question: 'Question:',
+                        option1: 'Option 1:',
+                        option2: 'Option 2:',
+                        option3: 'Option 3:',
+                        option4: 'Option 4:',
+                        answer: 'Answer:',
+                        slot: 'Slot:',
+                        question_type: 'Question Type:',
+                        submit: 'Add Question',
+                        beginner: 'Beginner',
+                        advance: 'Advance'
+                    },
+                    hi: {
+                        header: 'प्रश्न जोड़ें',
+                        question: 'प्रश्न:',
+                        option1: 'विकल्प 1:',
+                        option2: 'विकल्प 2:',
+                        option3: 'विकल्प 3:',
+                        option4: 'विकल्प 4:',
+                        answer: 'उत्तर:',
+                        slot: 'स्लॉट:',
+                        question_type: 'प्रश्न प्रकार:',
+                        submit: 'प्रश्न जोड़ें',
+                        beginner: 'शुरुआती',
+                        advance: 'उन्नत'
+                    }
+                };
+
+                const langLabels = labels[language];
+
+                document.getElementById('header').innerText = langLabels.header;
+                document.getElementById('label-question').innerText = langLabels.question;
+                document.getElementById('label-option1').innerText = langLabels.option1;
+                document.getElementById('label-option2').innerText = langLabels.option2;
+                document.getElementById('label-option3').innerText = langLabels.option3;
+                document.getElementById('label-option4').innerText = langLabels.option4;
+                document.getElementById('label-answer').innerText = langLabels.answer;
+                document.getElementById('label-slot').innerText = langLabels.slot;
+                document.getElementById('label-question_type').innerText = langLabels.question_type;
+                document.getElementById('btn-submit').innerText = langLabels.submit;
+                document.getElementById('option-beginner').innerText = langLabels.beginner;
+                document.getElementById('option-advance').innerText = langLabels.advance;
+
+                const inputs = ['question', 'option1', 'option2', 'option3', 'option4'];
+
+                // Clear input fields instead of translating
+                inputs.forEach(id => {
+                    document.getElementById(id).value = '';
+                });
+            }
+
+            function validateInput(input) {
+                const language = document.getElementById('language-select').value;
+                if (language === 'hi') {
+                    const hindiRegex = /^[\u0900-\u097F\s\p{P}\p{S}]+$/u;
+                    if (!hindiRegex.test(input.value)) {
+                        input.value = input.value.replace(/[^\u0900-\u097F\s\p{P}\p{S}]/gu, '');
+                    }
+                }
+            }
+
+            window.onload = changeLanguage;
+        </script>
+        <script src="/js/addquestion.js"></script>
+    </body>
+</html>
