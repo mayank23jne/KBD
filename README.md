@@ -1,4 +1,4 @@
-# Kaun Banega Crorepati
+# Kaun Banega Dharm Shiromani
 
 ## About
 
