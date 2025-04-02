@@ -182,6 +182,8 @@
                 </div>
             </div>
 
+            <div id="score_overlay" style="display: none;"></div>
+
         </div>
 
 
@@ -247,15 +249,21 @@
             }, 700);
 
             animate();
-
+            
 
             function showWinners() {
                 document.getElementById("winner-modal").style.display = "block";
+                document.getElementById("score_overlay").style.display = "block";
             }
 
             function closeModal() {
                 document.getElementById("winner-modal").style.display = "none";
+                document.getElementById("score_overlay").style.display = "none";
             }
+
+            document.getElementById("score_overlay").addEventListener('click',()=>{
+                closeModal();
+            });
         
         </script>
 
@@ -264,7 +272,7 @@
             /* Winner Button */
             #btn-winner {
                 background: #d14d00;
-                color: black;
+                color: white;
                 border: none;
                 padding: 8px 15px;
                 font-size: 1rem;
@@ -278,6 +286,19 @@
                 background: #b34201;
             }
 
+            #score_overlay{
+                position: fixed;
+                z-index: 9;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
             /* Modal Styles */
             .modal {
                 display: none;
@@ -286,7 +307,7 @@
                 left: 0;
                 top: 0;
                 width: 100%;
-                height: 100%;
+                /* height: 100%; */
                 background: rgba(0, 0, 0, 0.6);
                 display: flex;
                 justify-content: center;
