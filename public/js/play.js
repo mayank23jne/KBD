@@ -93,7 +93,7 @@ function updateTimer() {
     timeElapsed++;
     const minutes = Math.floor(timeElapsed / 60);
     const seconds = timeElapsed % 60;
-    console.log(`Time: ${minutes} min ${seconds} sec`);
+    // console.log(`Time: ${minutes} min ${seconds} sec`);
 }
 
 // Start counting time when page loads
