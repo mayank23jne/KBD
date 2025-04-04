@@ -125,7 +125,7 @@ buttons.lock.addEventListener('click', () => {
     lockLifelines(lifelines);
 
     // Pause timer if exists
-    if (slot <= 10) {
+    if (slot <= 16) {
         pauseTimer();
     }
 
@@ -178,7 +178,7 @@ buttons.quit.addEventListener('click', () => {
     show_overlay();
 
     // Pause timer if exists
-    if (slot <= 10) {
+    if (slot <= 16) {
         pauseTimer();
     }
 
@@ -297,7 +297,7 @@ function changeLanguage() {
 
 
     let language = document.querySelector('input[name="language"]:checked').value || ''; 
-    console.log(`Level: ${slot}, Language: ${language}`);
+    // console.log(`Level: ${slot}, Language: ${language}`);
 
     // Make question AJAX request
     let questionRequest = new XMLHttpRequest();
@@ -370,14 +370,16 @@ function getQuestion(price) {
     // Set the time based on slot
     if (slot <= 5) {
         setTimer(45);
-    } else if (slot <= 10) {
+    } else if (slot <= 16) {
         setTimer(60);
     } else {
         setTimer(null);
     }
 
     let language = document.querySelector('input[name="language"]:checked').value || ''; 
-    console.log(`Level: ${slot}, Language: ${language}`);
+    // console.log(`Level: ${slot}, Language: ${language}`);
+
+    document.getElementById('levels-btn').innerHTML = `Level :- ${slot}`;
 
     // Make question AJAX request
     let questionRequest = new XMLHttpRequest();
@@ -458,7 +460,7 @@ function setQuestion(questionObject) {
     if (slot != 16) unlockLifelines(lifelines);
 
     // Start the timer if slots < 10
-    if (slot <= 10) {
+    if (slot <= 16) {
         startResumeTimer();
     }
     // }, 1000);
@@ -615,15 +617,19 @@ function endGame() {
     });
 }
 
+const lifelineAudio = new Audio("../audio/lifeline.wav");
+
 lifelines.audiencePoll.addEventListener('click', () => {
     // Pause the timer if it exists
-    if (slot <= 10) {
+    if (slot <= 16) {
         pauseTimer();
     }
 
     const div = document.getElementById('audience-poll-div');
     if (div.classList.contains('unused')) {
         // Use the lifeline
+
+        lifelineAudio.play();
 
         // Send Audience Poll AJAX Request
         const audiencePollRequest = new XMLHttpRequest();
@@ -677,7 +683,7 @@ lifelines.audiencePoll.addEventListener('click', () => {
             close_overlay();
 
             // Resume the timer if it exists
-            if (slot <= 10) {
+            if (slot <= 16) {
                 startResumeTimer();
             }
         });
@@ -692,6 +698,8 @@ lifelines.audiencePoll.addEventListener('click', () => {
 lifelines.fiftyFifty.addEventListener('click', () => {
     const div = document.getElementById('50-50-div');
     if (div.classList.contains('unused')) {
+
+        lifelineAudio.play();
         // Use the lifeline
 
         fiftyFiftyDetailsContainer.is50 = true;
@@ -748,6 +756,7 @@ lifelines.fiftyFifty.addEventListener('click', () => {
 lifelines.flipTheQuestion.addEventListener('click', () => {
     const div = document.getElementById('flip-the-question-div');
     if (div.classList.contains('unused')) {
+        lifelineAudio.play();
         // Use the lifeline
         // dialogs.flipDialog.style.display = 'block';
         isFlip = true;
@@ -760,7 +769,7 @@ lifelines.flipTheQuestion.addEventListener('click', () => {
 
 function flipTheQuestionMethod() {
     // Pause the timer if it exists
-    if (slot <= 10) {
+    if (slot <= 16) {
         pauseTimer();
     }
 
@@ -774,12 +783,13 @@ function flipTheQuestionMethod() {
 // Ask the expert
 lifelines.askTheExpert.addEventListener('click', () => {
     // Pause the timer if it exists
-    if (slot <= 10) {
+    if (slot <= 16) {
         pauseTimer();
     }
 
     const div = document.getElementById('ask-the-expert-div');
     if (div.classList.contains('unused')) {
+        lifelineAudio.play();
         // Use the lifeline
 
         // Send Ask The Expert AJAX Request
@@ -834,7 +844,7 @@ lifelines.askTheExpert.addEventListener('click', () => {
             close_overlay();
 
             // Resume the timer if it exists
-            if (slot <= 10) {
+            if (slot <= 16) {
                 startResumeTimer();
             }
         });
@@ -865,10 +875,19 @@ function setTimer(time) {
     }
 }
 
+const tickAudio = new Audio("../audio/countclock.wav");
+
 function startResumeTimer() {
     if (!timer.running) {
         // Start or Resume Timer
         timer.running = true;
+
+        // setTimeout(() => {
+        //     // Play Tick-Tick Sound (Loop)
+        //     tickAudio.loop = true;
+        //     tickAudio.play();
+        // }, 1000);
+
         decrementTimer(timer.timeLeft);
     }
 }
@@ -877,6 +896,10 @@ function pauseTimer() {
     if (timer.running) {
         // Pause Timer
         timer.running = false;
+
+        // Stop Tick-Tick Sound
+        tickAudio.pause();
+        tickAudio.currentTime = 0; // Reset audio to the start
     }
 }
 
@@ -890,6 +913,9 @@ function decrementTimer() {
                 timer.left.style.width = progress + '%';
                 timer.right.style.width = progress + '%';
                 timer.span.innerHTML = timer.timeLeft;
+
+                tickAudio.play();
+
                 decrementTimer();
             } else {
                 console.log('Time is up');
@@ -904,7 +930,7 @@ function decrementTimer() {
 // Function to move the lifelines on mobile and restore on desktop
 function moveLifeline() {
     const lifelineDiv = document.getElementById('desk_lifeline'); // Lifelines div
-    const languageContainer = document.querySelector('.language-container'); // Language container
+    const languageContainer = document.querySelector('.topheader'); // Language container
     // const aside = document.querySelector('aside'); // Sidebar
     const aside = document.getElementById('side_aside'); // Sidebar
 
@@ -935,10 +961,6 @@ window.addEventListener('resize', moveLifeline);
 
 
 
-
-
-
-
 // Get elements
 const levelsBtn = document.getElementById('levels-btn');
 const sideAside = document.getElementById('side_aside');
@@ -956,12 +978,8 @@ levelsBtn.addEventListener('click', () => {
     document.body.style.overflow = 'hidden'; // Disable scrolling
 });
 
-// Close popup
-const closePopupFunc = () => {
-    sideAside.classList.remove('active');
-    overlay.classList.remove('active');
-    document.body.style.overflow = ''; // Restore scrolling
-};
+closePopup.addEventListener('click', () => {
+    sideAside.classList.toggle('active');
+    overlay.classList.toggle('active');
+})
 
-closePopup.addEventListener('click', closePopupFunc);
-overlay.addEventListener('click', closePopupFunc);

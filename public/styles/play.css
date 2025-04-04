@@ -46,6 +46,7 @@ main {
     align-items: baseline;
     /* background: inherit; */
     justify-content: center;
+    margin-top: 12rem;
 }
 
 .timer {
@@ -82,7 +83,7 @@ main {
     position: relative;
     background: inherit;
     width: 30%;
-    height: 25px;
+    height: 20px;
     padding-bottom: 10px;
 }
 
@@ -129,7 +130,7 @@ main {
     background-color: #390f4e;
     color: #ffffff;
     width: 100%;
-    height: 100px;
+    min-height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -153,7 +154,7 @@ main {
 .answer {
     position: relative;
     background-color: #390f4e;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding: 15px 20px;
     color: #ffffff;
     cursor: pointer;
@@ -199,6 +200,7 @@ main {
     display: grid;
     grid-template-columns: 49.5% 49.5%;
     grid-column-gap: 1%;
+    margin-top: -25px;
 }
 
 #lock-button {
@@ -422,7 +424,15 @@ aside {
         display: flex;
         justify-content: space-between;
         gap: 10px;
-        margin: 20px 0;
+        /* margin: 20px 0; */
+        height: 8%;
+    }
+    .lifeline #fifty-fifty-image {
+        width: 50%;
+    }
+
+    .timer-div{
+        margin-top: 0rem;
     }
 
     /* Lifeline Buttons */
@@ -433,10 +443,11 @@ aside {
         cursor: pointer;
         transition: transform 0.3s ease;
         width: 20%;
+        height: 50px;
     }
 
     .lifeline img {
-        width: 50px; /* Icon size */
+        width: 30px; /* Icon size */
     }
 
     /* Hover Effect */
@@ -466,6 +477,10 @@ aside {
 
     aside .lifelines {
         display: none; /* Hide from aside on mobile */
+    }
+
+    #mob_id{
+        justify-content: space-around;
     }
 }
 
@@ -498,13 +513,14 @@ aside {
 
 @media (max-width: 768px) {
     .buttons {
-        grid-template-columns: 100%;
-        /* gap: 5px; */
+        /* grid-template-columns: 100%; */
+        gap: 10px;
+        display: flex !important;
     }
-    #quit-button{
+    /* #quit-button{
         margin-top: 15px;
         margin-bottom: 40px;
-    }
+    } */
 }
 
 
@@ -532,7 +548,7 @@ aside {
 @media (max-width: 768px) {
     #answer-container {
         grid-template-columns: 100%;
-        gap: 10px;
+        gap: 5px;
     }
 }
 
@@ -541,6 +557,15 @@ aside {
     .dialog {
         width: 80%;
     }
+    /* .language-container {
+        margin-top: 20px !important;
+    } */
+
+    .custom-radio {
+        padding: 5px 20px !important;
+    }
+
+
 }
 
 
@@ -548,10 +573,11 @@ aside {
 /* Language Container */
 .language-container {
     display: flex;
-    gap: 25px;
-    justify-content: center;
+    gap: 20px;
+    /* justify-content: center; */
     align-items: center;
     margin: 25px 0;
+    margin-top: 0px;
     flex-wrap: wrap; /* Ensures responsiveness */
 }
 
@@ -564,14 +590,14 @@ aside {
 .custom-radio {
     display: inline-flex;
     align-items: center;
-    padding: 12px 24px;
+    padding: 10px 20px;
     border: 3px solid transparent; /* Border for hover animation */
     border-radius: 50px;
-    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    background: black;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    color: #390f4e;
+    color: white;
     font-family: 'Poppins', sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.4s ease;
@@ -581,17 +607,18 @@ aside {
 
 /* Add Glow Effect on Hover */
 .custom-radio:hover {
-    background: #f0d245;
-    color: #390f4e;
+    /* background: #927909; */
+    color: white;
     box-shadow: 0 8px 20px rgba(240, 210, 70, 0.7);
 }
 
 /* Checked State (When Selected) */
 .language-option input[type="radio"]:checked + .custom-radio {
-    background: linear-gradient(145deg, #f0d245, #ffdd44);
+    /* background: linear-gradient(145deg, #f0d245, #ffdd44); */
+    background: linear-gradient(45deg, #f5a623, #ff6348);;
     color: #390f4e;
-    border: 3px solid #ffd700;
-    box-shadow: 0 10px 30px rgba(255, 223, 70, 0.8);
+    border: 3px solid #f5a623;
+    box-shadow: 0 5px 30px rgba(255, 223, 70, 0.8);
     transform: scale(1.1); /* Slightly enlarge */
 }
 
@@ -606,30 +633,44 @@ aside {
 
 /* Main Section with Background Image */
 #main-section {
-    background: url('./../img/kbc.avif') no-repeat center center; /* Set image path */
-    background-size: cover; /* Ensure it covers the entire area */
+    background: url('./../img/LogoBG.png') no-repeat center center; /* Set image path */
+    background-size: 45%; /* Ensure it covers the entire area */
     width: 100%;
     height: auto;
+    background-position-y: 20px;
 }
 
+#left_header{
+    width: 85%;
+}
+
+#kbd_logo{
+    background: url(./../img/LogoBG.png) no-repeat center center;
+    background-size: 100%;
+    width: 25%;
+    height: 7rem;
+}
 
 .language-option input:disabled + .custom-radio {
-    background-color: #ccc; /* Gray out disabled option */
+    background-color: black; /* Gray out disabled option */
     pointer-events: none;   /* Prevent hover or click events */
     cursor: not-allowed;    /* Change cursor style */
     opacity: 0.6;           /* Optional: Lower opacity for a disabled look */
+    color: white;
   }
   
   /* Optional: Remove hover effects on the label when disabled */
   .language-option input:disabled + .custom-radio:hover {
-    background-color: #ccc; /* Maintain the same background */
+    background-color: black; /* Maintain the same background */
+    color: white;
   }
   
 
   @media (max-width: 768px) {
     .price-table {
-        padding: 0 50px; /* Reduce padding for smaller screens */
-        width: 90%; /* Ensure responsiveness */
+        padding: 60px 50px;
+        width: 90%;
+        padding-bottom: 0px;
     }
 }
 
@@ -643,7 +684,7 @@ aside {
 /* Global Button Styles */
 .btn {
     display: block;
-    padding: 10px 20px;
+    padding: 6px 12px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 30px;
@@ -653,10 +694,14 @@ aside {
 
 /* Levels Button (Opens Popup) */
 .levels-btn {
-    background: linear-gradient(45deg, #9800fe, #feae00);
+    /* background: linear-gradient(45deg, #9800fe, #feae00); */
+    background: linear-gradient(45deg, #9800fe, #4facfe);
     color: white;
-    box-shadow: 0 8px 20px rgba(0, 242, 254, 0.4);
+    /* box-shadow: 0 3px 20px rgba(0, 242, 254, 0.4); */
     display: block;
+    font-size: 14px;
+    height: 40px;
+    margin: 12px auto;
 
     /* z-index: 10000;  */
 }
@@ -669,6 +714,19 @@ aside {
 
 .levels-btn:active {
     transform: scale(0.95);
+}
+
+.level-btn {
+    background: linear-gradient(45deg, #9800fe, #4facfe);
+    color: white;
+    display: block;
+    font-size: 14px;
+    height: 40px;
+    pointer-events: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    margin: 13px auto;
 }
 
 /* Close Button (Inside Popup) */
@@ -711,12 +769,62 @@ aside {
     cursor: pointer;
 }
 
+
+#id_mobusername {
+    display: none;
+    font-weight: bold;
+    padding: 6px 12px;
+    background: rgba(30, 30, 60, 0.95); /* Light transparent background */
+    border-radius: 20px;
+    color: #f0d245;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    width: fit-content;
+    margin-left: 15px;
+}
+
+/* Hover effect */
+#id_mobusername:hover {
+    background: rgba(43, 43, 112, 0.95);
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+body{
+    background-color: black !important;
+}
+
 /* Mobile responsiveness */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    /* #main-section {
+        background: url('./../img/LogoBG.png') no-repeat center center; 
+        background-size: 30%;
+        width: 100%;
+        height: auto;
+        background-position-y: 1.5%;
+        background-position-x: 95%;
+    } */
     #main-section {
-        flex-direction: column;
+        background-color: black !important;
+        background:url('');
+        overflow-x: hidden !important;
+    }
+    /* #id_mobusername{
+        gap: 5px;
+        display: flex !important
+;
+        align-items: center;
+    }
+    #id_username{
+        display: none;
+    } */
+
+
+    #id_username {
+        padding: 8px 12px !important;
+        width: 8rem;
         text-align: center;
-        padding: 20px;
     }
 
 }
@@ -734,6 +842,7 @@ aside {
     transition: right 0.5s ease;
     overflow-y: auto;
     border-radius: 30px 0 0 30px;
+    overflow-x: hidden;
 }
 
 /* Show popup when active */
@@ -779,4 +888,116 @@ aside {
     .btn {
         display: none;
     }
+    .level-btn {
+        display: none;
+    }
 }
+
+
+/* Container for the language selector */
+.language-container {
+    position: relative;
+    display: inline-block;
+    background: black;
+    color: white;
+    border-radius: 25px;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.language-container i {
+    font-size: 18px;
+}
+
+.language-container span {
+    white-space: nowrap;
+}
+
+
+
+
+
+/* Language Selector Container */
+.language-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    /* background: linear-gradient(45deg, #f5a623, #ff6348); */
+    color: white;
+    border-radius: 25px;
+    padding: 0px 10px;
+    font-size: 14px;
+    font-weight: bold;  
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    height: 40px;
+    margin-top: 0px !important;
+}
+
+.language-container i {
+    font-size: 18px;
+}
+
+/* Custom Styled Select */
+.language-select {
+    appearance: none; /* Hide default dropdown arrow */
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    padding: 10px 5px;
+    /* padding-right: 20px;  */
+}
+
+.language-container select:focus {
+    outline: none;
+}
+
+
+/* Style for dropdown items */
+.custom-option {
+    font-size: 16px;
+    padding: 5px;
+}
+
+
+
+
+
+.tooltip-text {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 999;
+    left: -10px; /* Shift it to the left */
+    top: 100%;
+    transform: translate(0%, 0%); /* Move fully left and center vertically */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+ }
+
+ @media (max-width: 768px) {
+    .mobile-tooltip {
+       position: relative;
+       cursor: pointer;
+    }
+
+    .tooltip-text.show {
+       display: block;
+       opacity: 1;
+    }
+ }

@@ -27,24 +27,48 @@
     </head>
     
     <body>
-       <main id="main-section">
-         <div id="top_header" style="display: flex;">
-            <button id="levels-btn" class="btn levels-btn">&#10140; Levels</button>
-            <div id="id_username"> <i class="fa-solid fa-user"></i> <%= username %></div>
-         </div>
-            <div class="language-container">
-               <label class="language-option">
-                  <input type="radio" name="language" value="en" id="lang-en" onchange="changeLanguage()" checked />
-                  <span class="custom-radio">English</span>
-               </label>
-         
-               <label class="language-option">
-                  <input type="radio" name="language" value="hi" id="lang-hi" onchange="changeLanguage()" />
-                  <span class="custom-radio">हिन्दी</span>
-               </label>
+         <main id="main-section">
+            <div id="top_header" class="topheader" style="display: flex; justify-content: space-around;">
+               <div id="left_header">  
+                  <div id="mob_id" style="display: flex;">
+                     <!-- <div id="id_mobusername" style="display: none;"> <i class="fa-solid fa-user"></i> <%= username %></div> -->
+                     
+                     <!-- Language Button -->
+                     <!-- Language Selector -->
+                     <!-- <div class="language-container">
+                        <i class="fa-solid fa-globe"></i>
+                        <select id="language-select" class="language-select" onchange="changeLanguage()">
+                           <option value="en" id="lang-en" class="custom-option">English</option>
+                           <option value="hi" id="lang-hi" class="custom-option" selected>हिन्दी</option> 
+                        </select>
+                     </div> -->
+                  </div>
+                  <div class="language-container">
+                     <label class="language-option">
+                        <input type="radio" name="language" class="language-select" value="en" id="lang-en" onchange="changeLanguage()"  />
+                        <span class="custom-radio">English</span>
+                     </label>
+               
+                     <label class="language-option">
+                        <input type="radio" name="language" class="language-select" value="hi" id="lang-hi" onchange="changeLanguage()" checked/>
+                        <span class="custom-radio">हिन्दी</span>
+                     </label>
+                  </div>
+               </div>
+               <div id="right_header">
+                  <div id="id_username" class="mobile-tooltip" title="<%= username %>" onclick="showTooltip()">
+                     <i class="fa-solid fa-user"></i>
+                     <span>
+                        <%= username.length > 6 ? username.substring(0, 6) + '...' : username %>
+                        <span id="username-tooltip" class="tooltip-text"><%= username %></span>
+                     </span>
+                  </div>
+               </div>
             </div>
-        
-
+            <div id="show_level">
+               <!-- <button id="level-btn" class="btn level-btn">Level: </button> -->
+               <button id="levels-btn" class="btn levels-btn">&#10140; Level: </button>
+            </div>
             <aside>
 
                <!-- <div class="lifelines" id="mobile_lifeline" >
@@ -456,5 +480,24 @@
       </aside>
 
       <script src="/js/play.js" type="text/javascript"></script>
+
+      <script>
+         let tooltipTimeout;
+      
+         function showTooltip() {
+            const tooltip = document.getElementById("username-tooltip");
+      
+            // Clear any existing timeout
+            clearTimeout(tooltipTimeout);
+      
+            // Show tooltip
+            tooltip.classList.add("show");
+      
+            // Hide after 5 seconds
+            tooltipTimeout = setTimeout(() => {
+               tooltip.classList.remove("show");
+            }, 3000);
+         }
+      </script>
    </body>
 </html>

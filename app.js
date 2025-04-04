@@ -10,6 +10,7 @@ const mysql = require('mysql2'); // Use mysql2 instead of mongoose
 
 require('dotenv/config');
 
+
 // Middlewares
 app.set('view engine', 'ejs');
 app.use(cors());

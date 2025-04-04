@@ -30,12 +30,15 @@ signupForm.submit.addEventListener('click', () => {
     })
         .then((response) => response.json())
         .then((data) => {
+            console.log("get response from the api: ",data);
             if (data.error) {
                 alert(data.error);
             } else {
                 // alert('User registered successfully!');
                 clearSignupForm();
                 window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`
+                // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
+
             }
         })
         .catch((err) => console.error('Error:', err));
@@ -105,7 +108,11 @@ loginForm.submit.addEventListener('click', () => {
             } else {
                 // Optionally, clear the signup form
                 clearSignupForm();
+                console.log(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`)
+            
                 window.location.href = current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`;
+                // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
+
             }
         })
         .catch((err) => console.error('Error:', err));
