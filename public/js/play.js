@@ -55,7 +55,8 @@ const lifelines = {
 // Fifty Fifty Booleans
 const fiftyFiftyDetailsContainer = {
     is50: false,
-    removedOptions: []
+    removedOptions: [],
+    used_question_id:''
 };
 
 // Buttons Container
@@ -317,7 +318,7 @@ function changeLanguage() {
                 setQuestion(responseObject);
                 
                 const div = document.getElementById('50-50-div');
-                if ((fiftyFiftyDetailsContainer.is50) && (used_slot === slot)){
+                if ((fiftyFiftyDetailsContainer.is50) && (used_slot === slot) &&  (fiftyFiftyDetailsContainer.used_question_id === responseObject.id)){
                     console.log('Entered 50-50 to Experts');
                     let removedOption1 = fiftyFiftyDetailsContainer.removedOptions[0];
                     let removedOption2 = fiftyFiftyDetailsContainer.removedOptions[1];
@@ -620,13 +621,13 @@ function endGame() {
 const lifelineAudio = new Audio("../audio/lifeline.wav");
 
 lifelines.audiencePoll.addEventListener('click', () => {
-    // Pause the timer if it exists
-    if (slot <= 16) {
-        pauseTimer();
-    }
-
+    
     const div = document.getElementById('audience-poll-div');
     if (div.classList.contains('unused')) {
+        // Pause the timer if it exists
+        if (slot <= 16) {
+            pauseTimer();
+        }
         // Use the lifeline
 
         lifelineAudio.play();
@@ -703,6 +704,8 @@ lifelines.fiftyFifty.addEventListener('click', () => {
         // Use the lifeline
 
         fiftyFiftyDetailsContainer.is50 = true;
+
+        fiftyFiftyDetailsContainer.used_question_id = questionId;
 
         used_slot = slot;
 
@@ -782,13 +785,13 @@ function flipTheQuestionMethod() {
 
 // Ask the expert
 lifelines.askTheExpert.addEventListener('click', () => {
-    // Pause the timer if it exists
-    if (slot <= 16) {
-        pauseTimer();
-    }
-
+    
     const div = document.getElementById('ask-the-expert-div');
     if (div.classList.contains('unused')) {
+        // Pause the timer if it exists
+        if (slot <= 16) {
+            pauseTimer();
+        }
         lifelineAudio.play();
         // Use the lifeline
 
