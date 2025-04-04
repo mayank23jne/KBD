@@ -179,8 +179,8 @@ body {
  
    /* Your existing styles for mobile */
    #logo-img {
-      width: 100%;
-      height: 60%;
+      width: 90%;
+      height: 48%;
       transform: translateX(-50%);
       top: 20%;
    }
