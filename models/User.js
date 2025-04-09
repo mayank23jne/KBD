@@ -73,14 +73,14 @@ const pool = require('../db');
 
 class User {
     // Create a new user
-    static async createUser({ username, email, password, userType = 'registered' }) {
+    static async createUser({ username, email, mobile, password, userType = 'registered' }) {
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
             const query = `
-                INSERT INTO users (id, username, email, password, user_type) 
-                VALUES (UUID(), ?, ?, ?, ?)
+                INSERT INTO users (id, username, email, password, user_type, mobile_no) 
+                VALUES (UUID(), ?, ?, ?, ?, ?)
             `;
-            const [result] = await pool.query(query, [username, email, hashedPassword, userType]);
+            const [result] = await pool.query(query, [username, email, hashedPassword, userType, mobile]);
             return result;
         } catch (error) {
             console.error('Error creating user:', error);

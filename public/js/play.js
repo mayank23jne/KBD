@@ -949,6 +949,11 @@ function setTimer(time) {
         timer.timeTotal = time;
         timer.left.style.width = '0%';
         timer.right.style.width = '0%';
+
+        document.getElementById('progress-bar-left').style.display = "none";
+        document.getElementById('progress-bar-right').style.display = "none";
+        timer.span.style.display = "none";
+
     } else {
         // Time is infinity
         timer.span.innerHTML = 0;
@@ -1002,19 +1007,55 @@ function pauseTimer() {
     }
 }
 
+// function decrementTimer() {
+//     if (timer.running) {
+//         setTimeout(() => {
+//             if (timer.timeLeft >= 1) {
+//                 timer.timeLeft--;
+//                 let progress =
+//                     100 - Math.floor((timer.timeLeft / timer.timeTotal) * 100);
+//                 timer.left.style.width = progress + '%';
+//                 timer.right.style.width = progress + '%';
+//                 timer.span.innerHTML = timer.timeLeft;
+
+//                 if(timer.timeLeft <= 10){
+//                     tickAudio.play();
+//                 }
+
+//                 decrementTimer();
+//             } else {
+//                 console.log('Time is up');
+//                 buttons.lock.click();
+//             }
+//         }, 1000);
+//     }
+// }
+
 function decrementTimer() {
     if (timer.running) {
         setTimeout(() => {
             if (timer.timeLeft >= 1) {
                 timer.timeLeft--;
-                let progress =
-                    100 - Math.floor((timer.timeLeft / timer.timeTotal) * 100);
-                timer.left.style.width = progress + '%';
-                timer.right.style.width = progress + '%';
-                timer.span.innerHTML = timer.timeLeft;
+                let progress = 100 - Math.floor((timer.timeLeft / timer.timeTotal) * 100);
 
-                if(timer.timeLeft <= 10){
+                if (timer.timeLeft <= 10) {
+                    // Show the elements
+                    document.getElementById('progress-bar-left').style.display = "block";
+                    document.getElementById('progress-bar-right').style.display = "block";
+                    timer.span.style.display = "block";
+
+                    // Update the UI
+                    timer.left.style.width = progress + '%';
+                    timer.right.style.width = progress + '%';
+                    timer.span.innerHTML = timer.timeLeft;
+
+                    // Play ticking sound
                     tickAudio.play();
+                } else {
+                    // Hide the elements before 10 seconds
+                    document.getElementById('progress-bar-left').style.display = "none";
+                    document.getElementById('progress-bar-right').style.display = "none";
+                    timer.span.style.display = "none";
                 }
 
                 decrementTimer();
@@ -1025,6 +1066,7 @@ function decrementTimer() {
         }, 1000);
     }
 }
+
 
 
 
@@ -1083,4 +1125,7 @@ closePopup.addEventListener('click', () => {
     sideAside.classList.toggle('active');
     overlay.classList.toggle('active');
 })
+
+
+
 

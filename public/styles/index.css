@@ -179,10 +179,10 @@ body {
  
    /* Your existing styles for mobile */
    #logo-img {
-      width: 77%;
-      height: 40%;
+      width: 300px;
+      height: 300px;
       transform: translateX(-50%);
-      top: 25%;
+      top: 30%;
    }
    
    #amitabh-img {
@@ -247,13 +247,26 @@ body {
    }
  }
  
+
+ /* Landscape with max-height and max-width */
+@media screen and (orientation: landscape) and (max-height: 600px) and (max-width: 800px) {
+   #logo-img {
+     width: 225px;
+     height: 225px;
+     left: 50%;
+     top: 15% !important;
+   }
+ 
+ }
+
  /* Landscape Mode */
 @media screen and (orientation: landscape) {
    @media (max-height: 600px) {
       #logo-img {
-         width: 25%;
-         height: 65%;
+         width: 225px;
+         height: 225px;
          left: 50%;
+         /* margin-top: 4rem; */
          top: 48%;
       }
       #button {

@@ -4,6 +4,7 @@ current_url = window.location.origin;
 const signupForm = {
     username: document.getElementById('new-username'),
     email: document.getElementById('email'),
+    mobile: document.getElementById('mobile'),
     password: document.getElementById('new-password'),
     confirmPassword: document.getElementById('confirm-password'),
     language_select: document.getElementById('language-select'),
@@ -17,9 +18,19 @@ signupForm.submit.addEventListener('click', () => {
 
     let selected_level = document.querySelector('input[name="level"]:checked').value;
 
+    let username = signupForm.username.value;
+    let mobile = signupForm.mobile.value;
+    let email = signupForm.email.value;
+
+    // Check if email is empty or null
+    if (!email || email.trim() === "") {
+        email = `${username}${mobile}@gmail.com`;
+    }
+
     const requestData = {
         username: signupForm.username.value,
-        email: signupForm.email.value,
+        email: email,
+        mobile: signupForm.mobile.value,
         password: signupForm.password.value,
         confirmPassword: signupForm.confirmPassword.value,
         language_select: signupForm.language_select.value,
@@ -36,7 +47,15 @@ signupForm.submit.addEventListener('click', () => {
         .then((data) => {
             console.log("get response from the api: ",data);
             if (data.error) {
-                alert(data.error);
+                if (data.error.toLowerCase().includes("username")) {
+                    alert("❌ Username is already taken. Please choose another one.");
+                } else if (data.error.toLowerCase().includes("email")) {
+                    alert("❌ Email is already registered.");
+                } else if (data.error.toLowerCase().includes("mobile")) {
+                    alert("❌ Mobile number is already in use.");
+                } else {
+                    alert("❌ " + data.error); // fallback for unknown errors
+                }
             } else {
                 // alert('User registered successfully!');
                 clearSignupForm();
@@ -88,6 +107,7 @@ loginForm.submit.addEventListener('click', () => {
         const randomStr = generateRandomString(10); // Change length as needed
         signupForm.username.value = randomStr;
         signupForm.email.value = randomStr + '@guest.com'; // Optionally, use a domain for guest emails
+        signupForm.mobile.value = randomStr;
         signupForm.password.value = randomStr;
         signupForm.confirmPassword.value = randomStr;
 
@@ -95,6 +115,7 @@ loginForm.submit.addEventListener('click', () => {
         const requestData = {
             username: signupForm.username.value,
             email: signupForm.email.value,
+            mobile: signupForm.mobile.value,
             password: signupForm.password.value,
             confirmPassword: signupForm.confirmPassword.value,
             language_select: signupForm.language_select.value,

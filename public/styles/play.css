@@ -823,7 +823,6 @@ body{
 
     #id_username {
         padding: 8px 12px !important;
-        width: 8rem;
         text-align: center;
     }
 
@@ -1074,6 +1073,7 @@ body{
         }
         #id_username {
             padding: 5px 10px;
+            width: 8rem;
         }
     }
 }

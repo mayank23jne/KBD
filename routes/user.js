@@ -11,10 +11,10 @@ const e = require('express');
 // Register User
 router.post('/register', async (req, res) => {
     try {
-        const { username, email, password, confirmPassword, userType = 'registered' } = req.body;
+        const { username, email, mobile, password, confirmPassword, userType = 'registered' } = req.body;
 
         // Validation
-        if (!username || !email || !password || !confirmPassword) {
+        if (!username || !email ||!mobile || !password || !confirmPassword) {
             return res.status(400).json({ error: 'All fields are required.' });
         }
         if (password !== confirmPassword) {
@@ -26,9 +26,8 @@ router.post('/register', async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists.' });
         }
-
         // Create new user
-        await User.createUser({ username, email, password, userType });
+        await User.createUser({ username, email, mobile, password, userType });
 
         // Retrieve newly created user
         const user = await User.findOne({ username });
