@@ -105,6 +105,36 @@
                 }
             /* } */
 
+            /* Landscape Mode */
+            @media screen and (orientation: landscape) {
+                @media (max-height: 600px) {
+                    body{
+                        height: auto;
+                    }
+                    .scorecard-container{
+                        padding: 1rem 3rem;
+                    }
+                    #btn-winner{
+                        margin-top: -20px;
+                        font-weight: 500;
+                        left: 90%;
+                        height: 30px;
+                        width: 21%;
+                    }
+                    .score-item {
+                        padding: 2px 0;
+                    }
+                    #btn-play-again{
+                        left: 70%;
+                        margin-top: -40px;
+                    }
+                    #btn-home{
+                        left: 30%;
+                        margin-top: 1rem;
+                    }
+                }
+            }
+
         </style>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -197,13 +227,20 @@
 
 
         <script>
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+            const selected_level = getQueryParam('selected_level') || ''; 
+            const user_type = getQueryParam('user_type') || ''; 
+
             function goHome() {
                 window.location.href = '/';
             }
 
             function playAgain() {
                 let question_type = document.getElementById('question-type').innerText ;
-                window.location.href = `/play?q_type=${question_type}`;
+                window.location.href = `/play?q_type=${question_type}&level=${selected_level}&user_type=${user_type}`;
             }
 
             // Fireworks Animation

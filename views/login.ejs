@@ -65,24 +65,41 @@ button.signup:hover {
     box-shadow: 0 12px 35px rgba(248, 87, 166, 0.7);
 }
 
+
+
         </style>
     </head>
     <body>
         <div class="form">
             <!-- Header and Language Selector -->
             <div class="header-container">
-                <div id="header">Welcome to KBD</div>
+                <div id="header">Welcome to KBDS</div>
                 <div id="select_container">
                     <select name="question_type" id="question_type" onchange="handleQuestionTypeChange()">
                         <option value="Basic" id="option-beginner">Basic</option>
                         <option value="Chhahdhala" id="option-advance">Chhahdhala</option>
                     </select>
                     <select id="language-select" onchange="changeLanguage()">
-                        <option value="en" selected>English</option>
-                        <option value="hi">हिन्दी</option>
+                        <option value="en" >English</option>
+                        <option value="hi" selected>हिन्दी</option>
                     </select>
                 </div>
             </div>
+
+            <div class="flex items-center space-x-6" style="display: flex;">
+                <label class="text-white font-medium">Levels:</label>
+              
+                <label class="inline-flex items-center space-x-2">
+                  <input type="radio" name="level" value="basic" class="accent-pink-500" style="margin-left: 25px;" checked>
+                  <span class="text-white">Basic</span>
+                </label>
+              
+                <label class="inline-flex items-center space-x-2">
+                  <input type="radio" name="level" value="expert" class="accent-pink-500" style="margin-left: 25px;">
+                  <span class="text-white">Expert</span>
+                </label>
+            </div>
+              
 
             <!-- User Type Selection (Visible in both modes) -->
             <div class="user-type" id="user-type">
@@ -98,45 +115,56 @@ button.signup:hover {
 
             <!-- Login Form -->
             <div id="login-form" style="margin-top: 10px;">
-                <div id="credentials-container">
-                    <div class="input-container">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" placeholder="Enter your username" />
+                <div class="login_landscape">
+                    <div id="credentials-container">
+                        <div class="input-container">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" placeholder="Enter your username" />
+                        </div>
+    
+                        <div class="input-container">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" placeholder="Enter your password" />
+                        </div>
                     </div>
 
-                    <div class="input-container">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" placeholder="Enter your password" />
-                    </div>
                 </div>
-
                 <button type="submit" class="login" id="btn-login">Login</button>
+
 
                 <p style="margin-top: 10px;">Don't have an account? <a  style="color: #ff77b9;" href="#" onclick="showSignupForm()">Sign up here</a></p>
             </div>
 
             <!-- Signup Form (Initially Hidden) -->
             <div id="signup-form" style="display: none;margin-top: 10px;">
-                <div class="input-container">
-                    <label for="new-username">Username:</label>
-                    <input type="text" id="new-username" placeholder="Choose a username" />
-                </div>
+                <div class="login_landscape">
+                    <div id="credentials-container">
+                        <div id="two_container">
+                            <div class="input-container">
+                                <label id="singup_label" for="new-username">Username:</label>
+                                <input class="signup_input" type="text" id="new-username" placeholder="Choose a username" />
+                            </div>
+    
+                            <div class="input-container">
+                                <label id="singup_label" for="email">Email:</label>
+                                <input class="signup_input" type="email" id="email" placeholder="Enter your email" />
+                            </div>
+                        </div>
+                        <div id="two_container">             
+                            <div class="input-container">
+                                <label id="singup_label" for="new-password">Password:</label>
+                                <input class="signup_input" type="password" id="new-password" placeholder="Create a password" />
+                            </div>
+    
+                            <div class="input-container">
+                                <label id="singup_label" for="confirm-password">Confirm Password:</label>
+                                <input class="signup_input" type="password" id="confirm-password" placeholder="Confirm your password" />
+                            </div>
+                        </div>
+                        
+                    </div>
 
-                <div class="input-container">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" placeholder="Enter your email" />
                 </div>
-
-                <div class="input-container">
-                    <label for="new-password">Password:</label>
-                    <input type="password" id="new-password" placeholder="Create a password" />
-                </div>
-
-                <div class="input-container">
-                    <label for="confirm-password">Confirm Password:</label>
-                    <input type="password" id="confirm-password" placeholder="Confirm your password" />
-                </div>
-
                 <button type="submit" class="signup" id="btn-signup">Sign Up</button>
 
                 <p style="margin-top: 10px;">Already have an account? <a style="color: #ff77b9;" href="#" onclick="showLoginForm()">Login here</a></p>
@@ -153,7 +181,7 @@ button.signup:hover {
                     languageSelect.value = "hi";
                     languageSelect.disabled = true;
                 }else{
-                    languageSelect.value = "en";
+                    languageSelect.value = "hi";
                     languageSelect.disabled = false;
                 }
                 changeLanguage();
@@ -161,15 +189,19 @@ button.signup:hover {
             function changeLanguage() {
                 const lang = document.getElementById("language-select").value;
                 const header = document.getElementById("header");
-                header.textContent = lang === "hi" ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है" : "Welcome to KBD";
+                header.textContent = lang === "hi" ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है" : "Welcome to KBDS";
             }
+            changeLanguage();
 
             function toggleUserType(type) {
                 const credentialsContainer = document.getElementById("credentials-container");
+                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
+
                 if (type === 'guest') {
                     credentialsContainer.style.display = "none";
                 } else {
-                    credentialsContainer.style.display = "block";
+                    credentialsContainer.style.display = isShortScreen ? "flex" : "block";
+                    
                 }
             }
 
@@ -182,7 +214,10 @@ button.signup:hover {
             function showLoginForm() {
                 document.getElementById("signup-form").style.display = "none";
                 document.getElementById("login-form").style.display = "block";
-                document.getElementById("user-type").style.display = "block";
+
+                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
+                const user_type_div = document.getElementById('user-type');
+                user_type_div.style.display = isShortScreen ? "flex" : "block";
             }
         </script>
         <script src="/js/adduser.js"></script>

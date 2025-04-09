@@ -3,6 +3,7 @@
 const current_url = window.location.origin;
 let is_correct = false;
 let used_slot = 0;
+let count_lifeline = {};
 
 let questionId = 0,
     option1 = '',
@@ -65,26 +66,54 @@ const buttons = {
     quit: document.getElementById('quit-button')
 };
 
-// Slot Container (Started array from 1)
-const slots = [
-    0,
-    1000,
-    2000,
-    3000,
-    5000,
-    10000,
-    20000,
-    40000,
-    80000,
-    160000,
-    320000,
-    640000,
-    1250000,
-    2500000,
-    5000000,
-    10000000,
-    70000000
-];
+
+// Function to get query parameter value from URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Get language from the URL (e.g., ?language=english)
+// const language = getQueryParam('lang') || ''; // Default to 'english'
+const question_type = getQueryParam('q_type') || ''; 
+const selected_level = getQueryParam('level') || ''; 
+const user_type = getQueryParam('user_type') || ''; 
+
+let slots = [];
+
+if(selected_level === 'expert'){
+    // Slot Container (Started array from 1)
+    const levelslots = [
+        0,
+        10000,
+        20000,
+        40000,
+        80000,
+        160000,
+        320000,
+        640000,
+        1250000,
+        2500000,
+        5000000,
+        10000000
+    ];
+    slots = levelslots;
+}else{
+    const levelslots = [
+        0,
+        1000,
+        2000,
+        3000,
+        5000,
+        10000,
+        20000,
+        40000,
+        80000,
+        160000,
+        320000
+    ];
+    slots = levelslots;
+}
 
 
 let timeElapsed = 0;
@@ -204,77 +233,7 @@ buttons.quit.addEventListener('click', () => {
     });
 });
 
-// function getQuestion(price) {
-//     // Lock Buttons and Lifelines
-//     lockButtons(buttons);
-//     lockLifelines(lifelines);
 
-//     // Set the time
-//     if (slot <= 5) {
-//         setTimer(45);
-//         console.log('Timer Entered if');
-//     } else if (slot <= 10) {
-//         setTimer(60);
-//         console.log('Timer Entered else if');
-//     } else {
-//         setTimer(null);
-//         console.log('Timer Entered else');
-//     }
-
-//     console.log(slots[slot]);
-//     console.log(slot);
-//     // Make question AJAX request
-//     let questionRequest = new XMLHttpRequest();
-//     questionRequest.onload = () => {
-//         let responseObject = null;
-
-//         try {
-//             responseObject = JSON.parse(questionRequest.responseText);
-//         } catch (err) {
-//             console.log('Could not parse JSON!');
-//         }
-
-//         if (responseObject) {
-//             if (questionRequest.status == 200) {
-//                 // If question is received successfully set the question
-//                 console.log(responseObject[0]);
-//                 setQuestion(responseObject[0]);
-//             } else {
-//                 // TODO Error if network issue
-//                 console.log('Error');
-//             }
-//         }
-//     };
-
-//     if (isFlip) {
-//         console.log('Entered else');
-//         isFlip = false;
-//         dialogs.flipDialog.style.display = 'none';
-//         questionRequest.open(
-//             'get',
-//             `${current_url}/api/lifelines/flipthequestion/${questionId}/${price}`,
-//             true
-//         );
-//     } else {
-//         console.log('Entered if');
-//         questionRequest.open(
-//             'get',
-//             `${current_url}/api/question/${price}`,
-//             true
-//         );
-//     }
-//     questionRequest.send();
-// }
-
-// Function to get query parameter value from URL
-function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Get language from the URL (e.g., ?language=english)
-// const language = getQueryParam('lang') || ''; // Default to 'english'
-const question_type = getQueryParam('q_type') || ''; 
 
 // If "Chhahdhala" is selected, switch to Hindi
 const hindiRadio = document.getElementById("lang-hi");
@@ -367,6 +326,18 @@ function getQuestion(price) {
     // Lock Buttons and Lifelines
     lockButtons(buttons);
     lockLifelines(lifelines);
+
+    const questionshow = new Audio("../audio/questionshow.wav");
+    questionshow.play();
+    
+    if(slot > 10 ){
+        endQuestion(false);
+        return '';
+    }
+    if((user_type === 'guest') && (slot > 4)){
+        endQuestion(false);
+        return  '';
+    }
 
     // Set the time based on slot
     if (slot <= 5) {
@@ -486,6 +457,9 @@ function checkAnswer(selectedAnswer) {
                 setTimeout(() => {
                     // Display answer result after 2 seconds
                     if (responseObject.answer == selectedAnswer) {
+                        const correctanswer = new Audio("../audio/rightanswer.wav");
+                        correctanswer.play();
+
                         console.log('Correct answer!');
                         is_correct = true;
                         selectedAnswerLabel.style.background =
@@ -502,6 +476,8 @@ function checkAnswer(selectedAnswer) {
                             endQuestion(true);
                         }, 1000);
                     } else {
+                        const wronganswer = new Audio("../audio/wronganswer.wav");
+                        wronganswer.play();
                         console.log('Incorrect answer!');
                         if (selectedAnswer) {
                             // Answer is selected but is wrong
@@ -609,7 +585,7 @@ function endGame() {
     get_time = getTimeElapsed();
 
     setTimeout(() => {
-        window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&level=${slot-1}&time=${get_time}`;
+        window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot-1}&time=${get_time}`;
     }, 1000);
 
     // Clear markers
@@ -621,9 +597,37 @@ function endGame() {
 const lifelineAudio = new Audio("../audio/lifeline.wav");
 
 lifelines.audiencePoll.addEventListener('click', () => {
-    
     const div = document.getElementById('audience-poll-div');
     if (div.classList.contains('unused')) {
+
+        // Example: Adding a lifeline
+        if (Object.keys(count_lifeline).length < 3) {
+            const key = 'audience-poll-div';
+            count_lifeline[key] = lifelines.audiencePoll;
+        }
+
+        // Check when exactly 3 lifelines are used
+        if (Object.keys(count_lifeline).length === 3) {
+            const usedElements = Object.values(count_lifeline);
+
+            // Filter out lifelines not present in count_lifeline
+            const unusedLifelineEntries = Object.entries(lifelines).filter(
+                ([key, lifelineDiv]) => !usedElements.includes(lifelineDiv)
+            );
+
+            // Remove 'unused' class from inner divs of unused lifelines
+            unusedLifelineEntries.forEach(([_, lifelineButton]) => {
+                const innerDiv = lifelineButton.querySelector('div.used.unused');
+                if (innerDiv) {
+                    innerDiv.classList.remove('unused');
+                }
+            });
+            
+
+            console.log("🚫 Unused Lifelines updated visually.");
+        }
+
+        
         // Pause the timer if it exists
         if (slot <= 16) {
             pauseTimer();
@@ -699,6 +703,31 @@ lifelines.audiencePoll.addEventListener('click', () => {
 lifelines.fiftyFifty.addEventListener('click', () => {
     const div = document.getElementById('50-50-div');
     if (div.classList.contains('unused')) {
+        // Example: Adding a lifeline
+        if (Object.keys(count_lifeline).length < 3) {
+            const key = '50-50-div';
+            count_lifeline[key] = lifelines.fiftyFifty;
+        }
+
+        // Check when exactly 3 lifelines are used
+        if (Object.keys(count_lifeline).length === 3) {
+            const usedElements = Object.values(count_lifeline);
+
+            // Filter out lifelines not present in count_lifeline
+            const unusedLifelineEntries = Object.entries(lifelines).filter(
+                ([key, lifelineDiv]) => !usedElements.includes(lifelineDiv)
+            );
+
+            // Remove 'unused' class from inner divs of unused lifelines
+            unusedLifelineEntries.forEach(([_, lifelineButton]) => {
+                const innerDiv = lifelineButton.querySelector('div.used.unused');
+                if (innerDiv) {
+                    innerDiv.classList.remove('unused');
+                }
+            });
+
+            console.log("🚫 Unused Lifelines updated visually.");
+        }
 
         lifelineAudio.play();
         // Use the lifeline
@@ -759,6 +788,32 @@ lifelines.fiftyFifty.addEventListener('click', () => {
 lifelines.flipTheQuestion.addEventListener('click', () => {
     const div = document.getElementById('flip-the-question-div');
     if (div.classList.contains('unused')) {
+        // Example: Adding a lifeline
+        if (Object.keys(count_lifeline).length < 3) {
+            const key = 'flip-the-question-div' ;
+            count_lifeline[key] = lifelines.flipTheQuestion;
+        }
+
+        // Check when exactly 3 lifelines are used
+        if (Object.keys(count_lifeline).length === 3) {
+            const usedElements = Object.values(count_lifeline);
+
+            // Filter out lifelines not present in count_lifeline
+            const unusedLifelineEntries = Object.entries(lifelines).filter(
+                ([key, lifelineDiv]) => !usedElements.includes(lifelineDiv)
+            );
+
+            // Remove 'unused' class from inner divs of unused lifelines
+            unusedLifelineEntries.forEach(([_, lifelineButton]) => {
+                const innerDiv = lifelineButton.querySelector('div.used.unused');
+                if (innerDiv) {
+                    innerDiv.classList.remove('unused');
+                }
+            });
+
+            console.log("🚫 Unused Lifelines updated visually.");
+        }
+    
         lifelineAudio.play();
         // Use the lifeline
         // dialogs.flipDialog.style.display = 'block';
@@ -788,6 +843,32 @@ lifelines.askTheExpert.addEventListener('click', () => {
     
     const div = document.getElementById('ask-the-expert-div');
     if (div.classList.contains('unused')) {
+        // Example: Adding a lifeline
+        if (Object.keys(count_lifeline).length < 3) {
+            const key = 'ask-the-expert-div';
+            count_lifeline[key] = lifelines.askTheExpert;
+        }
+
+        // Check when exactly 3 lifelines are used
+        if (Object.keys(count_lifeline).length === 3) {
+            const usedElements = Object.values(count_lifeline);
+
+            // Filter out lifelines not present in count_lifeline
+            const unusedLifelineEntries = Object.entries(lifelines).filter(
+                ([key, lifelineDiv]) => !usedElements.includes(lifelineDiv)
+            );
+
+            // Remove 'unused' class from inner divs of unused lifelines
+            unusedLifelineEntries.forEach(([_, lifelineButton]) => {
+                const innerDiv = lifelineButton.querySelector('div.used.unused');
+                if (innerDiv) {
+                    innerDiv.classList.remove('unused');
+                }
+            });
+
+            console.log("🚫 Unused Lifelines updated visually.");
+        }
+        
         // Pause the timer if it exists
         if (slot <= 16) {
             pauseTimer();
@@ -879,6 +960,9 @@ function setTimer(time) {
 }
 
 const tickAudio = new Audio("../audio/countclock.wav");
+const backgroundAudio = new Audio("../audio/background.wav");
+
+let backgroundInterval;
 
 function startResumeTimer() {
     if (!timer.running) {
@@ -890,6 +974,13 @@ function startResumeTimer() {
         //     tickAudio.loop = true;
         //     tickAudio.play();
         // }, 1000);
+
+        // Start background audio loop
+        backgroundAudio.play();
+        backgroundInterval = setInterval(() => {
+            backgroundAudio.currentTime = 0;
+            backgroundAudio.play();
+        }, 10000); // every 10 seconds
 
         decrementTimer(timer.timeLeft);
     }
@@ -903,6 +994,11 @@ function pauseTimer() {
         // Stop Tick-Tick Sound
         tickAudio.pause();
         tickAudio.currentTime = 0; // Reset audio to the start
+
+        // Stop background audio loop
+        clearInterval(backgroundInterval);
+        backgroundAudio.pause();
+        backgroundAudio.currentTime = 0;
     }
 }
 
@@ -917,7 +1013,9 @@ function decrementTimer() {
                 timer.right.style.width = progress + '%';
                 timer.span.innerHTML = timer.timeLeft;
 
-                tickAudio.play();
+                if(timer.timeLeft <= 10){
+                    tickAudio.play();
+                }
 
                 decrementTimer();
             } else {
@@ -941,7 +1039,7 @@ function moveLifeline() {
     if (!lifelineDiv || !languageContainer || !aside) return;
 
     // Check screen width: Mobile is <= 768px
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 650;
 
     // If in mobile view, move lifelines to main after language container
     if (isMobile) {

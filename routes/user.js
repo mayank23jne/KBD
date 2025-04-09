@@ -50,7 +50,7 @@ router.post('/register', async (req, res) => {
 
         res.status(200).json({
             message: 'User registered successfully!',
-            redirectUrl: '/api/index',
+            redirectUrl: '/play',
         });
     } catch (err) {
         console.error('❌ Error registering user:', err);
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
 
         res.status(200).json({
             message: 'Login successful!',
-            redirectUrl: '/api/index',
+            redirectUrl: '/play',
         });
     } catch (err) {
         console.error('❌ Error during login:', err);

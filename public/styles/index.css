@@ -179,10 +179,10 @@ body {
  
    /* Your existing styles for mobile */
    #logo-img {
-      width: 90%;
-      height: 48%;
+      width: 77%;
+      height: 40%;
       transform: translateX(-50%);
-      top: 20%;
+      top: 25%;
    }
    
    #amitabh-img {
@@ -247,4 +247,33 @@ body {
    }
  }
  
- 
+ /* Landscape Mode */
+@media screen and (orientation: landscape) {
+   @media (max-height: 600px) {
+      #logo-img {
+         width: 25%;
+         height: 65%;
+         left: 50%;
+         top: 48%;
+      }
+      #button {
+         left: 45%;
+      }
+      #logo{
+         top: -40px !important;
+         transform: none !important;
+         width: 300px !important;
+         height: 100px !important;
+         transform: translateX(-50%) !important;
+      }
+      #svg-logo {
+         width: 300px !important;
+         height: 100px !important;
+         transform: none !important;
+      }
+      #button button {
+         font-size: 1rem;
+      }
+      
+   }
+}

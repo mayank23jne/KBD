@@ -1,147 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Add Question</title>
-        <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
-            rel="stylesheet"
-        />
-    </head>
-    <body>
-        <div class="form">
-            <div class="header-container">
-                <div id="header">Add a Question</div>
-                <select id="language-select" onchange="changeLanguage()">
-                    <option value="en" selected>English</option>
-                    <option value="hi">हिन्दी</option>
-                </select>
-            </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to KBD</title>
+  <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .input-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
 
-            <ul id="form-messages"></ul>
+    .input-container label {
+      width: 120px;
+    }
 
-            <label for="question" id="label-question">Question: </label>
-            <input type="text" id="question" oninput="validateInput(this)" />
+    .input-container input {
+      flex: 1;
+      padding: 5px;
+    }
 
-            <label for="option1" id="label-option1">Option 1: </label>
-            <input type="text" id="option1" oninput="validateInput(this)" />
+    #select_container {
+      display: flex;
+      gap: 0.5rem;
+      width: 60%;
+    }
 
-            <label for="option2" id="label-option2">Option 2: </label>
-            <input type="text" id="option2" oninput="validateInput(this)" />
+    #header {
+      width: 100%;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
 
-            <label for="option3" id="label-option3">Option 3: </label>
-            <input type="text" id="option3" oninput="validateInput(this)" />
+    #question_type {
+      width: 60%;
+    }
 
-            <label for="option4" id="label-option4">Option 4: </label>
-            <input type="text" id="option4" oninput="validateInput(this)" />
+    #language-select {
+      width: 50%;
+    }
 
-            <label for="answer" id="label-answer">Answer: </label>
-            <input type="text" id="answer" placeholder="2" />
+    button {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #5762f8, #ff58fa);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #3f4bf7, #f14dec);
+      box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
+    }
 
-            <label for="slot" id="label-slot">Slot: </label>
-            <select name="price" id="price">
-                <option value="1000">1000</option>
-                <option value="2000">2000</option>
-                <option value="3000">3000</option>
-                <option value="5000">5000</option>
-                <option value="10000">10000</option>
-                <option value="20000">20000</option>
-                <option value="40000">40000</option>
-                <option value="80000">80000</option>
-                <option value="160000">160000</option>
-                <option value="320000">320000</option>
-                <option value="640000">640000</option>
-                <option value="1250000">1250000</option>
-                <option value="2500000">2500000</option>
-                <option value="5000000">5000000</option>
-                <option value="10000000">10000000</option>
-                <option value="70000000">70000000</option>
-            </select>
+    .input-container input{
+        width: 50%;
+    }
 
-            <label for="label_question_type" id="label-question_type">Question Type: </label>
-            <select name="question_type" id="question_type">
-                <option value="Beginner" id="option-beginner">Beginner</option>
-                <option value="Advance" id="option-advance">Advance</option>
-            </select>
 
-            <ul id="status"></ul>
 
-            <button type="submit" id="btn-submit">Add Question</button>
-        </div>
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* transparent dark background */
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        <script>
+    .loader-overlay {
+      text-align: center;
+      color: white;
+    }
 
-            async function changeLanguage() {
-                const language = document.getElementById('language-select').value;
+    .loader-img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 10px;
+    }
 
-                const labels = {
-                    en: {
-                        header: 'Add a Question',
-                        question: 'Question:',
-                        option1: 'Option 1:',
-                        option2: 'Option 2:',
-                        option3: 'Option 3:',
-                        option4: 'Option 4:',
-                        answer: 'Answer:',
-                        slot: 'Slot:',
-                        question_type: 'Question Type:',
-                        submit: 'Add Question',
-                        beginner: 'Beginner',
-                        advance: 'Advance'
-                    },
-                    hi: {
-                        header: 'प्रश्न जोड़ें',
-                        question: 'प्रश्न:',
-                        option1: 'विकल्प 1:',
-                        option2: 'विकल्प 2:',
-                        option3: 'विकल्प 3:',
-                        option4: 'विकल्प 4:',
-                        answer: 'उत्तर:',
-                        slot: 'स्लॉट:',
-                        question_type: 'प्रश्न प्रकार:',
-                        submit: 'प्रश्न जोड़ें',
-                        beginner: 'शुरुआती',
-                        advance: 'उन्नत'
-                    }
-                };
+    .loader-text {
+      font-size: 16px;
+    }
 
-                const langLabels = labels[language];
+    
+  </style>
+</head>
+<body>
+  <div id="loader" style="display: none;">
+    <div class="loader-overlay">
+      <img src="/img/loader2.gif" alt="Loading..." class="loader-img" />
+      <p class="loader-text">Please wait, uploading questions...</p>
+    </div>
+  </div>
+  
+  
+  <div class="form">
+    <!-- Header and Language Selector -->
+    <div class="header-container">
+      <div id="header">Add Questions</div>
+      <div id="select_container">
+        <select name="question_type" id="question_type" onchange="handleQuestionTypeChange()">
+          <option value="Basic" id="option-beginner">Basic</option>
+          <option value="Chhahdhala" id="option-advance">Chhahdhala</option>
+        </select>
+        <!-- <select id="language-select" onchange="changeLanguage()">
+          <option value="en" selected>English</option>
+          <option value="hi">हिन्दी</option>
+        </select> -->
+      </div>
+    </div>
 
-                document.getElementById('header').innerText = langLabels.header;
-                document.getElementById('label-question').innerText = langLabels.question;
-                document.getElementById('label-option1').innerText = langLabels.option1;
-                document.getElementById('label-option2').innerText = langLabels.option2;
-                document.getElementById('label-option3').innerText = langLabels.option3;
-                document.getElementById('label-option4').innerText = langLabels.option4;
-                document.getElementById('label-answer').innerText = langLabels.answer;
-                document.getElementById('label-slot').innerText = langLabels.slot;
-                document.getElementById('label-question_type').innerText = langLabels.question_type;
-                document.getElementById('btn-submit').innerText = langLabels.submit;
-                document.getElementById('option-beginner').innerText = langLabels.beginner;
-                document.getElementById('option-advance').innerText = langLabels.advance;
+    <!-- File Inputs Section -->
+    <div id="file-inputs-section" style="margin-top: 20px;">
+      <div class="input-container" id="file-input-1">
+        <label for="file1">Hindi XML:</label>
+        <input type="file" id="file1" name="file1" accept=".xml" onchange="validateXMLFile('file1', 'hi')" />
+      </div>
+      <div class="input-container" id="file-input-2">
+        <label for="file2">English XML:</label>
+        <input type="file" id="file2" name="file2" accept=".xml" onchange="validateXMLFile('file2', 'en')" />
+      </div>
+    </div>
 
-                const inputs = ['question', 'option1', 'option2', 'option3', 'option4'];
+    <button onclick="handleAddQuestion()">Add Question</button>
 
-                // Clear input fields instead of translating
-                inputs.forEach(id => {
-                    document.getElementById(id).value = '';
-                });
-            }
+  </div>
 
-            function validateInput(input) {
-                const language = document.getElementById('language-select').value;
-                if (language === 'hi') {
-                    const hindiRegex = /^[\u0900-\u097F\s\p{P}\p{S}]+$/u;
-                    if (!hindiRegex.test(input.value)) {
-                        input.value = input.value.replace(/[^\u0900-\u097F\s\p{P}\p{S}]/gu, '');
-                    }
-                }
-            }
+  <script>
+    let uploadedLanguages = {
+      file1: null,
+      file2: null,
+    };
 
-            window.onload = changeLanguage;
-        </script>
-        <script src="/js/addquestion.js"></script>
-    </body>
+    function handleQuestionTypeChange() {
+      const type = document.getElementById("question_type").value;
+      const input2 = document.getElementById("file-input-2");
+      let file1 =  document.getElementById('file1');
+      let file2 =  document.getElementById('file2');
+
+      if (type === "Chhahdhala") {
+
+        input2.style.display = "none";
+        file1.value = '';
+        file2.value = '';
+      } else {
+        input2.style.display = "flex";
+        file1.value = '';
+        file2.value = '';
+      }
+    }
+  
+    function detectLanguageFromText(text) {
+      let hindiCount = 0;
+      let englishCount = 0;
+  
+      for (const char of text) {
+        const code = char.charCodeAt(0);
+        if (code >= 0x0900 && code <= 0x097F) {
+          hindiCount++;
+        } else if ((code >= 0x0041 && code <= 0x005A) || (code >= 0x0061 && code <= 0x007A)) {
+          englishCount++;
+        }
+      }
+  
+      if (hindiCount > englishCount) return 'hi';
+      if (englishCount > hindiCount) return 'en';
+      return 'unknown';
+    }
+  
+    function extractTextFromXML(xmlString) {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+  
+      const questions = xmlDoc.getElementsByTagName("Question");
+      let extractedText = "";
+  
+      for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+  
+        const newQuestion = q.getElementsByTagName("NewQuestion")[0]?.textContent || "";
+        const option1 = q.getElementsByTagName("Option1")[0]?.textContent || "";
+        const option2 = q.getElementsByTagName("Option2")[0]?.textContent || "";
+        const option3 = q.getElementsByTagName("Option3")[0]?.textContent || "";
+        const option4 = q.getElementsByTagName("Option4")[0]?.textContent || "";
+  
+        extractedText += newQuestion + " " + option1 + " " + option2 + " " + option3 + " " + option4 + " ";
+      }
+  
+      return extractedText;
+    }
+  
+    function validateXMLFile(inputId, expectedLang) {
+      const fileInput = document.getElementById(inputId);
+      const file = fileInput.files[0];
+  
+      if (!file || !file.name.endsWith(".xml")) {
+        alert("Please select a valid XML file.");
+        fileInput.value = "";
+        uploadedLanguages[inputId] = null;
+        return;
+      }
+  
+      const reader = new FileReader();
+  
+      reader.onload = function (e) {
+        const text = e.target.result;
+        const extractedText = extractTextFromXML(text);
+        const detectedLang = detectLanguageFromText(extractedText);
+  
+        // Check expected language
+        if (detectedLang !== expectedLang) {
+          alert(`Invalid file: Expected a ${expectedLang === 'hi' ? 'Hindi' : 'English'} XML file.`);
+          fileInput.value = "";
+          uploadedLanguages[inputId] = null;
+          return;
+        }
+  
+        // Block same language in both inputs
+        const otherInputId = inputId === 'file1' ? 'file2' : 'file1';
+        if (uploadedLanguages[otherInputId] === detectedLang) {
+          alert(`A ${detectedLang === 'hi' ? 'Hindi' : 'English'} file is already uploaded in the other input.`);
+          fileInput.value = "";
+          uploadedLanguages[inputId] = null;
+          return;
+        }
+  
+        uploadedLanguages[inputId] = detectedLang;
+        console.log(`File "${file.name}" accepted as ${detectedLang}`);
+      };
+  
+      reader.readAsText(file, 'utf-16');
+    }
+  
+    async function handleAddQuestion() {
+      const type = document.getElementById("question_type").value;
+      const file1 = document.getElementById("file1").files[0];
+      const file2 = document.getElementById("file2").files[0];
+      const loader = document.getElementById("loader");
+
+      const showLoader = () => loader.style.display = "flex";
+      const hideLoader = () => loader.style.display = "none";
+
+      try {
+        showLoader();
+
+        if (type === "Basic") {
+          if (!file1 || !file2) {
+            alert("Please upload both Hindi and English XML files.");
+            hideLoader();
+            return;
+          }
+          if (uploadedLanguages.file1 !== 'hi' || uploadedLanguages.file2 !== 'en') {
+            alert("Invalid file selection. Make sure Hindi file is on the first and English on the second.");
+            hideLoader();
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append('hindiFile', file1);
+          formData.append('englishFile', file2);
+
+          const response = await fetch('/api/questions/upload/basic', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+          alert(result.message || "Basic questions uploaded!");
+        }
+
+        else if (type === "Chhahdhala") {
+          if (!file1) {
+            alert("Please upload a Hindi XML file.");
+            hideLoader();
+            return;
+          }
+          if (uploadedLanguages.file1 !== 'hi') {
+            alert("Invalid Hindi XML file.");
+            hideLoader();
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append('hindiFile', file1);
+
+          const response = await fetch('/api/questions/upload/chhahdhala', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+          alert(result.message || "Chhahdhala questions uploaded!");
+        }
+
+        document.getElementById("file1").value = '';
+        document.getElementById("file2").value = '';
+      } catch (err) {
+        alert("Error uploading questions.");
+        console.error(err);
+      } finally {
+        hideLoader();
+      }
+    }
+
+
+  </script>
+  
+</body>
 </html>

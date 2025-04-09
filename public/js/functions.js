@@ -46,6 +46,7 @@ function createChart(option1, option2, option3, option4) {
             ]
         },
         options: {
+            
             responsive: true,
             title: {
                 display: true,
@@ -57,14 +58,14 @@ function createChart(option1, option2, option3, option4) {
             },
             scales: {
                 yAxes: [
-                    {
+                    {   
                         gridLines: {
                             display: false
                         },
                         ticks: {
                             min: 0,
                             max: 100,
-                            stepSize: 20
+                            stepSize: 25
                         }
                     }
                 ],

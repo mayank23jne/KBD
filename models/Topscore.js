@@ -86,7 +86,7 @@ class Topscore {
                 WHERE question_type = ?
                 GROUP BY user_id, username, user_type, question_type, play_time, play_level
                 ORDER BY play_level DESC, play_time ASC
-                LIMIT 10
+                LIMIT 50
             `;
             const [rows] = await pool.query(query, [question_type]);
             return rows;

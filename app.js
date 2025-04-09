@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
@@ -44,7 +43,7 @@ const isAuthenticated = (req, res, next) => {
 
 // Routes
 app.get('/', (req, res) => {
-    res.render('login');
+    res.render('index');
 });
 
 // Protected Routes - Require Authentication
@@ -57,8 +56,8 @@ app.get('/play', isAuthenticated, (req, res) => {
 //     res.render('addquestion');
 // });
 
-app.get('/api/index', isAuthenticated, (req, res) => {
-    res.render('index', { language: req.session.language });
+app.get('/login',  (req, res) => {
+    res.render('login');
 });
 
 app.get('/api/question', (req, res) => {
@@ -66,20 +65,9 @@ app.get('/api/question', (req, res) => {
 });
 
 
+const questionRoutes = require('./routes/add_filequestions');
 
-// app.get('/api/scorecard', isAuthenticated, (req, res) => {
-//     const { question_type, level, time } = req.query; // Get query parameters
-
-//     // Ensure user session exists
-//     const username = req.session.user ? req.session.user.username : 'Guest';
-
-//     res.render('scorecard', {
-//         username: username,
-//         questionType: question_type || '',
-//         level: level || '1',
-//         time: time || ''
-//     });
-// });
+app.use('/api/questions', questionRoutes);
 
 
 const Topscore = require('./models/Topscore'); // Import the Topscore class

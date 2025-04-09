@@ -1,7 +1,7 @@
 
 const fs = require('fs');
 const xml2js = require('xml2js');
-const Question = require('./models/Question');
+const Question = require('../models/Question');
 
 
 const parseXML = async (filePath) => {
@@ -31,14 +31,29 @@ const shuffleOptions = (options, correctIndex) => {
 
 
 
+
 // for mysql database connectivity 
 
-const saveChhahdhalaQuestions = async () => {
+// const SaveChhahdhalaQuestions = async () => {
+exports.SaveChhahdhalaQuestions = async (hindiData) => {
     try {
-        const hindiData = await parseXML('chhahdhala.xml');
+        // const hindiData = await parseXML('chhahdhala.xml');
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
 
         for (const hin of hindiQuestions) {
+
+            const questionTextHi = hin.NewQuestion[0];
+            const questionType = "Chhahdhala";
+
+    
+            const isDuplicate = await Question.CheckDuplicateQuestion(questionTextHi, questionType);
+
+
+            if (isDuplicate) {
+                console.log(`⚠️ Skipped duplicate question: ${questionTextHi}`);
+                continue;
+            }
+
             // Prepare options and shuffle them
             const options = [
                 { en: "N/A", hi: hin.Option1[0] },
@@ -114,21 +129,20 @@ const saveChhahdhalaQuestions = async () => {
         }
 
         console.log("🎉 All Hindi questions processed successfully!");
-        process.exit(0);
     } catch (error) {
         console.error("❌ Error processing Hindi questions:", error);
-        process.exit(1);
     }
 };
 
 // Run the function
-saveChhahdhalaQuestions();
+// SaveChhahdhalaQuestions();
 
 
-const mergeAndSaveQuestions = async () => {
+// const SaveBasicQuestions = async () => {
+exports.SaveBasicQuestions = async (hindiData, englishData) => {
     try {
-        const englishData = await parseXML('english.xml');
-        const hindiData = await parseXML('hindi.xml');
+        // const englishData = await parseXML('english.xml');
+        // const hindiData = await parseXML('hindi.xml');
 
         const englishQuestions = englishData.KBDS.Questions[0].Question;
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
@@ -136,6 +150,17 @@ const mergeAndSaveQuestions = async () => {
         for (const eng of englishQuestions) {
             const questionNumber = parseInt(eng.QuestionNumber[0]);
             const hin = hindiQuestions.find(q => parseInt(q.QuestionNumber[0]) === questionNumber);
+            
+            const questionTextHi = hin ? hin.NewQuestion[0] : "";
+            const questionTextEn = eng.NewQuestion[0];
+            const questionType = "Basic";
+            
+            const isDuplicate = await Question.CheckDuplicateQuestion(questionTextHi, questionType);
+
+            if (isDuplicate) {
+            console.log(`⚠️ Skipped duplicate Basic question: ${questionTextEn}`);
+            continue;
+            }
 
             const options = [
                 { en: eng.Option1[0], hi: hin ? hin.Option1[0] : "" },
@@ -200,10 +225,8 @@ const mergeAndSaveQuestions = async () => {
         console.log("🎉 All questions processed successfully!");
     } catch (error) {
         console.error("❌ Error processing questions:", error);
-    } finally {
-        process.exit(0); // Ensure MySQL connection closes
-    }
+    } 
 };
 
 // Run the function
-mergeAndSaveQuestions();
+// SaveBasicQuestions();

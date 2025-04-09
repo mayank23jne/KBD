@@ -47,10 +47,11 @@ TweenMax.to('#amitabh-img', 2, {
 const playButton = document.querySelector('#button button');
 playButton.addEventListener('click', () => {
 
-   const urlParams = new URLSearchParams(window.location.search);
-   const lang = urlParams.get('lang');
-   const question_type = urlParams.get('q_type');
+   // const urlParams = new URLSearchParams(window.location.search);
+   // const lang = urlParams.get('lang');
+   // const question_type = urlParams.get('q_type');
 
-   window.location.href = `/play?lang=${lang}&q_type=${question_type}`;
+   // window.location.href = `/play?lang=${lang}&q_type=${question_type}`;
+   window.location.href = `/login`;
 });
 

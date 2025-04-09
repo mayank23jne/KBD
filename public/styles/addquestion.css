@@ -301,7 +301,7 @@ button.danger:hover {
 @media screen and (max-width: 768px) {
     .form {
         padding: 30px;
-        margin-top: 6rem !important;
+        margin-top: 2.5rem !important;
     }
 
     #header {
@@ -355,4 +355,101 @@ button.danger:hover {
 option {
     background-color: black;
     color: white;
+}
+
+
+
+
+
+
+
+
+
+/* Landscape Mode */
+@media screen and (orientation: landscape) {
+    @media (max-height: 600px) {
+        body {
+            padding: 25px;
+            align-items: center;
+        }
+
+        .form {
+            max-width: 700px;
+        }
+
+        #select_container {
+            flex-direction: row;
+            display: flex;
+            gap: 0.5rem;
+            width: 60%;
+            margin-top: -10px;
+        }
+        #user-type{
+            margin-top: -10px;
+            display: flex;
+            gap: 10px;
+        }
+        label{
+            margin: 15px 0 8px;
+            font-size: 14px;
+        }
+        #header {
+            font-size: 18px;
+            width: 50% !important;
+            margin-bottom: 0px;
+        }
+        .header-container{
+            display: flex;
+        }
+        .form {
+            padding: 15px;
+            margin-top: 0rem !important;
+        }
+
+        #language-select, #question_type {
+            width: 50%;
+        }
+        button{
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 40px;
+            width: 25%;
+            font-size: 14px !important;
+            padding: 0px !important;
+        }
+        .signup{
+            margin-top: 6px !important;
+        }
+        .login_landscape{
+            display: flex;
+            margin-top: 0px;
+        }
+        #credentials-container{
+            display: flex ;
+            gap: 10px;
+        }
+        .input-container{
+            margin-bottom: 0px !important;
+          
+        }
+
+        #singup_label{
+            margin: 5px 0 8px !important;
+        }
+        .signup_input{
+            margin: 5px 5px 8px !important;
+        }
+        p{
+            text-align: center;
+        }
+
+        #password, #new-password, #confirm-password{
+            width: fit-content !important;
+        }
+        #login-form{
+            margin-top: -12px !important;
+        }
+        
+    }
 }

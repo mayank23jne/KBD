@@ -13,6 +13,10 @@ const signupForm = {
 };
 
 signupForm.submit.addEventListener('click', () => {
+    let user_type =  document.querySelector('input[name="userType"]:checked').value
+
+    let selected_level = document.querySelector('input[name="level"]:checked').value;
+
     const requestData = {
         username: signupForm.username.value,
         email: signupForm.email.value,
@@ -36,7 +40,7 @@ signupForm.submit.addEventListener('click', () => {
             } else {
                 // alert('User registered successfully!');
                 clearSignupForm();
-                window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`
+                window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
                 // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
 
             }
@@ -77,6 +81,8 @@ loginForm.submit.addEventListener('click', () => {
 
     let user_type =  document.querySelector('input[name="userType"]:checked').value
 
+    let selected_level = document.querySelector('input[name="level"]:checked').value;
+
     // If user type is 'guest', generate a random string and set it into the fields.
     if (user_type === 'guest') {
         const randomStr = generateRandomString(10); // Change length as needed
@@ -108,9 +114,9 @@ loginForm.submit.addEventListener('click', () => {
             } else {
                 // Optionally, clear the signup form
                 clearSignupForm();
-                console.log(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`)
+                // console.log(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`)
             
-                window.location.href = current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`;
+                window.location.href = current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
                 // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
 
             }
@@ -139,7 +145,7 @@ loginForm.submit.addEventListener('click', () => {
             } else {
                 console.log('User login successfully!');
                 
-                window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`
+                window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
             }
         })
         .catch((err) => console.error('Error:', err));

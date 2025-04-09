@@ -1,5 +1,5 @@
-const { type, required } = require('@hapi/joi/lib/types/object');
-const mongoose = require('mongoose');
+// const { type, required } = require('@hapi/joi/lib/types/object');
+// const mongoose = require('mongoose');
 
 // const QuestionSchema = mongoose.Schema({
 //     question: {
@@ -180,51 +180,6 @@ class Question {
 
     // Find a random question by slot and parse JSON fields
     static async findRandomBySlot({ slot, user_id = '', question_type = null, questionId = null }) {
-        // try {
-        //     const totalCount = await this.countByFilter({ slot, user_id, question_type });
-        //     if (totalCount === 0) return null;
-
-        //     const randomOffset = Math.floor(Math.random() * totalCount);
-
-        //     let query = `
-        //         SELECT * FROM questions 
-        //         WHERE slot = ? AND user_id = ?
-        //     `;
-        //     const values = [slot, user_id];
-
-        //     if (question_type) {
-        //         query += ' AND question_type = ?';
-        //         values.push(question_type);
-        //     }
-
-        //     if (questionId) {
-        //         query += ' AND id != ?';
-        //         values.push(questionId);
-        //     }
-
-        //     query += ' LIMIT 1 OFFSET ?';
-        //     values.push(randomOffset);
-
-        //     const [rows] = await pool.query(query, values);
-
-        //     if (!rows.length) return null;
-
-        //     // Parse JSON fields
-        //     const question = rows[0];
-        //     question.explanation = JSON.parse(question.explanation);
-        //     question.question = JSON.parse(question.question);
-        //     question.option1 = JSON.parse(question.option1);
-        //     question.option2 = JSON.parse(question.option2);
-        //     question.option3 = JSON.parse(question.option3);
-        //     question.option4 = JSON.parse(question.option4);
-
-        //     question._id = question.id;
-
-        //     return question;
-        // } catch (error) {
-        //     console.error('❌ Error fetching random question:', error);
-        //     throw new Error('Database error: Failed to fetch random question');
-        // }
 
         try {
             // Count the total number of unused questions
@@ -298,14 +253,6 @@ class Question {
 
     // Update a question's user_id (e.g., mark as used)
     static async updateUserId(questionId, userId) {
-        // try {
-        //     const query = 'UPDATE questions SET user_id = ? WHERE id = ?';
-        //     const [result] = await pool.query(query, [userId, questionId]);
-        //     return result.affectedRows > 0;
-        // } catch (error) {
-        //     console.error('❌ Error updating user_id:', error);
-        //     throw new Error('Database error: Failed to update question');
-        // }
 
         try {
             const query = `
@@ -319,6 +266,23 @@ class Question {
             throw new Error('Database error: Failed to mark question as used');
         }
     }
+
+    // check duplicate questions
+    static async CheckDuplicateQuestion(questionTextHi, question_type) {
+        try {
+            const query = `
+                SELECT 1 FROM questions
+                WHERE JSON_EXTRACT(question, '$.hi') = ? AND question_type = ?
+                LIMIT 1
+            `;
+            const [rows] = await pool.query(query, [questionTextHi, question_type]);
+            return rows.length > 0;
+        } catch (error) {
+            console.error('❌ Error checking duplicates:', error);
+            throw new Error('Database error: Failed to check duplicate question');
+        }
+    }    
+      
 }
 
 module.exports = Question;

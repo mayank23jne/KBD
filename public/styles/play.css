@@ -418,7 +418,7 @@ aside {
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     /* Lifelines Container - Common Style */
     .lifelines {
         display: flex;
@@ -467,8 +467,8 @@ aside {
     }
 }
 
-/* Mobile View (<=768px) */
-@media (max-width: 768px) {
+/* Mobile View (<=650px) */
+@media (max-width: 650px) {
     main .lifelines {
         display: flex; /* Show in main on mobile */
         flex-wrap: wrap;
@@ -501,7 +501,7 @@ aside {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     aside {
         width: 100%;
         border-left: none;
@@ -511,7 +511,7 @@ aside {
     
 }
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     .buttons {
         /* grid-template-columns: 100%; */
         gap: 10px;
@@ -524,20 +524,20 @@ aside {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     body {
         flex-direction: column;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     main {
         width: 100%;
         padding: 1rem;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     .timer {
         width: 100px;
         height: 50px;
@@ -545,7 +545,7 @@ aside {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     #answer-container {
         grid-template-columns: 100%;
         gap: 5px;
@@ -553,7 +553,7 @@ aside {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     .dialog {
         width: 80%;
     }
@@ -666,7 +666,7 @@ aside {
   }
   
 
-  @media (max-width: 768px) {
+  @media (max-width: 650px) {
     .price-table {
         padding: 60px 50px;
         width: 90%;
@@ -796,7 +796,7 @@ body{
 }
 
 /* Mobile responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 650px) {
     /* #main-section {
         background: url('./../img/LogoBG.png') no-repeat center center; 
         background-size: 30%;
@@ -869,7 +869,7 @@ body{
 }
 
 /* Responsive Design (Show Sidebar in Popup Only for Mobile) */
-@media (min-width: 769px) {
+@media (min-width: 651px) {
     #side_aside {
         position: static;
         width: auto;
@@ -990,7 +990,7 @@ body{
     transition: opacity 0.3s ease;
  }
 
- @media (max-width: 768px) {
+ @media (max-width: 650px) {
     .mobile-tooltip {
        position: relative;
        cursor: pointer;
@@ -1000,4 +1000,80 @@ body{
        display: block;
        opacity: 1;
     }
+
+    #chart{
+        height: 251px !important;
+    }
  }
+
+
+
+
+ /* Landscape Mode */
+@media screen and (orientation: landscape) {
+
+    @media (max-height: 600px) {
+        .timer {
+            width: 60px;
+            height: 35px;
+            font-size: 18px;
+        }
+        .lifeline{
+            /* width: 8%;
+            height: 35px; */
+            width: 15%;
+            height: 35px;
+        }
+        .language-container {
+            height: 0px;
+        }
+        main .lifelines{
+            margin-top: -45px;
+        }
+        .timer-div {
+            margin-top: 2rem;
+        }
+
+        #main-section{
+            background-size: 25%;
+            background-position-y: 10px;
+        }
+        #question{
+            min-height: 60px    ;
+        }
+        .answer{
+            padding: 5px 20px;
+            /* width: 50%; */
+        }
+        #two_answer {
+            display: flex;
+            gap: 30px;
+        }
+
+        .levels-btn{
+            margin: 8px auto;
+            height: 30px;
+        }
+        #lock-button{
+            height: 30px;
+            padding: 0px 20px;
+        }
+        #quit-button{
+            height: 30px;
+            padding: 0px 20px;
+        }
+        .dialog{
+            left: 30%;
+            width: 50%;
+        }
+        #right_header{
+            width: 50%;
+        }
+        .custom-radio{
+            padding: 2px 10px;
+        }
+        #id_username {
+            padding: 5px 10px;
+        }
+    }
+}
