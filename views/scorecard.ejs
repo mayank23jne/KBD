@@ -240,8 +240,8 @@
 
             function playAgain() {
                 let question_type = document.getElementById('question-type').innerText ;
-                let timestamp = Date.now(); // Current timestamp in ms
-                window.location.href = `/play?q_type=${question_type}&level=${selected_level}&user_type=${user_type}&ts=${timestamp}`;
+                // let timestamp = Date.now(); // Current timestamp in ms
+                window.location.href = `/play?q_type=${question_type}&level=${selected_level}&user_type=${user_type}&action=playagain`;
             }
 
             // Fireworks Animation
