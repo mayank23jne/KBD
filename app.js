@@ -43,11 +43,13 @@ const isAuthenticated = (req, res, next) => {
 
 // Routes
 app.get('/', (req, res) => {
+    req.session.visitedIndex = true;
     res.render('index');
 });
 
 // Protected Routes - Require Authentication
 app.get('/play', isAuthenticated, (req, res) => {
+    req.session.visitedIndex = false;
     const username = req.session.user ? req.session.user.username : 'Guest';
     res.render('play', { language: req.session.language , username: username});
 });
@@ -57,6 +59,10 @@ app.get('/play', isAuthenticated, (req, res) => {
 // });
 
 app.get('/login',  (req, res) => {
+    if (!req.session.visitedIndex) {
+        // Redirect to index if / hasn't been visited
+        return res.redirect('/');
+    }
     res.render('login');
 });
 
@@ -75,6 +81,7 @@ const Topscore = require('./models/Topscore'); // Import the Topscore class
 app.get('/api/scorecard', isAuthenticated, async (req, res) => {
     try {
         // Ensure user session exists
+        req.session.visitedIndex = false;
         if (!req.session.user) {
             return res.redirect('/login'); // Redirect to login if not authenticated
         }

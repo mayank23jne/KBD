@@ -502,6 +502,24 @@
          
       </script>
  
+      <!-- <script>
+
+         // Now push the real page back into history
+         history.pushState({}, '', location.href);
+         
+         window.addEventListener('popstate', function () {
+            // Clear local storage
+            localStorage.clear();
+
+            // Clear session storage
+            sessionStorage.clear();
+            window.location.href = '/'; // Redirect to home page on back
+         });
+
+      </script> -->
+      
+
+
 
    </body>
 </html>

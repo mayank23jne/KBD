@@ -240,7 +240,8 @@
 
             function playAgain() {
                 let question_type = document.getElementById('question-type').innerText ;
-                window.location.href = `/play?q_type=${question_type}&level=${selected_level}&user_type=${user_type}`;
+                let timestamp = Date.now(); // Current timestamp in ms
+                window.location.href = `/play?q_type=${question_type}&level=${selected_level}&user_type=${user_type}&ts=${timestamp}`;
             }
 
             // Fireworks Animation
@@ -314,7 +315,24 @@
         
         </script>
 
+        <!-- <script>
+            // Now push the real page back into history
+            history.pushState({}, '', location.href);
 
+            window.addEventListener('popstate', function () {
+                // Clear local storage
+                localStorage.clear();
+
+                // Clear session storage
+                sessionStorage.clear();
+                window.location.href = '/'; // Redirect to home page on back
+            });
+        </script> -->
+
+
+  
+  
+  
 
         <style>
     
