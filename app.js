@@ -9,6 +9,8 @@ const mysql = require('mysql2'); // Use mysql2 instead of mongoose
 
 require('dotenv/config');
 
+app.locals.GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
 
 // Middlewares
 app.set('view engine', 'ejs');
@@ -70,6 +72,9 @@ app.get('/api/question', (req, res) => {
     res.render('addquestion');
 });
 
+app.get('/privacy-policy', (req, res) => {
+    res.render('privacy_policy');
+});
 
 const questionRoutes = require('./routes/add_filequestions');
 

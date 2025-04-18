@@ -8,6 +8,8 @@ const router = express.Router();
 const User = require('../models/User');
 const e = require('express');
 
+require('dotenv').config(); // Make sure this is at the top
+
 // Register User
 router.post('/register', async (req, res) => {
     try {
@@ -97,5 +99,56 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Server error: ' + err.message });
     }
 });
+
+
+const { OAuth2Client } = require('google-auth-library');
+
+const CLIENT_ID =  process.env.GOOGLE_CLIENT_ID; // Load from .env
+const client = new OAuth2Client(CLIENT_ID);
+
+router.post('/google-token', async (req, res) => {
+    try {
+        const { id_token } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: id_token,
+            audience: CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        const email = payload.email;
+        const username = payload.name;
+    
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (!existingUser) {
+            // Create new user
+            await User.createUser({ username, email, mobile:null, password:'' });
+        }
+        
+        // Retrieve newly created user
+        const user = await User.findOne({ email });
+        console.log(user)
+        let user_name;
+        if (user.user_type === 'guest'){
+            user_name = "Guest"
+        }
+        else{
+            user_name = user.username;
+        }
+        // Set session with user info
+        req.session.user = {
+            id: user.id,
+            username: user_name,
+            user_type: user.user_type
+        };
+
+        res.json({ redirectUrl: "/play" });
+    } catch (err) {
+        console.error('❌ Token verification failed:', err);
+        res.status(401).json({ error: "Invalid token" });
+    }
+});
+
+
 
 module.exports = router;

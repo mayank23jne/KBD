@@ -297,6 +297,19 @@ button.danger:hover {
     background: linear-gradient(45deg, #ff6348, #f5a623);
 }
 
+
+#login_buttons{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+}
+#id_logingmail{
+    margin-top: 30px;
+    border-radius: 12px;
+}
+
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .form {
@@ -319,6 +332,7 @@ button.danger:hover {
     body {
         align-items: start;
     };
+    
 }
 
 @media screen and (max-width: 480px) {
@@ -336,6 +350,13 @@ button.danger:hover {
     }
     #select_container{
         width: 100% !important;
+    }
+    #id_logingmail{
+        margin-top: 10px;
+        border-radius: 12px;
+    }
+    #login_buttons{
+        display: block;
     }
 }
 

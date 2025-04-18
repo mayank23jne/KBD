@@ -44,6 +44,10 @@
                         </select>
                      </div> -->
                   </div>
+                  <div id="landscape_level">
+                     <!-- <button id="level-btn" class="btn level-btn">Level: </button> -->
+                     <button id="landscape_level_btn" class="rocket-btn">&#10140; Level: </button>
+                  </div>
                   <div class="language-container">
                      <label class="language-option">
                         <input type="radio" name="language" class="language-select" value="en" id="lang-en" onchange="changeLanguage()"  />
@@ -55,17 +59,27 @@
                         <span class="custom-radio">हिन्दी</span>
                      </label>
                   </div>
+                  
                </div>
                <div id="right_header">
-                  <div id="id_username" class="mobile-tooltip" title="<%= username %>" onclick="showTooltip()">
-                     <i class="fa-solid fa-user"></i>
-                     <span>
-                        <%= username.length > 6 ? username.substring(0, 6) + '...' : username %>
-                        <span id="username-tooltip" class="tooltip-text"><%= username %></span>
-                     </span>
+                  <div id="side_profile_bar">
+
+                     <div id="id_username" class="mobile-tooltip" title="<%= username %>" onclick="showTooltip()">
+                        <i class="fa-solid fa-user"></i>
+                        <span>
+                           <%= username.length > 6 ? username.substring(0, 6) + '...' : username %>
+                           <span id="username-tooltip" class="tooltip-text"><%= username %></span>
+                        </span>
+                     </div>
+                     <button id="quit-button">❌</button>
+                  </div>
+                  <div id="landscape_lifelines">
+                        
                   </div>
                </div>
             </div>
+            <!-- Empty div for popup on landscape -->
+            <div id="landscape_sidebar" class="landscape-sidebar"></div>
             <div id="show_level">
                <!-- <button id="level-btn" class="btn level-btn">Level: </button> -->
                <button id="levels-btn" class="btn levels-btn">&#10140; Level: </button>
@@ -166,10 +180,41 @@
             <div class="buttons">
                 <button id="lock-button">Lock</button>
                 <button id="quit-button">Quit</button>
+
+                <div id="bottom_btn">
+                  <button id="lamp-button">
+                     <span id="bulb">💡</span>
+                  </button>
+                  <button id="next-button">&gt;</button> <!-- This is the > symbol -->
+                </div>
+                
+                
+                <script>
+                  const bulb = document.getElementById('bulb');
+                
+                  let isOn = false;
+                
+                  setInterval(() => {
+                    isOn = !isOn;
+                    bulb.classList.toggle('on', isOn);
+                  }, 500);
+                
+                </script>
+                
+                
+
             </div>
          </div>
 
+         
+         
          <div class="overlay" id="id_overlay"></div>
+         
+         <!-- Lamp Dialog -->
+         <div class="dialog" id="lamp-dialog">
+            <p id="explanation_id"></p>
+            <button class="dialog-close" id="lamp-dialog-close">Ok</button>
+         </div>
 
          <!-- Audience Poll Dialog -->
          <div class="dialog" id="audience-poll-dialog">

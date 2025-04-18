@@ -172,3 +172,29 @@ loginForm.submit.addEventListener('click', () => {
         .catch((err) => console.error('Error:', err));
     }
 });
+
+
+
+function handleCredentialResponse(response) {
+
+    language_select = document.getElementById('language-select');
+    questiontype = document.getElementById('question_type').value;
+    usertype = document.querySelector('input[name="userType"]:checked');
+    selectedLevel = document.querySelector('input[name="level"]:checked').value;
+
+
+    // Send ID token to backend
+    fetch("/api/google-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_token: response.credential })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.redirectUrl) {
+        window.location.href = `${data.redirectUrl}?lang=${language_select}&q_type=${questiontype}&level=${selectedLevel}&user_type=${usertype}`;
+      } else {
+        alert("Login failed: " + data.error);
+      }
+    });
+}

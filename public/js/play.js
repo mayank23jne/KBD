@@ -42,7 +42,8 @@ const dialogs = {
     quitDialog: document.getElementById('quit-dialog'),
     quitMessage: document.getElementById('quit-message'),
     endGameDialog: document.getElementById('end-game-dialog'),
-    overlay_dailog:  document.getElementById('id_overlay')
+    overlay_dailog:  document.getElementById('id_overlay'),
+    lamp_dailog: document.getElementById('lamp-dialog')
 };
 
 // Lifelines Container
@@ -63,7 +64,10 @@ const fiftyFiftyDetailsContainer = {
 // Buttons Container
 const buttons = {
     lock: document.getElementById('lock-button'),
-    quit: document.getElementById('quit-button')
+    quit: document.getElementById('quit-button'),
+    lamp_btn: document.getElementById('lamp-button'),
+    next_btn: document.getElementById('next-button')
+
 };
 
 
@@ -182,9 +186,9 @@ buttons.lock.addEventListener('click', () => {
         optionColorSpan.style.color = '#ececec';
 
         // Sets the color of label to yellow
-        answerLabel.style.background =
-            'linear-gradient(90deg, rgba(240,176,0,1) 0%, rgba(224,209,70,1) 50%, rgba(240,176,0,1) 100%)';
-        answerLabel.style.color = '#2a2a2a';
+        // answerLabel.style.background =
+        //     'linear-gradient(90deg, rgba(240,176,0,1) 0%, rgba(224,209,70,1) 50%, rgba(240,176,0,1) 100%)';
+        // answerLabel.style.color = '#2a2a2a';
         console.log(selectedAnswer[0].value);
 
         checkAnswer(selectedAnswer[0].value);
@@ -195,12 +199,90 @@ buttons.lock.addEventListener('click', () => {
     }
 });
 
+function isMobileLandscape() {
+    return (
+        'ontouchstart' in window &&
+        window.innerWidth > window.innerHeight && // Landscape
+        window.innerWidth <= 1024 // Consider it mobile/tablet
+    );
+}
+
+let isProcessing = false;
+
+document.getElementById('answer-container').addEventListener('click', function (e) {
+    if (!isMobileLandscape()) return; // ⛔ Skip if not landscape on mobile
+    if (isProcessing) return;
+    isProcessing = true;
+
+    setTimeout(() => { isProcessing = false; }, 300); // small debounce
+
+    const label = e.target.closest('label.answer');
+    if (!label) return;
+
+    const radio = label.querySelector('input[type="radio"]');
+    if (!radio || radio.disabled) return;
+
+    // 🔒 Disable all answer inputs after one is clicked
+    const allInputs = document.querySelectorAll('input[name="answer"]');
+    allInputs.forEach(input => input.disabled = true);
+
+      
+    // ✅ Select and lock the clicked one
+    radio.checked = true;
+
+    // lockButtons(buttons);
+    lockLifelines(lifelines);
+
+    if (slot <= 16) pauseTimer();
+
+    const selectedAnswer = Array.from(allInputs).filter(el => el.checked);
+
+    if (selectedAnswer.length === 1) {
+        const answerLabel = selectedAnswer[0].parentNode;
+
+        const spans = document.querySelectorAll('.checked');
+        spans.forEach(span => (span.style.visibility = 'hidden'));
+
+        const optionColorSpan = document.getElementById(
+            `option-color${selectedAnswer[0].value}`
+        );
+        // if (optionColorSpan) optionColorSpan.style.color = '#ececec';
+
+        console.log(selectedAnswer[0].value);
+        checkAnswer(selectedAnswer[0].value);
+    } else {
+        console.log('Game ended');
+        checkAnswer(null);
+    }
+});
+
+
 function show_overlay(){
     dialogs.overlay_dailog.classList.add('open')
 }
 function close_overlay(){
     dialogs.overlay_dailog.classList.remove('open')
 }
+
+buttons.next_btn.addEventListener('click', () => {
+    setTimeout(() => {
+        endQuestion(true);
+    }, 1000);
+    document.getElementById('bottom_btn').style.display='none';
+});
+
+buttons.lamp_btn.addEventListener('click', () => {
+    // Show Dialog
+    dialogs.lamp_dailog.style.display = 'block';
+    show_overlay();
+});
+
+const btnOk = document.getElementById('lamp-dialog-close');
+btnOk.addEventListener('click', () => {
+    dialogs.lamp_dailog.style.display = 'none';
+    close_overlay();
+
+});
 
 buttons.quit.addEventListener('click', () => {
     // Show Dialog
@@ -348,10 +430,13 @@ function getQuestion(price) {
         setTimer(null);
     }
 
+    document.getElementById('bottom_btn').style.display='none';
+
     let language = document.querySelector('input[name="language"]:checked').value || ''; 
     // console.log(`Level: ${slot}, Language: ${language}`);
 
     document.getElementById('levels-btn').innerHTML = `Level :- ${slot}`;
+    document.getElementById('landscape_level_btn').innerHTML = `Level :- ${slot}`;
 
     // Make question AJAX request
     let questionRequest = new XMLHttpRequest();
@@ -420,6 +505,9 @@ function setQuestion(questionObject) {
     // Set the question
     container.question.innerHTML = questionObject.question[language];
 
+    const explanationText = questionObject.explanation[language];
+    document.getElementById('explanation_id').innerHTML = explanationText;
+
     // Set options after 5 seconds
     // setTimeout(() => {
     container.option1.innerHTML = `<input type="radio" name="answer" id="1" value="1" /><span class="option-color" id="option-color1">A:&nbsp;</span> ${option1} <span class="checked"></span>`;
@@ -462,34 +550,62 @@ function checkAnswer(selectedAnswer) {
 
                         console.log('Correct answer!');
                         is_correct = true;
-                        selectedAnswerLabel.style.background =
-                            'linear-gradient(90deg, rgba(47,132,4,1) 0%, rgba(87,212,8,1) 50%, rgba(47,132,4,1) 100%)';
+                        
+
+                        if (!isMobileLandscape()) {
+                            selectedAnswerLabel.style.background =
+                                'linear-gradient(90deg, rgba(47,132,4,1) 0%, rgba(87,212,8,1) 50%, rgba(47,132,4,1) 100%)';
+                        }else{
+                            selectedAnswerLabel.style.width = '98%';
+                            selectedAnswerLabel.style.background = "url('./../img/greenbox.png') no-repeat center center";
+                            selectedAnswerLabel.style.backgroundSize = '100% 100%';
+                            selectedAnswerLabel.style.boxSizing = 'border-box';
+                        }
                         selectedAnswerLabel.style.color = '#ffffff';
 
-                        const optionColorSpan = document.getElementById(
-                            `option-color${selectedAnswer}`
-                        );
-                        optionColorSpan.style.color = '#f0d245';
+                        // const optionColorSpan = document.getElementById(
+                        //     `option-color${selectedAnswer}`
+                        // );
+                        // optionColorSpan.style.color = '#f0d245';
 
                         // Since answer is correct, end the question and go to next question
-                        setTimeout(() => {
-                            endQuestion(true);
-                        }, 1000);
+                        if (!isMobileLandscape()) {
+                            setTimeout(() => {
+                                endQuestion(true);
+                            }, 1000);
+                        }else{
+                            document.getElementById('bottom_btn').style.display='flex';
+                        }
                     } else {
                         const wronganswer = new Audio("../audio/wronganswer.wav");
                         wronganswer.play();
                         console.log('Incorrect answer!');
                         if (selectedAnswer) {
-                            // Answer is selected but is wrong
-                            selectedAnswerLabel.style.background =
-                                'linear-gradient(90deg, rgba(240,176,0,1) 0%, rgba(224,209,70,1) 50%, rgba(240,176,0,1) 100%)';
+                            if (!isMobileLandscape()) {
+                                // Answer is selected but is wrong
+                                selectedAnswerLabel.style.background =
+                                    'linear-gradient(90deg, rgba(240,176,0,1) 0%, rgba(224,209,70,1) 50%, rgba(240,176,0,1) 100%)';
+                            }else{
+                                selectedAnswerLabel.style.width = '98%';
+                                selectedAnswerLabel.style.background = "url('./../img/red.png') no-repeat center center";
+                                selectedAnswerLabel.style.backgroundSize = '100% 100%';
+                                selectedAnswerLabel.style.boxSizing = 'border-box';
+                            }
                         }
                         // Display correct answer
                         const correctAnswerLabel = document.getElementById(
                             `option${responseObject.answer}`
                         );
-                        correctAnswerLabel.style.background =
-                            'linear-gradient(90deg, rgba(47,132,4,1) 0%, rgba(87,212,8,1) 50%, rgba(47,132,4,1) 100%)';
+
+                        if (!isMobileLandscape()) {
+                            correctAnswerLabel.style.background =
+                                'linear-gradient(90deg, rgba(47,132,4,1) 0%, rgba(87,212,8,1) 50%, rgba(47,132,4,1) 100%)';
+                        }else{
+                            correctAnswerLabel.style.width = '98%';
+                            correctAnswerLabel.style.background = "url('./../img/greenbox.png') no-repeat center center";
+                            correctAnswerLabel.style.backgroundSize = '100% 100%';
+                            correctAnswerLabel.style.boxSizing = 'border-box';
+                        }
                         correctAnswerLabel.style.color = '#ffffff';
 
                         // Since answer is incorrect end the game
@@ -520,7 +636,15 @@ function endQuestion(isCorrect) {
         container.question.innerHTML = '&nbsp;';
         document.querySelectorAll('.answer').forEach(label => {
             label.innerHTML = '&nbsp';
-            label.style.background = '#390f4e';
+            if (!isMobileLandscape()){
+                label.style.background = '#390f4e';     
+            }else{
+                // label.style.background = 'transparent';
+                label.style.width = '98%';
+                label.style.background = "url('./../img/box.png') no-repeat center center";
+                label.style.backgroundSize = '100% 100%';
+                label.style.boxSizing = 'border-box';
+            }
             label.style.color = '#ffffff';
         });
 
@@ -1070,62 +1194,165 @@ function decrementTimer() {
 
 
 
-// Function to move the lifelines on mobile and restore on desktop
+// Utility to check if mobile in landscape
+function isMobileLandscape() {
+    return (
+        'ontouchstart' in window &&
+        window.innerWidth > window.innerHeight && // Landscape
+        window.innerWidth <= 1024 // Mobile/tablet width
+    );
+}
+
+// Lifeline movement logic
 function moveLifeline() {
-    const lifelineDiv = document.getElementById('desk_lifeline'); // Lifelines div
-    const languageContainer = document.querySelector('.topheader'); // Language container
-    // const aside = document.querySelector('aside'); // Sidebar
-    const aside = document.getElementById('side_aside'); // Sidebar
+    const lifelineDiv = document.getElementById('desk_lifeline');
+    const languageContainer = document.querySelector('.topheader');
+    const aside = document.getElementById('side_aside');
+    const landscapeContainer = document.getElementById('landscape_lifelines');
 
-    // Ensure all required elements exist
-    if (!lifelineDiv || !languageContainer || !aside) return;
+    if (!lifelineDiv || !landscapeContainer || !aside) return;
 
-    // Check screen width: Mobile is <= 768px
-    const isMobile = window.innerWidth <= 650;
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const isLandscape = window.innerWidth > window.innerHeight;
 
-    // If in mobile view, move lifelines to main after language container
-    if (isMobile) {
+    if (isMobile && isLandscape) {
+        // ✅ Only move to landscape container if it's mobile AND in landscape
+        if (!landscapeContainer.contains(lifelineDiv)) {
+            landscapeContainer.appendChild(lifelineDiv);
+        }
+    } else if (isMobile && !isLandscape) {
+        // 📱 Mobile in portrait mode
         if (!languageContainer.nextElementSibling?.isSameNode(lifelineDiv)) {
             languageContainer.parentNode.insertBefore(lifelineDiv, languageContainer.nextSibling);
         }
-    }
-    // If in desktop view, move lifelines back to the aside
-    else {
+    } else {
+        // 💻 Desktop or tablet
         if (!aside.contains(lifelineDiv)) {
-            // aside.appendChild(lifelineDiv);
             aside.insertBefore(lifelineDiv, aside.firstChild);
         }
     }
 }
 
-// Ensure the function runs on page load and window resize
-document.addEventListener('DOMContentLoaded', moveLifeline);
-window.addEventListener('resize', moveLifeline);
 
+// Setup popup for level buttons
+function setupLevelPopup(buttonId) {
+    const button = document.getElementById(buttonId);
+    const popup = document.getElementById('side_aside');
+    const closeBtn = document.getElementById('close-popup');
 
+    let overlay = document.querySelector('.level_overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'level_overlay';
+        document.body.appendChild(overlay);
+    }
 
-// Get elements
-const levelsBtn = document.getElementById('levels-btn');
-const sideAside = document.getElementById('side_aside');
-const closePopup = document.getElementById('close-popup');
+    if (!button || !popup || !closeBtn) return;
 
-// Create overlay for dimming background
-const overlay = document.createElement('div');
-overlay.className = 'level_overlay';
-document.body.appendChild(overlay);
+    button.addEventListener('click', () => {
+        popup.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
 
-// Open popup
-levelsBtn.addEventListener('click', () => {
-    sideAside.classList.add('active');
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Disable scrolling
-});
+    closeBtn.addEventListener('click', () => {
+        popup.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+}
 
-closePopup.addEventListener('click', () => {
-    sideAside.classList.toggle('active');
-    overlay.classList.toggle('active');
-})
+// Run popup setup
+setupLevelPopup('levels-btn');
+setupLevelPopup('landscape_level_btn');
 
+// Prepare variables for level movement
+const levelContent = document.querySelector('.price-table');
+const originalLevelParent = levelContent?.parentElement;
+const originalLevelNextSibling = levelContent?.nextElementSibling;
+const landscapeSidebar = document.getElementById('landscape_sidebar');
+const landscapeBtn = document.getElementById('landscape_level_btn');
 
+let overlay = document.querySelector('.level_overlay');
+if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'level_overlay';
+    document.body.appendChild(overlay);
+}
 
+// Setup landscape-specific sidebar behavior
+function setupLandscapeSidebar() {
+    if (!levelContent || !landscapeSidebar || !landscapeBtn) return;
 
+    // Move content into landscape sidebar
+    if (!landscapeSidebar.contains(levelContent)) {
+        landscapeSidebar.appendChild(levelContent);
+        levelContent.style.display = 'block';
+    }
+
+    // Open sidebar
+    landscapeBtn.addEventListener('click', () => {
+        landscapeSidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close sidebar
+    function closeSidebar() {
+        landscapeSidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close on outside click
+    document.addEventListener('click', function (event) {
+        const isClickInsideSidebar = landscapeSidebar.contains(event.target);
+        const isClickOnButton = landscapeBtn.contains(event.target);
+        if (!isClickInsideSidebar && !isClickOnButton && landscapeSidebar.classList.contains('active')) {
+            closeSidebar();
+        }
+    });
+}
+
+let hasLandscapeSidebarInitialized = false;
+
+// Handle orientation or resize
+function handleOrientationOrResize() {
+    moveLifeline();
+
+    if (isMobileLandscape()) {
+        if (!hasLandscapeSidebarInitialized) {
+            setupLandscapeSidebar();
+            hasLandscapeSidebarInitialized = true;
+        }
+
+        // Move into sidebar
+        if (!landscapeSidebar.contains(levelContent)) {
+            landscapeSidebar.appendChild(levelContent);
+            levelContent.style.display = 'block';
+        }
+
+    } else {
+        // Move back to original parent
+        if (originalLevelParent && !originalLevelParent.contains(levelContent)) {
+            if (originalLevelNextSibling) {
+                originalLevelParent.insertBefore(levelContent, originalLevelNextSibling);
+            } else {
+                originalLevelParent.appendChild(levelContent);
+            }
+            levelContent.style.display = 'block';
+        }
+
+        // Hide sidebar if open
+        if (landscapeSidebar?.classList.contains('active')) {
+            landscapeSidebar.classList.remove('active');
+            document.body.style.overflow = '';
+            overlay?.classList.remove('active');
+        }
+    }
+}
+
+// Run on load and orientation changes
+document.addEventListener('DOMContentLoaded', handleOrientationOrResize);
+window.addEventListener('resize', handleOrientationOrResize);
+window.addEventListener('orientationchange', handleOrientationOrResize);

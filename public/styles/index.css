@@ -18,6 +18,21 @@ body {
    transform: translate(-50%, -50%);
    animation: fill-anim 0.5s ease forwards 5s;
    margin-top: 20px;
+   display: none;
+}
+
+#top_line{
+   width: 100%;
+   justify-content: center;
+   display: flex;
+}
+
+#line{
+   top: -50px !important;
+   width: 325px !important;
+   height: 50px !important;
+   /* transform: translateX(50%) !important;
+   margin-left: 22%; */
 }
 
 @keyframes line-anim {
@@ -69,8 +84,11 @@ body {
 #button {
    position: absolute;
    top: 85%;
-   left: 46%;
+   /* left: 46%; */
    transform: translateY(200px);
+   width: 100%;
+   justify-content: center;
+   display: flex;
 }
 
 #button button {
@@ -128,6 +146,16 @@ body {
    height: 420px;
    width: 420px;
    opacity: 0;
+   display: none;
+}
+
+#logo-video {
+   position: absolute;
+   top: 45%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   height: 350px;
+   width: 350px;
 }
 
 /* Powered by  */
@@ -163,9 +191,9 @@ body {
      padding: 0;
    }
 
-   #button {
+   /* #button {
       left: 35%;
-   }
+   } */
  
    /* Example: Fix a main container if one exists */
    #main-container {
@@ -179,6 +207,13 @@ body {
  
    /* Your existing styles for mobile */
    #logo-img {
+      width: 300px;
+      height: 300px;
+      transform: translateX(-50%);
+      top: 30%;
+   }
+
+   #logo-video {
       width: 300px;
       height: 300px;
       transform: translateX(-50%);
@@ -228,7 +263,12 @@ body {
      /* left: 15% !important; */
      transform: translateX(-50%) !important;
    }
-   
+   #line{
+      margin-top: 20%;
+   }
+   #button {
+      top: 80%;
+   }
    #svg-logo {
      width: 300px !important;
      height: 100px !important;
@@ -256,6 +296,16 @@ body {
      left: 50%;
      top: 15% !important;
    }
+   #line{
+      margin-top: 0%;
+   }
+   
+   #logo-video {
+      width: 225px;
+      height: 225px;
+      left: 50%;
+      top: 15% !important;
+   }
  
  }
 
@@ -269,9 +319,15 @@ body {
          /* margin-top: 4rem; */
          top: 48%;
       }
-      #button {
-         left: 45%;
+      #logo-video {
+         width: 225px;
+         height: 225px;
+         left: 50%;
+         top: 48%;
       }
+      /* #button {
+         left: 45%;
+      } */
       #logo{
          top: -40px !important;
          transform: none !important;
