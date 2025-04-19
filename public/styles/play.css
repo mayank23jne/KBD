@@ -10,7 +10,7 @@
 body {
     display: flex;
     font-family: 'Poppins', sans-serif;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 button {
@@ -20,7 +20,7 @@ button {
 
 main {
     width: 70%;
-    padding: 2%;
+    padding: 1.5%;
     background-color: rgb(236, 236, 236);
     position: relative;
 }
@@ -82,8 +82,8 @@ main {
 .padding-div {
     position: relative;
     background: inherit;
-    width: 30%;
-    height: 20px;
+    width: 12%;
+    height: 10px;
     padding-bottom: 10px;
 }
 
@@ -189,18 +189,28 @@ main {
 
 /* When the radio button is checked, add a yellow background */
 
-#answer-container input:checked ~ .checked {
+/* #answer-container input:checked ~ .checked {
     background-size: 100%;
     border: 1px solid;
     background-color: #f0d245;
     opacity: 0.4;
-}
+
+} */
+
+/* label.answer:has(input:checked) {
+    width: 100%;
+    background: url('./../img/lockbox.png') no-repeat center center;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+} */
+
 
 .buttons {
     display: grid;
     grid-template-columns: 49.5% 49.5%;
     grid-column-gap: 1%;
-    margin-top: -25px;
+    margin-top: -22px;
+    /* margin-top: -3%; */
 }
 
 #lock-button {
@@ -696,21 +706,19 @@ aside {
 }
 
 /* Levels Button (Opens Popup) */
-.levels-btn {
-    /* background: linear-gradient(45deg, #9800fe, #feae00); */
+/* .levels-btn {
+
     background: linear-gradient(45deg, #9800fe, #4facfe);
     color: white;
-    /* box-shadow: 0 3px 20px rgba(0, 242, 254, 0.4); */
     display: block;
     font-size: 14px;
     height: 40px;
     margin: 12px auto;
 
-    /* z-index: 10000;  */
-}
+} */
 
 /* Hover & Active Effect for Levels Button */
-.levels-btn:hover {
+/* .levels-btn:hover {
     background: linear-gradient(45deg, #9800fe, #4facfe);
     transform: scale(1.1);
 }
@@ -730,6 +738,11 @@ aside {
     margin-top: 10px;
     margin-bottom: 15px;
     margin: 13px auto;
+} */
+
+#show_level{
+    display: flex;
+    justify-content: center;
 }
 
 /* Close Button (Inside Popup) */
@@ -796,7 +809,7 @@ aside {
 
 body{
     /* background-color: #473369 !important; */
-    background-color: black !important;
+    background-color: #6a4c8c !important;
 }
 
 #landscape_level_btn{
@@ -814,7 +827,7 @@ body{
         background-position-x: 95%;
     } */
     #main-section {
-        background-color: black !important;
+        background-color: transparent !important;
         background:url('');
         overflow-x: hidden !important;
     }
@@ -906,7 +919,7 @@ body{
 .language-container {
     position: relative;
     display: inline-block;
-    background: black;
+    background: transparent;
     color: white;
     border-radius: 25px;
     padding: 8px 15px;
@@ -943,7 +956,7 @@ body{
     font-weight: bold;  
     gap: 10px;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); */
     height: 40px;
     margin-top: 0px !important;
 }
@@ -1012,6 +1025,80 @@ body{
     #chart{
         height: 251px !important;
     }
+
+    #question{
+        padding: 20px;
+        min-height: 80px;
+        /* background-color: #5e5c5a; */
+        width: 100%; /* fixed width */
+        background: url('./../img/questionbox.png') no-repeat center center;
+        background-size: 100% 100%; /* stretches both width and height */
+        
+        box-sizing: border-box; /* ensures padding doesn’t overflow width */
+    }
+    .answer{
+        padding: 12px 30px;
+        /* width: 50%; */
+        background-color: transparent;
+    }
+
+    body {
+        background: url('./../img/mobilebackground.jpg') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    #main-section {
+        background-size: 100%; 
+        width: 100%;
+        height: auto;
+    }
+
+    .lifeline {
+        /* width: 20%;
+        height: 50px; */
+        background-color: #756491;
+        border: none;
+    }
+    /* #fifty-fifty-image {
+        width: 34px;
+        height: 34px;
+    } */
+    .lifelines{
+        padding: 10px 10px;
+    }
+    .answer {
+        width: 98%; /* fixed width */
+        background: url('./../img/box.png') no-repeat center center;
+        background-size: 100% 100%; /* stretches both width and height */
+        
+        box-sizing: border-box; /* ensures padding doesn’t overflow width */
+    }
+    
+    #answer-container{
+        gap: 10px;
+        margin-top: 30px;
+    }
+    #bottom_btn{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        gap: 10%;
+    }
+
+    .levels-btn {
+        margin: 12px auto;
+        height: 40px;
+        background-color: #8875af; /* Adjust to your purple */
+        color: white;
+        padding: 5px 20px;
+        border: none;
+        font-weight: bold;
+        font-size: 16px;
+        clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+    
  }
 
 
@@ -1030,6 +1117,7 @@ body{
         body {
             background: url('./../img/background.jpg') no-repeat center center;
             background-size: cover;
+            background-attachment: fixed;
         }
 
         #main-section {
@@ -1068,14 +1156,18 @@ body{
         }
         #quit-button {
             margin-top: 0px;
-            width: 25%;
+            width: 30px;
             height: 35px;
             /* background: transparent; */
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
         }
         .buttons #quit-button {
-            display: none;
+            display: none !important;
+        }
+        .buttons{
+            justify-content: center;
+            display: flex;
         }
 
         /* #main-section{ */
@@ -1083,6 +1175,7 @@ body{
             /* background-position-y: 10px; */
         /* } */
         #question{
+            padding: 10px 40px;
             min-height: 70px;
             /* background-color: #5e5c5a; */
             width: 98%; /* fixed width */
@@ -1092,7 +1185,7 @@ body{
             box-sizing: border-box; /* ensures padding doesn’t overflow width */
         }
         .answer{
-            padding: 10px 20px;
+            padding: 12px 30px;
             /* width: 50%; */
             background-color: transparent;
         }
@@ -1107,7 +1200,7 @@ body{
             margin-left: -8px;
         }
         #lock-button{
-            display: none;
+            width: 150px;
         }
         .option-color{
             margin-left: 20px;
@@ -1115,7 +1208,7 @@ body{
 
         .rocket-btn {
             margin: 8px auto;
-            height: 40px;
+            height: 30px;
             background-color: #8875af; /* Adjust to your purple */
             color: white;
             padding: 5px 20px;
@@ -1131,12 +1224,12 @@ body{
             display: block;
         }
         #lock-button{
-            height: 30px;
+            height: 40px;
             padding: 0px 20px;
         }
         #quit-button{
             height: 30px;
-            padding: 0px 20px;
+            padding: 0px 0px;
         }
         .dialog{
             /* left: 30%; */
@@ -1244,13 +1337,18 @@ body{
         }
         
 
-        #bottom_btn{
+        /* #bottom_btn{
             display: flex;
             justify-content: space-between;
             width: 108%;
+        } */
+          
+        #bottom_btn{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            gap: 10%;
         }
-          
-          
           
     
     }
@@ -1258,7 +1356,7 @@ body{
 
 
 #lamp-button {
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
     width: 60px;
     height: 40px;
     background-color: transparent;
@@ -1279,15 +1377,58 @@ body{
   
 
 #next-button {
-    margin-top: 1rem;
-    width: 60px;
-    height: 40px;
-    background-color: transparent;
+    /* margin-top: 1rem; */
+    /* width: 60px;
+    height: 40px; */
+    background-color: #33cc66;
     border: none;
-    font-size: 2rem;
-    cursor: pointer;
+
     /* display: none; */
+    color: white;
+
+    padding: 5px 10px;
+    width: 150px;
+    border-style: none;
+    border-radius: 0px 15px 0px 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
 }
 #bottom_btn{
     display: none;
+    margin-top: 30px;
+}
+
+
+#question{
+    padding: 10px 40px;
+    min-height: 70px;
+    /* background-color: #5e5c5a; */
+    width: 98%; /* fixed width */
+    background: url('./../img/questionbox.png') no-repeat center center;
+    background-size: 100% 100%; /* stretches both width and height */
+    
+    box-sizing: border-box; /* ensures padding doesn’t overflow width */
+}
+.answer{
+    padding: 12px 30px;
+    /* width: 50%; */
+    background-color: transparent;
+}
+
+.answer {
+    width: 98%; /* fixed width */
+    background: url('./../img/box.png') no-repeat center center;
+    background-size: 100% 100%; /* stretches both width and height */
+    
+    box-sizing: border-box; /* ensures padding doesn’t overflow width */
+}
+
+#bottom_btn{
+    display: flex;
+    justify-content: center;
+    width: 200%;
+    gap: 20%;
 }

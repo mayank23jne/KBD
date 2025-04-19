@@ -82,7 +82,7 @@
             <div id="landscape_sidebar" class="landscape-sidebar"></div>
             <div id="show_level">
                <!-- <button id="level-btn" class="btn level-btn">Level: </button> -->
-               <button id="levels-btn" class="btn levels-btn">&#10140; Level: </button>
+               <button id="levels-btn" class="levels-btn">&#10140; Level: </button>
             </div>
             <aside>
 
@@ -164,7 +164,7 @@
                     <input type="radio" name="answer" id="1" value="1" />&nbsp;
                     <span class="checked"></span>
                 </label>
-                <label class="answer" id="option2">
+                <label class="answer" id="option2" tabindex="-1">
                     <input type="radio" name="answer" id="2" value="2" />&nbsp;
                     <span class="checked"></span>
                 </label>
@@ -179,13 +179,13 @@
             </div>
             <div class="buttons">
                 <button id="lock-button">Lock</button>
-                <button id="quit-button">Quit</button>
+                <button id="quit-button" class="quit-btn">Quit</button>
 
                 <div id="bottom_btn">
                   <button id="lamp-button">
                      <span id="bulb">💡</span>
                   </button>
-                  <button id="next-button">&gt;</button> <!-- This is the > symbol -->
+                  <button id="next-button" style="color: white;">Next</button> <!-- This is the > symbol -->
                 </div>
                 
                 
@@ -212,7 +212,7 @@
          
          <!-- Lamp Dialog -->
          <div class="dialog" id="lamp-dialog">
-            <p id="explanation_id"></p>
+            <p style="color: white;" id="explanation_id"></p>
             <button class="dialog-close" id="lamp-dialog-close">Ok</button>
          </div>
 
