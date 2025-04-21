@@ -80,13 +80,38 @@ class Topscore {
     // Get the top 10 unique users sorted by highest play_level, then lowest play_time
     static async getTopScorers(question_type) {
         try {
+            // const query = `
+            //     SELECT user_id, username, user_type, play_time, play_level, question_type
+            //     FROM scorecard
+            //     WHERE question_type = ?
+            //     GROUP BY user_id, username, user_type, question_type, play_time, play_level
+            //     ORDER BY play_level DESC, play_time ASC
+                
+            // `;
+
             const query = `
-                SELECT user_id, username, user_type, play_time, play_level, question_type
-                FROM scorecard
-                WHERE question_type = ?
-                GROUP BY user_id, username, user_type, question_type, play_time, play_level
-                ORDER BY play_level DESC, play_time ASC
-                LIMIT 50
+                SELECT 
+                    @rank := @rank + 1 AS rank,
+                    user_id,
+                    username,
+                    user_type,
+                    play_time,
+                    play_level,
+                    question_type
+                FROM (
+                    SELECT 
+                        user_id,
+                        username,
+                        user_type,
+                        play_time,
+                        play_level,
+                        question_type
+                    FROM scorecard
+                    WHERE question_type = ?
+                    GROUP BY user_id, username, user_type, question_type, play_time, play_level
+                    ORDER BY play_level DESC, play_time ASC
+                ) AS sorted_scores,
+                (SELECT @rank := 0) AS r
             `;
             const [rows] = await pool.query(query, [question_type]);
             return rows;
@@ -95,6 +120,44 @@ class Topscore {
             throw error;
         }
     }
+
+    static async getUserRank(user_id, question_type) {
+        try {
+            const query = `
+                SELECT * FROM (
+                    SELECT 
+                        user_id,
+                        username,
+                        user_type,
+                        play_time,
+                        play_level,
+                        question_type,
+                        @rank := @rank + 1 AS rank
+                    FROM (
+                        SELECT 
+                            user_id,
+                            username,
+                            user_type,
+                            play_time,
+                            play_level,
+                            question_type
+                        FROM scorecard
+                        WHERE question_type = ?
+                        GROUP BY user_id, username, user_type, question_type, play_time, play_level
+                        ORDER BY play_level DESC, play_time ASC
+                    ) AS ordered_scores,
+                    (SELECT @rank := 0) AS r
+                ) AS ranked
+                WHERE user_id = ?
+            `;
+            const [rows] = await pool.query(query, [question_type, user_id]);
+            return rows[0]; // Should return one row for the given user_id
+        } catch (error) {
+            console.error('Error fetching user rank:', error);
+            throw error;
+        }
+    }
+    
 }
 
 module.exports = Topscore;

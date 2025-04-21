@@ -181,6 +181,8 @@
                 <div class="modal-content">
                     <span class="close" onclick="closeModal()">&times;</span>
                     <h2>🏆 Top Scorers</h2>
+                    <p style="margin: 10px 0px;">Your Rank is : <%= userRank %></p>
+
                     <table id="winner-table">
                         <thead>
                             <tr>
@@ -193,9 +195,9 @@
                         </thead>
                         <tbody id="winner-list">
                             <% if (topScorers.length > 0) { %>
-                                <% topScorers.forEach((scorer, index) => { %>
+                                <% topScorers.slice(0, 50).forEach((scorer, index) => { %>
                                     <tr>
-                                        <td>#<%= index + 1 %></td>
+                                        <td>#<%= scorer.rank %></td>
                                         <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
                                         <td><%= scorer.play_level %></td>
                                         <!-- <td><%= scorer.play_time %></td> -->

@@ -114,13 +114,18 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
         // Fetch the updated leaderboard (top 10 users)
         const topScorers = await Topscore.getTopScorers(question_type);
 
+        // Fetch this user's rank
+        const userRankData = await Topscore.getUserRank(id, question_type);
+        const userRank = userRankData?.rank || 'N/A';
+
         // Render the scorecard page with top scorers
         res.render('scorecard', {
             username,
             questionType: question_type || '',
             level: level || '1',
             time: time || '',
-            topScorers
+            topScorers,
+            userRank
         });
 
     } catch (error) {
