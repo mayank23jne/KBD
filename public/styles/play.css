@@ -82,7 +82,7 @@ main {
 .padding-div {
     position: relative;
     background: inherit;
-    width: 12%;
+    width: 20%;
     height: 10px;
     padding-bottom: 10px;
 }
@@ -531,6 +531,29 @@ aside {
         margin-top: 15px;
         margin-bottom: 40px;
     } */
+    .buttons #quit-button {
+        display: none !important;
+    }
+    #side_profile_bar #quit-button{
+        display: block !important;
+    }
+    #side_profile_bar{
+        display: flex !important;
+        gap: 8px;
+    }
+    #quit-button{
+        height: 30px;
+        padding: 0px 0px;
+        margin-top: 0px;
+        width: 35px;
+        height: 35px;
+        /* background: transparent; */
+        border-radius: 50%;
+        font-size: 18px;
+    }
+    #left_header{
+        width: 50% !important;
+    }
 }
 
 
@@ -567,12 +590,12 @@ aside {
     .dialog {
         width: 80%;
     }
-    /* .language-container {
-        margin-top: 20px !important;
-    } */
+    .language-container {
+        padding: 0px 0px !important;
+    }
 
     .custom-radio {
-        padding: 5px 20px !important;
+        padding: 5px 10px !important;
         font-size: 13px !important;
     }
 
@@ -1145,11 +1168,11 @@ body{
             margin-top: -45px;
         } */
         .timer-div {
-            margin-top: -4%;
+            margin-top: -3%;
         }
         #side_profile_bar{
             display: flex;
-            gap: 5px;
+            gap: 10px;
         }
         #side_profile_bar #quit-button{
             display: block;
@@ -1280,7 +1303,7 @@ body{
             top: 0;
             width: 300px;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9); /* transparent white */
+            background: rgb(16 15 15 / 90%);
             box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
             transition: left 0.3s ease;
             z-index: 999;
@@ -1326,7 +1349,7 @@ body{
             height: 34px;
         }
         .lifelines{
-            padding: 10px 10px;
+            padding: 5px 10px;
         }
         .answer {
             width: 98%; /* fixed width */
@@ -1349,7 +1372,18 @@ body{
             width: 100%;
             gap: 10%;
         }
-          
+        
+        .tooltip-text.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .tooltip-text {
+            top: 50%;              /* Vertically center */
+            left: -10px;           /* Start slightly to the left */
+            transform: translate(-100%, -50%); /* Fully move left, center vertically */
+        }
+        
     
     }
 }
@@ -1357,13 +1391,15 @@ body{
 
 #lamp-button {
     /* margin-top: 1rem; */
-    width: 60px;
+    width: 125px;
     height: 40px;
     background-color: transparent;
     border: none;
-    font-size: 2rem;
+    font-size: 1.5rem;
     cursor: pointer;
     /* display: none; */
+    border-radius: 0px 15px 0px 15px;
+    border: 3px solid yellow;
   }
   
   #bulb {
@@ -1387,7 +1423,7 @@ body{
     color: white;
 
     padding: 5px 10px;
-    width: 150px;
+    width: 125px;
     border-style: none;
     border-radius: 0px 15px 0px 15px;
     font-family: 'Poppins', sans-serif;
@@ -1430,5 +1466,7 @@ body{
     display: flex;
     justify-content: center;
     width: 200%;
-    gap: 20%;
+    gap: 10%;
 }
+
+

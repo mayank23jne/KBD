@@ -546,8 +546,9 @@ function setQuestion(questionObject) {
     unlockButtons(buttons);
     if (slot != 16) unlockLifelines(lifelines);
 
+    explain_button = document.getElementById('bottom_btn').style.display;
     // Start the timer if slots < 10
-    if (slot <= 16) {
+    if ((slot <= 16) && (explain_button==='none')) {
         startResumeTimer();
     }
     // }, 1000);
