@@ -118,6 +118,40 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
         const userRankData = await Topscore.getUserRank(id, question_type);
         const userRank = userRankData?.rank || 'N/A';
 
+        // fetch used questions 
+        const question_s = await Topscore.getUsedQuestionCount(id, question_type);
+        const question_score = question_s.question_score;
+        
+
+        // fetch the questions played 
+        const question_played = await Topscore.getQuestionScoresWithRank(question_type);
+
+        //fetch user question rank 
+        const userQuestionRankData = await Topscore.getUserQuestionRank(id, question_type);
+        const userQuestionRank = userQuestionRankData?.rank || 'N/A';
+
+        // fetch game played count 
+        const game_p = await Topscore.getUserGamePlayCount(id, question_type);
+        const game_score = game_p.game_played;
+
+        // fetch the game played 
+        const game_played = await Topscore.getGameScoresWithRank(question_type);
+
+        //fetch user game rank 
+        const userGameRankData = await Topscore.getUserGameRank(id, question_type);
+        const userGameRank = userGameRankData?.rank || 'N/A';
+
+        // fetch time played count 
+        const time_p = await Topscore.getUserTimePlayCount(id, question_type);
+        const time_score = time_p.total_play_time;
+
+        // fetch the game played 
+        const time_played = await Topscore.getTimeScoresWithRank(question_type);
+
+        //fetch user game rank 
+        const userTimeRankData = await Topscore.getUserTimeRank(id, question_type);
+        const userTimeRank = userTimeRankData?.rank || 'N/A';
+
         // Render the scorecard page with top scorers
         res.render('scorecard', {
             username,
@@ -125,7 +159,16 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
             level: level || '1',
             time: time || '',
             topScorers,
-            userRank
+            userRank,
+            question_score,
+            question_played,
+            userQuestionRank,
+            game_score,
+            game_played,
+            userGameRank,
+            time_score,
+            time_played,
+            userTimeRank
         });
 
     } catch (error) {

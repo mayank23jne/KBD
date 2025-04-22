@@ -150,6 +150,7 @@
                 <i class="fa-solid fa-trophy"></i> Top Scorers
             </button>
 
+
             <div class="scorecard">
                 <div class="score-item">
                     <label id="label-username">Username:</label>
@@ -178,48 +179,297 @@
             
             <!-- Winner Popup Modal -->
             <div id="winner-modal" style="display: none;" class="modal">
+                <style>
+                    .top-buttons {
+                        display: flex;
+                        justify-content: center;
+                        gap: 10px;
+                        padding: 10px 10px;
+                        flex-wrap: wrap;
+                    }
+
+                    .top-buttons button {
+                        padding: 10px 20px;
+                        border: 2px solid orange;
+                        border-radius: 25px;
+                        background-color: transparent;
+                        color: orange;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        position: relative;
+                        left: 0%;
+                        transform: none;
+                        height: 40px;
+                        width: 20%;
+                        font-size: 14px !important;
+                        padding: 0px !important;
+                        margin: 5px;
+                    }
+
+                    @media (max-width: 650px) {
+                        .top-buttons {
+                            display: block;
+                        }
+                        .top-buttons button {
+                            width: 100%;
+                            margin: 20px 0px;
+                        }
+                        .modal-content{
+                            height: 100vh;
+                        }
+                        .stats {
+                            margin-top: 20px;
+                        }
+                        .footer-time {
+                            margin-top: 20px;
+                        }
+                    }
+
+                    .top-buttons button.active {
+                        background-color: orange;
+                        color: #3d2b1f; /* dark text like your image */
+                        border: none;
+                    }
+
+                    .container {
+                    padding: 20px;
+                    }
+
+                    .score-title {
+                    font-size: 20px;
+                    }
+
+                    .username {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: white;
+                    margin-top: 10px;
+                    }
+
+                    .stats {
+                    display: flex;
+                    justify-content: space-around;
+                    
+                    flex-wrap: wrap;
+                    }
+
+                    .stat-box {
+                    color: orange;
+                    margin: 10px;
+                    font-size: 24px;
+                    }
+
+                    .stat-box span {
+                    display: block;
+                    font-size: 22px;
+                    color: white;
+                    margin-top: 10px;
+                    }
+
+                    .footer-time {
+                    color: orange;
+                    font-size: 24px;
+                    }
+                    
+                    #user_rank{
+                        color: orange;
+                        font-size: 24px;
+                    }
+
+                    .footer-time span {
+                    display: block;
+                    color: white;
+                    font-size: 22px;
+                    margin-top: 10px;
+                    }
+
+                    .section {
+                    display: none;
+                    padding: 0px;
+                    }
+
+                    .section.active {
+                    display: block;
+                    }
+
+                    span {
+                        padding-top: 0px;
+                    }
+                </style>
                 <div class="modal-content">
                     <span class="close" onclick="closeModal()">&times;</span>
-                    <h2>🏆 Top Scorers</h2>
-                    <p style="margin: 10px 0px;">Your Rank is : <%= userRank %></p>
+                    <!-- <h2>🏆 Top Scorers</h2> -->
 
-                    <table id="winner-table">
-                        <thead>
-                            <tr>
-                                <th>🏅 Rank</th>
-                                <th><i class="fa-solid fa-user"></i> Username</th>
-                                <th>🚀 Play Level</th>
-                                <th>⏱️ Play Time</th>
-                                <th>📚 Question Type</th>
-                            </tr>
-                        </thead>
-                        <tbody id="winner-list">
-                            <% if (topScorers.length > 0) { %>
-                                <% topScorers.slice(0, 50).forEach((scorer, index) => { %>
-                                    <tr>
-                                        <td>#<%= scorer.rank %></td>
-                                        <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
-                                        <td><%= scorer.play_level %></td>
-                                        <!-- <td><%= scorer.play_time %></td> -->
-                                        <td>
-                                            <% 
-                                                const time = scorer.play_time.split(' ');
-                                                const minutes = parseInt(time[0]);
-                                                const seconds = time.length > 2 ? time[2] : '';
-                                            %>
-                                            
-                                            <%= minutes === 0 ? `${seconds} sec` : scorer.play_time %>
-                                        </td>
-                                        <td><%= scorer.question_type %></td>
-                                    </tr>
-                                <% }); %>
-                            <% } else { %>
+                    <div class="top-buttons">
+                        <button class="tab-btn active" onclick="showSection('myScores', this)">My Scores</button>
+                        <button class="tab-btn" onclick="showSection('questionsPlayed', this)">Questions Played</button>
+                        <button class="tab-btn" onclick="showSection('gamesPlayed', this)">Games Played</button>
+                        <button class="tab-btn" onclick="showSection('timePlayed', this)">Time Played</button>
+                    </div>
+
+                    <script>
+                        function showSection(id, btn) {
+                          // Hide all sections
+                          document.querySelectorAll('.section').forEach(section => {
+                            section.classList.remove('active');
+                          });
+                    
+                          // Remove active class from all buttons
+                          document.querySelectorAll('.tab-btn').forEach(button => {
+                            button.classList.remove('active');
+                          });
+                    
+                          // Show selected section and highlight button
+                          document.getElementById(id).classList.add('active');
+                          btn.classList.add('active');
+                        }
+                    </script>
+                    
+                    <!-- Sections -->
+                    <div id="myScores" class="section active">
+                        <div class="container">
+                            <div class="score-title">Your Score for <%= questionType %> Game</div>
+                            <div class="username"><%= username %></div>
+                        
+                            <div class="stats">
+                              <div class="stat-box">
+                                Total Games
+                                <span><%= game_score %></span>
+                              </div>
+                              <div class="stat-box">
+                                Total Questions
+                                <span><%= question_score %></span>
+                              </div>
+                            </div>
+                        
+                            <div class="footer-time">
+                              Total Time
+                              <span>
+
+                                <% 
+                                  let formattedTimeScore = time_score;
+                                  if (time_score) {
+                                    const timeParts = time_score.split(':'); // [00h, 01m, 24s]
+                                    formattedTimeScore = 
+                                      (timeParts[0] !== '00h' ? timeParts[0] + ':' : '') +
+                                      (timeParts[1] !== '00m' ? timeParts[1] + ':' : '') +
+                                      timeParts[2];
+                                  }
+                                %>
+                                <%= formattedTimeScore || '-' %>
+
+                              </span>
+                
+                       
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="questionsPlayed" class="section">
+                        <p id="user_rank" style="margin: 5px 0px;">Your Rank is : <%= userQuestionRank %></p>
+
+                        <table id="winner-table">
+                            <thead>
                                 <tr>
-                                    <td colspan="4">No top scorers yet</td>
+                                    <th>🏅 Rank</th>
+                                    <th><i class="fa-solid fa-user"></i> Username</th>
+                                    <th>🚀 Score</th>
                                 </tr>
-                            <% } %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody id="winner-list">
+                                <% if (question_played.length > 0) { %>
+                                    <% question_played.slice(0, 50).forEach((scorer, index) => { %>
+                                        <tr>
+                                            <td>#<%= scorer.rank %></td>
+                                            <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                                            <td><%= scorer.question_score %></td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4">No top scorers yet</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div id="gamesPlayed" class="section">
+                        <p id="user_rank" style="margin: 5px 0px;">Your Rank is : <%= userGameRank %></p>
+
+                        <table id="winner-table">
+                            <thead>
+                                <tr>
+                                    <th>🏅 Rank</th>
+                                    <th><i class="fa-solid fa-user"></i> Username</th>
+                                    <th>🚀 Game</th>
+                                </tr>
+                            </thead>
+                            <tbody id="winner-list">
+                                <% if (game_played.length > 0) { %>
+                                    <% game_played.slice(0, 50).forEach((scorer, index) => { %>
+                                        <tr>
+                                            <td>#<%= scorer.rank %></td>
+                                            <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                                            <td><%= scorer.game_played %></td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4">No top scorers yet</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="timePlayed" class="section">
+                        <p id="user_rank" style="margin: 5px 0px;">Your Rank is : <%= userTimeRank %></p>
+
+                        <table id="winner-table">
+                            <thead>
+                                <tr>
+                                    <th>🏅 Rank</th>
+                                    <th><i class="fa-solid fa-user"></i> Username</th>
+                                    <th>⏱️ Play Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="winner-list">
+                                <% if (time_played.length > 0) { %>
+                                    <% time_played.slice(0, 50).forEach((scorer, index) => { %>
+                                        <tr>
+                                            <td>#<%= scorer.rank %></td>
+                                            <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                                           
+                                            <td>
+                                                <% 
+                                                  let formattedTime = scorer.total_play_time;
+                                                  if (scorer.total_play_time) {
+                                                    const timeParts = scorer.total_play_time.split(':'); // [00h, 01m, 24s]
+                                                    formattedTime = 
+                                                      (timeParts[0] !== '00h' ? timeParts[0] + ':' : '') +
+                                                      (timeParts[1] !== '00m' ? timeParts[1] + ':' : '') +
+                                                      timeParts[2];
+                                                  }
+                                                %>
+                                                <%= formattedTime || '-' %>
+                                            </td>
+                                              
+                                            
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="4">No top scorers yet</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
 
@@ -404,7 +654,7 @@
                 position: absolute;
                 top: 10px;
                 right: 15px;
-                font-size: 24px;
+                font-size: 30px;
                 cursor: pointer;
                 color: white;
             }
