@@ -1102,7 +1102,7 @@ body{
         margin-top: 30px;
     }
     #bottom_btn{
-        display: flex;
+        /* display: flex; */
         justify-content: center;
         width: 100%;
         gap: 10%;
@@ -1367,7 +1367,7 @@ body{
         } */
           
         #bottom_btn{
-            display: flex;
+            /* display: flex; */
             justify-content: center;
             width: 100%;
             gap: 10%;
@@ -1463,7 +1463,7 @@ body{
 }
 
 #bottom_btn{
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     width: 200%;
     gap: 10%;

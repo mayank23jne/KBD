@@ -12,7 +12,7 @@
         <style>
             body {
                 margin: 0;
-                overflow: hidden;
+                overflow-x: hidden;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -23,7 +23,7 @@
             }
 
             .scorecard-container {
-                padding: 3rem;
+                padding: 2rem;
                 border-radius: 20px;
                 box-shadow: 0 10px 40px rgba(255, 105, 180, 0.3);
                 background: rgba(30, 30, 60, 0.95);
@@ -41,9 +41,9 @@
                 font-size: 1.1rem;
             }
 
-            .score-item:last-child {
+            /* .score-item:last-child {
                 border-bottom: none;
-            }
+            } */
 
             #btn-home {
                 margin-top: 2rem;
@@ -100,16 +100,21 @@
 
             /* Mobile responsiveness */
             /* @media (max-width: 768px) { */
-                span {
-                    padding-top: 15px;
-                }
+            span {
+                margin: 15px 0 8px !important;
+            }
             /* } */
+
+            label {
+                margin: 15px 0 8px !important;
+            }
 
             /* Landscape Mode */
             @media screen and (orientation: landscape) {
                 @media (max-height: 600px) {
                     body{
                         height: auto;
+                        padding: 12px 25px;
                     }
                     .scorecard-container{
                         padding: 1rem 3rem;
@@ -117,9 +122,9 @@
                     #btn-winner{
                         margin-top: -20px;
                         font-weight: 500;
-                        left: 90%;
+                        left: 85%;
                         height: 30px;
-                        width: 21%;
+                        width: 25%;
                     }
                     .score-item {
                         padding: 2px 0;
@@ -132,33 +137,193 @@
                         left: 30%;
                         margin-top: 1rem;
                     }
+
+                    #share_button{
+                        margin-top: -30px !important;
+                        font-weight: 500;
+                        left: 98%;
+                        height: 30px;
+                        width: 30px;
+                        margin-left: 25px;
+                        border: none;
+                    }
+
+                    #share-popup{
+                        justify-content: flex-end !important;
+                        position: absolute !important;
+                        left: 70% !important;
+                        top: 1% !important;
+                        gap: 0.5rem !important;
+                    }
+                    
+                    #popup_buttons {
+                        width: 35px !important;
+                        left: 18px !important;
+                        margin-top: 0px !important;
+                        padding: 0px !important;
+                        height: 30px !important;
+                    }
+                    .scorecard{
+                        background-size: 30% 100% !important;
+                    }
                 }
+            }
+
+            @media (max-width: 350px) {
+                #play-time{
+                    width: 80px !important;
+                }
+            }
+
+            #popup_buttons{
+                width: 30px;
+                margin-top: 5px;
+                padding: 5px;
+            }
+
+            #share-popup{
+                justify-content: center;
+            }
+
+            #share_button{
+                margin-top: 10px;
+                height: 35px;
+                padding: 5px;
+                border: none;
+            }
+
+            .custom-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-top: 2px solid #333;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: auto;
+            display: none;
+            }
+
+
+            @keyframes spin {
+            to { transform: rotate(360deg); }
+            }
+
+            .scorecard{
+                background: url('./../img/trophy.png') no-repeat center;
+                background-size: 40% 55%;
+            }
+
+            #label-question-type {
+                display: inline-block;
+                max-width: 100px; /* or any small width */
+                white-space: normal;
+                word-break: break-word;
+            }
+            #label-play-time {
+                display: inline-block;
+                max-width: 100px; /* or any small width */
+                white-space: normal;
+                word-break: break-word;
             }
 
         </style>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        
+
     </head>
     <body>
         <!-- Fireworks Canvas -->
         <canvas id="fireworksCanvas"></canvas>
 
+
         <div class="scorecard-container">
+          
+            
             <div id="header">Scorecard</div>
             <button id="btn-winner" onclick="showWinners()">
                 <i class="fa-solid fa-trophy"></i> Top Scorers
             </button>
 
+            <button id="share_button" onclick="shareImage()" class="btn-light">
+                <i class="bi bi-share-fill" id="id_share_icon"></i>
+                <div class="custom-spinner" id="spinner_id"></div>
+            </button>
+
+            
+
+            <!-- <div id="share-popup" style="display: none; gap: 1rem;">
+                <button id="popup_buttons" onclick="shareImage('whatsapp')" class="btn btn-success btn-sm"><i class="bi bi-whatsapp"></i></button>
+                <button id="popup_buttons" onclick="shareImage('facebook')" class="btn btn-primary btn-sm"><i class="bi bi-facebook"></i></button>
+                <button id="popup_buttons" onclick="shareImage('instagram')" class="btn btn-danger btn-sm"><i class="bi bi-instagram"></i></button>
+            </div> -->
+              
+            <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+            <script>
+                function toggleSharePopup() {
+                  const popup = document.getElementById("share-popup");
+                  popup.style.display = popup.style.display === "none" ? "flex" : "none";
+                }
+                
+                async function shareImage() {
+                    const scorecard = document.querySelector(".scorecard-container");
+
+                    // Hide unnecessary elements during capture
+                    document.getElementById("id_share_icon").style.display = "none";
+                    document.getElementById("btn-home").style.display = "none";
+                    document.getElementById("btn-play-again").style.display = "none";
+                    document.getElementById("spinner_id").style.display = "block";
+
+                    await html2canvas(scorecard, {
+                        scale: window.devicePixelRatio * 2,
+                        useCORS: true,
+                        backgroundColor: null,
+                        allowTaint: true,
+                        removeContainer: true
+                    }).then(canvas => {
+                        canvas.toBlob(async blob => {
+                        const file = new File([blob], "scorecard.png", { type: "image/png" });
+
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            try {
+                            await navigator.share({
+                                files: [file],
+                                title: "My KBDS Quiz Scorecard",
+                                text: `Check out my score on KBDS! 🏆\n\nDownload the game:\nhttps://play.google.com/store/apps/details?id=com.pepcus.kbds`
+                            });
+                            } catch (err) {
+                            console.error("Share failed:", err);
+                            }
+                        } else {
+                            alert("Your device doesn't support sharing files.");
+                        }
+
+                        // Restore UI after sharing
+                        document.getElementById("spinner_id").style.display = "none";
+                        document.getElementById("btn-home").style.display = "block";
+                        document.getElementById("btn-play-again").style.display = "block";
+                        document.getElementById("id_share_icon").style.display = "block";
+                        }, "image/png");
+                    });
+                }
+
+
+            </script>
+                
+
 
             <div class="scorecard">
                 <div class="score-item">
-                    <label id="label-username">Username:</label>
-                    <span id="username" style="margin-left: 20px;"><%= username %></span>
+                    <label id="label-username">Player:</label>
+                    <span id="username" style="margin: 20px 0 8px;"><%= username %></span>
                 </div>
 
                 <div class="score-item">
-                    <label id="label-question-type">Question Type:</label>
+                    <label id="label-question-type">Level Played:</label>
                     <span id="question-type"><%= questionType %></span>
                 </div>
 
@@ -168,7 +333,7 @@
                 </div>
 
                 <div class="score-item">
-                    <label id="label-play-level">Play Level:</label>
+                    <label id="label-play-level">Question Cleared:</label>
                     <span id="play-level"><%= level %></span>
                 </div>
             </div>
