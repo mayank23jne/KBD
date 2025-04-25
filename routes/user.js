@@ -6,7 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const e = require('express');
+
 
 require('dotenv').config(); // Make sure this is at the top
 

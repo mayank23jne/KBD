@@ -153,22 +153,25 @@ window.addEventListener('DOMContentLoaded', event => {
     startGame();
 });
 
+
 buttons.lock.addEventListener('click', () => {
     // Lock Buttons and Lifelines
     lockButtons(buttons);
     lockLifelines(lifelines);
 
-    // Pause timer if exists
-    if (slot <= 16) {
-        pauseTimer();
-    }
-
+    
     // Gets the selected input radio button
     const selectedAnswer = Array.from(
         document.getElementsByName('answer')
     ).filter(element => element.checked == true);
-
+    
     if (selectedAnswer.length == 1) {
+
+        // Pause timer if exists
+        if (slot <= 16) {
+            pauseTimer();
+        }
+        
         // Answer is selected
         // Gets the parent of input button -> Label
         const answerLabel = selectedAnswer[0].parentNode;
@@ -195,7 +198,8 @@ buttons.lock.addEventListener('click', () => {
     } else {
         // Time is up
         console.log('Game ended');
-        checkAnswer(null);
+        // checkAnswer(null);
+        unlockButtons(buttons);
     }
 });
 
@@ -210,6 +214,8 @@ function isMobileLandscape() {
 document.getElementById('answer-container').addEventListener('click', function (e) {
     // Make sure the click was on a radio input
     if (e.target && e.target.matches('input[type="radio"][name="answer"]')) {
+
+        buttons.lock.disabled = false;
 
         // Reset background of all labels
         const allLabels = document.querySelectorAll('#answer-container .answer');
@@ -287,8 +293,12 @@ function close_overlay(){
 }
 
 buttons.next_btn.addEventListener('click', () => {
+    if(is_correct){
+        endQuestion(true);
+    }else{
+        endQuestion(false);
+    }
     // setTimeout(() => {
-    endQuestion(true);
     // }, 1000);
     document.getElementById('bottom_btn').style.display='none';
     document.getElementById('lock-button').style.display='block';
@@ -434,8 +444,6 @@ function getQuestion(price) {
     lockButtons(buttons);
     lockLifelines(lifelines);
 
-    const questionshow = new Audio("../audio/questionshow.wav");
-    questionshow.play();
     
     if(slot > 10 ){
         endQuestion(false);
@@ -445,6 +453,13 @@ function getQuestion(price) {
         endQuestion(false);
         return  '';
     }
+    
+    const questionshow = new Audio("../audio/questionshow.wav");
+    questionshow.play();
+
+    const answerContainer = document.getElementById('answer-container');
+    // Unable further clicking
+    answerContainer.style.pointerEvents = 'auto';
 
     // Set the time based on slot
     if (slot <= 5) {
@@ -544,6 +559,11 @@ function setQuestion(questionObject) {
 
     // Unlock buttons and lifelines once options are displayed
     unlockButtons(buttons);
+    // if(is_correct){
+    //     buttons.lock.disabled = false;
+    // }else{
+    buttons.lock.disabled = true;
+    // }
     if (slot != 16) unlockLifelines(lifelines);
 
     explain_button = document.getElementById('bottom_btn').style.display;
@@ -570,6 +590,10 @@ function checkAnswer(selectedAnswer) {
                 const selectedAnswerLabel = document.getElementById(
                     `option${selectedAnswer}`
                 );
+                const answerContainer = document.getElementById('answer-container');
+                // Disable further clicking
+                answerContainer.style.pointerEvents = 'none';
+
                 setTimeout(() => {
                     // Display answer result after 2 seconds
                     if (responseObject.answer == selectedAnswer) {
@@ -639,12 +663,18 @@ function checkAnswer(selectedAnswer) {
                         // }
                         correctAnswerLabel.style.color = '#ffffff';
 
+                        is_correct = false;
+
+                        document.getElementById('bottom_btn').style.display='flex';
+                        document.getElementById('lock-button').style.display='none';
+                        document.getElementsByClassName('quit-btn')[0].style.display = 'none';
+
                         // Since answer is incorrect end the game
-                        setTimeout(() => {
-                            endQuestion(false);
-                        }, 1000);
+                        // setTimeout(() => {
+                        //     endQuestion(false);
+                        // }, 1000);
                     }
-                }, 1000);
+                }, 100);
             } else {
                 console.log('Error: ' + responseObject.error);
             }
@@ -662,38 +692,38 @@ function checkAnswer(selectedAnswer) {
 function endQuestion(isCorrect) {
     // TODO Display a dialog
 
-    setTimeout(() => {
+    // setTimeout(() => {
         // Set all label backgrounds and text color to default settings and empty labels
-        container.question.innerHTML = '&nbsp;';
-        document.querySelectorAll('.answer').forEach(label => {
-            label.innerHTML = '&nbsp';
-            // if (!isMobileLandscape()){
-            //     label.style.background = '#390f4e';     
-            // }else{
-                // label.style.background = 'transparent';
-            label.style.width = '98%';
-            label.style.background = "url('./../img/box.png') no-repeat center center";
-            label.style.backgroundSize = '100% 100%';
-            label.style.boxSizing = 'border-box';
-            // }
-            label.style.color = '#ffffff';
-        });
+    container.question.innerHTML = '&nbsp;';
+    document.querySelectorAll('.answer').forEach(label => {
+        label.innerHTML = '&nbsp';
+        // if (!isMobileLandscape()){
+        //     label.style.background = '#390f4e';     
+        // }else{
+            // label.style.background = 'transparent';
+        label.style.width = '98%';
+        label.style.background = "url('./../img/box.png') no-repeat center center";
+        label.style.backgroundSize = '100% 100%';
+        label.style.boxSizing = 'border-box';
+        // }
+        label.style.color = '#ffffff';
+    });
 
-        // Set color spans to yellow
-        document.querySelectorAll('.option-color').forEach(span => {
-            span.style.color = '#f0d245';
-        });
+    // Set color spans to yellow
+    document.querySelectorAll('.option-color').forEach(span => {
+        span.style.color = '#f0d245';
+    });
 
-        if (isFlip) {
-            nextQuestion();
-        } else if (isQuit) {
-            endGame();
-        } else if (isCorrect) {
-            nextQuestion();
-        } else {
-            endGame();
-        }
-    }, 1000);
+    if (isFlip) {
+        nextQuestion();
+    } else if (isQuit) {
+        endGame();
+    } else if (isCorrect) {
+        nextQuestion();
+    } else {
+        endGame();
+    }
+    // }, 100);
 }
 
 function nextQuestion() {
@@ -741,7 +771,7 @@ function endGame() {
 
     setTimeout(() => {
         window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot-1}&time=${get_time}`;
-    }, 1000);
+    }, 100);
 
     // Clear markers
     document.querySelectorAll('.reached').forEach(marker => {
@@ -1218,7 +1248,8 @@ function decrementTimer() {
                 decrementTimer();
             } else {
                 console.log('Time is up');
-                buttons.lock.click();
+                // buttons.lock.click();
+                checkAnswer(null);
             }
         }, 1000);
     }
