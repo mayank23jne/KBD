@@ -191,7 +191,8 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST,     // MySQL host (e.g., localhost)
     user: process.env.DB_USER,     // MySQL username
     password: process.env.DB_PASS, // MySQL password
-    database: process.env.DB_NAME  // MySQL database name
+    database: process.env.DB_NAME,  // MySQL database name
+    port: process.env.DB_PORT
 });
 
 // Connect to MySQL Database

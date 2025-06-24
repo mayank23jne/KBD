@@ -210,7 +210,7 @@ class Topscore {
 
             const query = `
                 SELECT 
-                    @rank := @rank + 1 AS rank,
+                    @rank := @rank + 1 AS \`rank\`,
                     user_id,
                     username,
                     user_type,
@@ -226,12 +226,13 @@ class Topscore {
                         play_level,
                         question_type
                     FROM scorecard
-                    WHERE question_type = ?
+                    WHERE question_type = "Basic"
                     GROUP BY user_id, username, user_type, question_type, play_time, play_level
                     ORDER BY play_level DESC, play_time ASC
-                ) AS sorted_scores,
-                (SELECT @rank := 0) AS r
+                ) AS sorted_scores
+                CROSS JOIN (SELECT @rank := 0) AS vars;
             `;
+
             const [rows] = await pool.query(query, [question_type]);
             return rows;
         } catch (error) {
@@ -251,7 +252,7 @@ class Topscore {
                         play_time,
                         play_level,
                         question_type,
-                        @rank := @rank + 1 AS rank
+                        @rank := @rank + 1 AS \`rank\`
                     FROM (
                         SELECT 
                             user_id,
@@ -264,11 +265,12 @@ class Topscore {
                         WHERE question_type = ?
                         GROUP BY user_id, username, user_type, question_type, play_time, play_level
                         ORDER BY play_level DESC, play_time ASC
-                    ) AS ordered_scores,
-                    (SELECT @rank := 0) AS r
+                    ) AS ordered_scores
+                    CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked
-                WHERE user_id = ?
+                WHERE user_id = ?;
             `;
+
             const [rows] = await pool.query(query, [question_type, user_id]);
             return rows[0]; // Should return one row for the given user_id
         } catch (error) {
@@ -306,7 +308,7 @@ class Topscore {
                         ELSE username
                     END AS username,
                     question_score,
-                    @rank := @rank + 1 AS rank
+                    @rank := @rank + 1 AS \`rank\`
                 FROM (
                     SELECT 
                         used_questions.user_id,
@@ -317,13 +319,14 @@ class Topscore {
                     INNER JOIN questions ON questions.id = used_questions.question_id
                     INNER JOIN users ON users.id = used_questions.user_id
                     WHERE questions.question_type = ?
-                      AND used_questions.used_datetime IS NOT NULL
+                    AND used_questions.used_datetime IS NOT NULL
                     GROUP BY used_questions.user_id, users.username, users.user_type
                     ORDER BY question_score DESC
-                ) AS ordered_scores,
-                (SELECT @rank := 0) AS r
+                ) AS ordered_scores
+                CROSS JOIN (SELECT @rank := 0) AS vars
             ) AS ranked;
-          `;
+        `;
+
     
           const [rows] = await pool.query(query, [questionType]);
           return rows;
@@ -344,7 +347,7 @@ class Topscore {
                             ELSE username
                         END AS username,
                         question_score,
-                        @rank := @rank + 1 AS rank
+                        @rank := @rank + 1 AS \`rank\`
                     FROM (
                         SELECT 
                             used_questions.user_id,
@@ -355,14 +358,15 @@ class Topscore {
                         INNER JOIN questions ON questions.id = used_questions.question_id
                         INNER JOIN users ON users.id = used_questions.user_id
                         WHERE questions.question_type = ?
-                          AND used_questions.used_datetime IS NOT NULL
+                        AND used_questions.used_datetime IS NOT NULL
                         GROUP BY used_questions.user_id, users.username, users.user_type
                         ORDER BY question_score DESC
-                    ) AS ordered_scores,
-                    (SELECT @rank := 0) AS r
+                    ) AS ordered_scores
+                    CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked
-                WHERE user_id = ?
+                WHERE user_id = ?;
             `;
+
             const [rows] = await pool.query(query, [question_type, user_id]);
             return rows[0]; // Returns one row for the given user_id
         } catch (error) {
@@ -399,7 +403,7 @@ class Topscore {
                         ELSE username
                     END AS username,
                     game_played,
-                    @rank := @rank + 1 AS rank
+                    @rank := @rank + 1 AS \`rank\`
                 FROM (
                     SELECT 
                         scorecard.user_id,
@@ -409,12 +413,13 @@ class Topscore {
                     FROM scorecard 
                     INNER JOIN users ON users.id = scorecard.user_id
                     WHERE scorecard.question_type = ?
-                    GROUP BY scorecard.user_id, users.username, users.user_type
+                    GROUP BY scorecard.user_id, users.username, users.user_type, scorecard.game_played
                     ORDER BY game_played DESC
-                ) AS ordered_scores,
-                (SELECT @rank := 0) AS r
+                ) AS ordered_scores
+                CROSS JOIN (SELECT @rank := 0) AS vars
             ) AS ranked;
-          `;
+        `;
+
     
           const [rows] = await pool.query(query, [questionType]);
           return rows;
@@ -435,7 +440,7 @@ class Topscore {
                             ELSE username
                         END AS username,
                         game_played,
-                        @rank := @rank + 1 AS rank
+                        @rank := @rank + 1 AS \`rank\`
                     FROM (
                         SELECT 
                             scorecard.user_id,
@@ -445,13 +450,14 @@ class Topscore {
                         FROM scorecard 
                         INNER JOIN users ON users.id = scorecard.user_id
                         WHERE scorecard.question_type = ?
-                        GROUP BY scorecard.user_id, users.username, users.user_type
+                        GROUP BY scorecard.user_id, users.username, users.user_type, scorecard.game_played
                         ORDER BY game_played DESC
-                    ) AS ordered_scores,
-                    (SELECT @rank := 0) AS r
+                    ) AS ordered_scores
+                    CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked
-                WHERE user_id = ?
+                WHERE user_id = ?;
             `;
+
             const [rows] = await pool.query(query, [question_type, user_id]);
             return rows[0]; // Returns one row for the given user_id
         } catch (error) {
@@ -479,31 +485,32 @@ class Topscore {
 
     static async getTimeScoresWithRank(questionType) {
         try {
-          const query = `
-            SELECT * FROM (
-                SELECT 
-                    user_id,
-                    CASE 
-                        WHEN user_type = 'guest' THEN 'Guest'
-                        ELSE username
-                    END AS username,
-                    total_play_time,
-                    @rank := @rank + 1 AS rank
-                FROM (
+            const query = `
+                SELECT * FROM (
                     SELECT 
-                        scorecard.user_id,
-                        users.username,
-                        users.user_type,
-                        scorecard.total_play_time
-                    FROM scorecard 
-                    INNER JOIN users ON users.id = scorecard.user_id
-                    WHERE scorecard.question_type = ?
-                    GROUP BY scorecard.user_id, users.username, users.user_type
-                    ORDER BY total_play_time DESC
-                ) AS ordered_scores,
-                (SELECT @rank := 0) AS r
-            ) AS ranked;
-          `;
+                        user_id,
+                        CASE 
+                            WHEN user_type = 'guest' THEN 'Guest'
+                            ELSE username
+                        END AS username,
+                        total_play_time,
+                        @rank := @rank + 1 AS \`rank\`
+                    FROM (
+                        SELECT 
+                            scorecard.user_id,
+                            users.username,
+                            users.user_type,
+                            scorecard.total_play_time
+                        FROM scorecard 
+                        INNER JOIN users ON users.id = scorecard.user_id
+                        WHERE scorecard.question_type = ?
+                        GROUP BY scorecard.user_id, users.username, users.user_type, scorecard.total_play_time
+                        ORDER BY total_play_time DESC
+                    ) AS ordered_scores
+                    CROSS JOIN (SELECT @rank := 0) AS vars
+                ) AS ranked;
+            `;
+
     
           const [rows] = await pool.query(query, [questionType]);
           return rows;
@@ -524,7 +531,7 @@ class Topscore {
                             ELSE username
                         END AS username,
                         total_play_time,
-                        @rank := @rank + 1 AS rank
+                        @rank := @rank + 1 AS \`rank\`
                     FROM (
                         SELECT 
                             scorecard.user_id,
@@ -534,13 +541,14 @@ class Topscore {
                         FROM scorecard 
                         INNER JOIN users ON users.id = scorecard.user_id
                         WHERE scorecard.question_type = ?
-                        GROUP BY scorecard.user_id, users.username, users.user_type
+                        GROUP BY scorecard.user_id, users.username, users.user_type, scorecard.total_play_time
                         ORDER BY total_play_time DESC
-                    ) AS ordered_scores,
-                    (SELECT @rank := 0) AS r
+                    ) AS ordered_scores
+                    CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked
-                WHERE user_id = ?
+                WHERE user_id = ?;
             `;
+
             const [rows] = await pool.query(query, [question_type, user_id]);
             return rows[0]; // Returns one row for the given user_id
         } catch (error) {
