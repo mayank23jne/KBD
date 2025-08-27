@@ -1283,6 +1283,7 @@ function moveLifeline() {
         // ✅ Only move to landscape container if it's mobile AND in landscape
         if (!landscapeContainer.contains(lifelineDiv)) {
             landscapeContainer.appendChild(lifelineDiv);
+            aside.prepend(lifelineDiv);
         }
     } else if (isMobile && !isLandscape) {
         // 📱 Mobile in portrait mode

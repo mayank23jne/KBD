@@ -46,7 +46,7 @@ main {
     align-items: baseline;
     /* background: inherit; */
     justify-content: center;
-    margin-top: 5rem;
+    margin-top: 10rem;
 }
 
 .timer {
