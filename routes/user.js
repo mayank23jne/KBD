@@ -76,7 +76,7 @@ router.post('/register-with-google', async (req, res) => {
         // Create new user
         await User.createUser({ username, email, mobile:null, password:'', userType: 'google' }); 
         const user = await User.findOneWithGoogle({ email: email });
-        const redirectUrl = `/play-with-google?email=${btoa(email)}&lang=${user.language_select}%&q_type=Basic&level=Basic&user_type=google`;
+        const redirectUrl = `/play-with-google?email=${btoa(email)}&lang=en%&q_type=Basic&level=Basic&user_type=google`;
         res.status(200).json({
             status: true,
             message: 'User registered successfully!',
@@ -98,7 +98,7 @@ router.post('/login-with-google', async (req, res) => {
         res.status(200).json({
             status: true,
             message: 'Login successful!',
-            redirectUrl: `/play-with-google?email=${btoa(email)}&lang=${user.language_select}%&q_type=Basic&level=Basic&user_type=google`,
+            redirectUrl: `/play-with-google?email=${btoa(email)}&lang=en%&q_type=Basic&level=Basic&user_type=google`,
         });
     } catch (err) {
         console.error('❌ Error during login:', err);
