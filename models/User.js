@@ -104,6 +104,13 @@ class User {
         return rows.length ? rows[0] : null;
     }
 
+    // Find user by email
+    static async findOneWithGoogle({ email }) {
+        const query = 'SELECT * FROM users WHERE email = ? AND user_type = "google"';
+        const [rows] = await pool.query(query, [email]);
+        return rows.length ? rows[0] : null;
+    }
+
     // Compare hashed password
     static async comparePassword(enteredPassword, storedPassword) {
         return await bcrypt.compare(enteredPassword, storedPassword);

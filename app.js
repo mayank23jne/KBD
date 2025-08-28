@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
+const User = require('./models/User');
 
 const mysql = require('mysql2'); // Use mysql2 instead of mongoose
 
@@ -54,6 +55,24 @@ app.get('/play', isAuthenticated, (req, res) => {
     req.session.visitedIndex = false;
     const username = req.session.user ? req.session.user.username : 'Guest';
     res.render('play', { language: req.session.language , username: username});
+});
+
+app.get('/play-with-google', async (req, res) => {
+    console.log("play-with-google",req.query);
+    const email = atob(req.query.email);
+    console.log("email",email);
+    const user = await User.findOneWithGoogle({ email });
+    console.log("user",user);
+    if (!user) { 
+        return res.redirect('/');
+    }
+    req.session.user = {
+        id: user.id,
+        username: user.username,
+        user_type: user.user_type
+    };
+    req.session.language = user.language_select;
+    res.render('play', { language: req.session.language , username: user.username});
 });
 
 // app.get('/api/question', isAuthenticated, (req, res) => {
