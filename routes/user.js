@@ -86,6 +86,7 @@ router.post('/register-with-google', async (req, res) => {
             redirectUrl: redirectUrl,
         });
     } catch (err) {
+        
         console.error('❌ Error registering user:', err);
         res.status(500).json({ error: 'Server error: ' + err.message });
     }
