@@ -150,6 +150,45 @@
                 </div>
             </div>
 
+            <!-- Signup Form (Initially Hidden) -->
+            <div id="signup-form" style="display: none;margin-top: 10px;">
+                <div class="login_landscape">
+                    <div id="credentials-container">
+                        <div id="two_container">
+                            <div class="input-container">
+                                <label id="singup_label" for="new-username">Username:</label>
+                                <input class="signup_input" type="text" id="new-username" placeholder="Choose a username" />
+                            </div>
+    
+                            <div class="input-container" style="display: none;">
+                                <label id="singup_label" for="email">Email:</label>
+                                <input class="signup_input" type="email" id="email" placeholder="Enter your email" />
+                            </div>
+                            <div class="input-container">
+                                <label id="signup_label" for="mobile">Mobile:</label>
+                                <input class="signup_input" type="text" id="mobile" placeholder="Enter your mobile number" maxlength="10" />
+                            </div>
+                            
+                        </div>
+                        <div id="two_container">             
+                            <div class="input-container">
+                                <label id="singup_label" for="new-password">Password:</label>
+                                <input class="signup_input" type="password" id="new-password" placeholder="Create a password" />
+                            </div>
+    
+                            <div class="input-container">
+                                <label id="singup_label" for="confirm-password">Confirm Password:</label>
+                                <input class="signup_input" type="password" id="confirm-password" placeholder="Confirm your password" />
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <button type="submit" class="signup" id="btn-signup">Sign Up</button>
+
+                <p style="margin-top: 10px;">Already have an account? <a style="color: #ff77b9;" href="#" onclick="showLoginForm()">Login here</a></p>
+            </div>
         </div>
 
         <script>
