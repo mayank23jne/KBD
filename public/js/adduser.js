@@ -93,6 +93,7 @@ const loginForm = {
     language_select: document.getElementById('language-select'),
     question_type: document.getElementById('question_type'),
     userType: document.querySelector('input[name="userType"]:checked'),
+    email: document.getElementById('email'),
     submit: document.getElementById('btn-login'),
 };
 
@@ -144,6 +145,28 @@ loginForm.submit.addEventListener('click', () => {
         })
         .catch((err) => console.error('Error:', err));
 
+    }else if(user_type === 'google'){
+        console.log("google",loginForm.email.value);
+        const requestData = {
+            email: loginForm.email.value,
+            language_select: loginForm.language_select.value,
+            question_type: loginForm.question_type.value,
+            userType: user_type,
+        };
+        fetch(current_url+'/api/login-with-google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("data",data);
+            if (data.error) {
+                alert(data.error);
+            } else {
+                window.location.href = current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
+            }
+        });
     }else{
 
         const requestData = {

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Welcome to KBD</title>
+        <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link
+            href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            .input-container {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .input-container label {
+                width: 100px;
+            }
+
+            .input-container input {
+                flex: 1;
+                padding: 5px;
+            }
+
+            #password, #new-password, #confirm-password {
+                width: 150px;
+            }
+            #select_container{
+                display: flex;
+                gap: 0.5rem;
+                width: 60%;
+            }
+            #header {
+                width: 100%;
+            }
+            #question_type{
+                width: 60%;
+            }
+            #language-select{
+                width: 50%;
+            }
+            #btn-login{
+                left: 0% !important;
+                transform: none !important;
+            }
+
+            /* Login Button - Sunset Orange */
+            button.login {
+                background: linear-gradient(135deg, #5762f8, #ff58fa);
+                color: white;
+            }
+
+            button.login:hover {
+                background: linear-gradient(135deg, #3f4bf7, #f14dec);
+                box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
+            }
+
+            /* Signup Button - Hot Pink */
+            button.signup {
+                background: linear-gradient(135deg, #5762f8, #ff58fa);
+                color: white;
+            }
+
+            button.signup:hover {
+                background: linear-gradient(135deg, #3f4bf7, #f14dec);
+                box-shadow: 0 12px 35px rgba(248, 87, 166, 0.7);
+            }
+
+        </style>
+
+        <!-- Load GIS client -->
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    </head>
+    <body>
+        <div class="form">
+            <!-- Header and Language Selector -->
+            <div class="header-container">
+                <div id="header">Welcome to KBDS</div>
+                <div id="select_container">
+                    <select name="question_type" id="question_type" onchange="handleQuestionTypeChange()">
+                        <option value="Basic" id="option-beginner">Basic</option>
+                        <option value="Chhahdhala" id="option-advance">Chhahdhala</option>
+                    </select>
+                    <select id="language-select" onchange="changeLanguage()">
+                        <option value="en" >English</option>
+                        <option value="hi" selected>हिन्दी</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6" style="display: flex;">
+                <label class="text-white font-medium">Levels:</label>
+              
+                <label class="inline-flex items-center space-x-2">
+                  <input type="radio" name="level" value="basic" class="accent-pink-500" style="margin-left: 25px;" checked>
+                  <span class="text-white">Basic</span>
+                </label>
+              
+                <label class="inline-flex items-center space-x-2">
+                  <input type="radio" name="level" value="expert" class="accent-pink-500" style="margin-left: 25px;">
+                  <span class="text-white">Expert</span>
+                </label>
+            </div>
+              
+
+            <!-- User Type Selection (Visible in both modes) -->
+            <div class="user-type" id="user-type">
+                <label style="width: fit-content;">
+                    <input type="radio" name="userType" value="guest" onchange="toggleUserType('guest')" />
+                    Guest User
+                </label>
+                <label style="width: fit-content;">
+                    <input type="radio" name="userType" value="google" onchange="toggleUserType('google')" checked />
+                    <!-- get user name from session -->
+                   <%= req.session.user.username %>
+                </label>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" style="margin-top: 10px;">
+                <div class="login_landscape">
+                    <div id="credentials-container">
+                       <input type="hidden" id="email" value="<%= req.session.user.email %>" />
+                    </div>
+
+                </div>
+                <div id="login_buttons">
+
+                    <button type="submit" class="login" id="btn-login">Login</button>
+    
+                    <!-- Google One Tap or Sign-in button -->
+                    <!-- <div id="g_id_onload"
+                        data-client_id="<%= GOOGLE_CLIENT_ID %>"
+                        data-callback="handleCredentialResponse"
+                        data-auto_prompt="false">
+                    </div> -->
+    
+                    <!-- <div class="g_id_signin" id="id_logingmail"
+                        data-type="standard"
+                        data-size="large"
+                        data-theme="outline"
+                        data-text="sign_in_with"
+                        data-shape="rectangular"
+                        data-logo_alignment="left">
+                    </div> -->
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            function handleQuestionTypeChange() {
+                const questionType = document.getElementById("question_type").value;
+                const languageSelect = document.getElementById("language-select");
+
+                // If "Chhahdhala" is selected, switch to Hindi
+                if (questionType === "Chhahdhala") {
+                    languageSelect.value = "hi";
+                    languageSelect.disabled = true;
+                }else{
+                    languageSelect.value = "hi";
+                    languageSelect.disabled = false;
+                }
+                changeLanguage();
+            }
+            function changeLanguage() {
+                const lang = document.getElementById("language-select").value;
+                const header = document.getElementById("header");
+                header.textContent = lang === "hi" ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है" : "Welcome to KBDS";
+            }
+            changeLanguage();
+
+            function toggleUserType(type) {
+                const credentialsContainer = document.getElementById("credentials-container");
+                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
+
+                if (type === 'guest') {
+                    credentialsContainer.style.display = "none";
+                } else {
+                    credentialsContainer.style.display = isShortScreen ? "flex" : "block";
+                    
+                }
+            }
+
+            function showSignupForm() {
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("signup-form").style.display = "block";
+                document.getElementById("user-type").style.display = "none";
+            }
+
+            function showLoginForm() {
+                document.getElementById("signup-form").style.display = "none";
+                document.getElementById("login-form").style.display = "block";
+
+                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
+                const user_type_div = document.getElementById('user-type');
+                user_type_div.style.display = isShortScreen ? "flex" : "block";
+            }
+        </script>
+        <script src="/js/adduser.js"></script>
+
+    </body>
+</html>

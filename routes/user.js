@@ -74,12 +74,12 @@ router.post('/register-with-google', async (req, res) => {
             return res.status(200).json({
                 status: true,
                 message: 'User already exists.',
-                redirectUrl: `/play-with-google?email=${btoa(email)}&lang=en%&q_type=Basic&level=Basic&user_type=google`,
+                redirectUrl: `/login-with-google?email=${btoa(email)}`,
             });
         }
         // Create new user
         await User.createUser({ username, email, mobile:null, password:'', userType: 'google' }); 
-        const redirectUrl = `/play-with-google?email=${btoa(email)}&lang=en%&q_type=Basic&level=Basic&user_type=google`;
+        const redirectUrl = `/login-with-google?email=${btoa(email)}`;
         res.status(200).json({
             status: true,
             message: 'User registered successfully!',
@@ -88,6 +88,24 @@ router.post('/register-with-google', async (req, res) => {
     } catch (err) {
         
         console.error('❌ Error registering user:', err);
+        res.status(500).json({ error: 'Server error: ' + err.message });
+    }
+});
+
+router.post('/login-with-google', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOneWithGoogle({ email: email });
+        if (!user) {
+            return res.status(400).json({ error: 'Invalid email.' });
+        }
+        res.status(200).json({
+            status: true,
+            message: 'User login successfully!',
+            redirectUrl: '/play',
+        });
+    } catch (err) {
+        console.error('❌ Error login user:', err);
         res.status(500).json({ error: 'Server error: ' + err.message });
     }
 });

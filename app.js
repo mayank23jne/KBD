@@ -87,6 +87,23 @@ app.get('/login',  (req, res) => {
     res.render('login');
 });
 
+app.get('/login-with-google', async (req, res) => {
+    console.log("login-with-google",req.query);
+    const email = atob(req.query.email);
+    console.log("email",email);
+    const user = await User.findOneWithGoogle({ email });
+    if (!user) { 
+        return res.redirect('/');
+    }
+    req.session.user = {
+        id: user.id,
+        username: user.username,
+        user_type: user.user_type,
+        email: user.email
+    };
+    res.render('loginWithGoogle', { req: req });
+});
+
 app.get('/api/question', (req, res) => {
     res.render('addquestion');
 });
@@ -225,4 +242,4 @@ db.connect((err) => {
 
 
 // Listen to server
-app.listen(process.env.PORT, () => console.log('Listening on http://localhost:3000'));
+app.listen(process.env.PORT, () => console.log(`Listening on http://localhost:${process.env.PORT}`));
