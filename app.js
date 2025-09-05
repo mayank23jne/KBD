@@ -46,12 +46,12 @@ const isAuthenticated = (req, res, next) => {
 
 // Routes
 app.get('/', (req, res) => {
-    req.session.visitedIndex = true;
-    // res.render('index');
-    if (!req.session.visitedIndex) {
-        // Redirect to index if / hasn't been visited
-        return res.redirect('/');
-    }
+    // req.session.visitedIndex = true;
+    // // res.render('index');
+    // if (!req.session.visitedIndex) {
+    //     // Redirect to index if / hasn't been visited
+    //     return res.redirect('/');
+    // }
     let id = null;
     let username = null;
     if(req.query.id){
@@ -92,10 +92,10 @@ app.get('/play-with-google', async (req, res) => {
 // });
 
 app.get('/login',  (req, res) => {
-    if (!req.session.visitedIndex) {
-        // Redirect to index if / hasn't been visited
-        return res.redirect('/');
-    }
+    // if (!req.session.visitedIndex) {
+    //     // Redirect to index if / hasn't been visited
+    //     return res.redirect('/');
+    // }
     let id = null;
     let username = null;
     if(req.query.id){
