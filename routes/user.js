@@ -114,8 +114,9 @@ router.post('/login-with-google', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { username, password, id } = req.body;
+        let user = null;
         if(id){
-            const user = await User.findOne({ id });
+            user = await User.findOne({ id });
             if(!user){
                 return res.status(400).json({ error: 'Invalid id.' });
             }
@@ -126,7 +127,7 @@ router.post('/login', async (req, res) => {
             }
 
             // Find user by username
-            const user = await User.findOne({ username });
+            user = await User.findOne({ username });
             if (!user) {
                 return res.status(400).json({ error: 'Invalid username or password.' });
             }
