@@ -115,23 +115,28 @@
                 </label>
                 <label style="width: fit-content;">
                     <input type="radio" name="userType" value="registered" onchange="toggleUserType('registered')" checked />
-                    Registered User
+                   <% if(isUser.username){ %>
+                        <%= isUser.username %>
+                   <% }else{ %>
+                        Registered User
+                   <% } %>
                 </label>
             </div>
 
             <!-- Login Form -->
             <div id="login-form" style="margin-top: 10px;">
                 <div class="login_landscape">
-                    <div id="credentials-container">
-                        <div class="input-container">
-                            <label for="username">Username:</label>
-                            <input type="text" id="username" placeholder="Enter your username" />
-                        </div>
-    
-                        <div class="input-container">
-                            <label for="password">Password:</label>
-                            <input type="password" id="password" placeholder="Enter your password" />
-                        </div>
+                    <input type="hidden" id="id" value="<%= isUser.id %>" />
+                    <div id="credentials-container" style="display: <%= isUser.id ? 'none' : 'block' %>;">
+                            <div class="input-container">
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" placeholder="Enter your username" />
+                            </div>
+        
+                            <div class="input-container">
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" placeholder="Enter your password" />
+                            </div>
                     </div>
 
                 </div>

@@ -89,7 +89,7 @@ class User {
     }
 
     // Find user by email or username
-    static async findOne({ username, email }) {
+    static async findOne({ username, email, id }) {
         let query = 'SELECT * FROM users WHERE ';
         const values = [];
         if (username) {
@@ -98,6 +98,9 @@ class User {
         } else if (email) {
             query += 'email = ?';
             values.push(email);
+        } else if (id) {
+            query += 'id = ?';
+            values.push(id);
         }
 
         const [rows] = await pool.query(query, values);

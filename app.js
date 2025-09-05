@@ -47,7 +47,8 @@ const isAuthenticated = (req, res, next) => {
 // Routes
 app.get('/', (req, res) => {
     req.session.visitedIndex = true;
-    res.render('index');
+    // res.render('index');
+    res.redirect('/login');
 });
 
 // Protected Routes - Require Authentication
@@ -84,7 +85,13 @@ app.get('/login',  (req, res) => {
         // Redirect to index if / hasn't been visited
         return res.redirect('/');
     }
-    res.render('login');
+    let id = null;
+    let username = null;
+    if(req.query.id){
+        id = atob(req.query.id);
+        username = atob(req.query.username);
+    }
+    res.render('login',{isUser: {id, username}});
 });
 
 app.get('/login-with-google', async (req, res) => {

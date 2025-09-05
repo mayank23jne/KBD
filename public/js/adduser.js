@@ -94,6 +94,7 @@ const loginForm = {
     question_type: document.getElementById('question_type'),
     userType: document.querySelector('input[name="userType"]:checked'),
     email: document.getElementById('email'),
+    id: document.getElementById('id'),
     submit: document.getElementById('btn-login'),
 };
 
@@ -138,7 +139,7 @@ loginForm.submit.addEventListener('click', () => {
                 clearSignupForm();
                 // console.log(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`)
             
-                window.location.href = current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
+                window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
                 // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
 
             }
@@ -164,7 +165,7 @@ loginForm.submit.addEventListener('click', () => {
             if (data.error) {
                 alert(data.error);
             } else {
-                window.location.href = current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
+                window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
             }
         });
     }else{
@@ -175,6 +176,7 @@ loginForm.submit.addEventListener('click', () => {
             language_select: loginForm.language_select.value,
             question_type: loginForm.question_type.value,
             userType: loginForm.userType ? loginForm.userType.value : 'registered',
+            id: loginForm.id.value,
         };
 
         fetch(current_url+'/api/login', {
@@ -189,7 +191,7 @@ loginForm.submit.addEventListener('click', () => {
             } else {
                 console.log('User login successfully!');
                 
-                window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
+                window.location.href =current_url+`${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
             }
         })
         .catch((err) => console.error('Error:', err));

@@ -51,7 +51,7 @@ router.post('/register', async (req, res) => {
 
         res.status(200).json({
             message: 'User registered successfully!',
-            redirectUrl: '/play',
+            redirectUrl: `/play?id=${btoa(user.id)}&username=${btoa(user.username)}`,
         });
     } catch (err) {
         console.error('❌ Error registering user:', err);
@@ -102,7 +102,7 @@ router.post('/login-with-google', async (req, res) => {
         res.status(200).json({
             status: true,
             message: 'User login successfully!',
-            redirectUrl: '/play',
+            redirectUrl: `/play?id=${btoa(user.id)}&username=${btoa(user.username)}`,
         });
     } catch (err) {
         console.error('❌ Error login user:', err);
@@ -113,26 +113,31 @@ router.post('/login-with-google', async (req, res) => {
 // User Login
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, id } = req.body;
+        if(id){
+            const user = await User.findOne({ id });
+            if(!user){
+                return res.status(400).json({ error: 'Invalid id.' });
+            }
+        }else{
+            // Validate input
+            if (!username || !password) {
+                return res.status(400).json({ error: 'Username and password are required.' });
+            }
 
-        // Validate input
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password are required.' });
+            // Find user by username
+            const user = await User.findOne({ username });
+            if (!user) {
+                return res.status(400).json({ error: 'Invalid username or password.' });
+            }
+
+
+            // Compare passwords
+            const isMatch = await User.comparePassword(password, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ error: 'Invalid username or password.' });
+            }
         }
-
-        // Find user by username
-        const user = await User.findOne({ username });
-        if (!user) {
-            return res.status(400).json({ error: 'Invalid username or password.' });
-        }
-
-
-        // Compare passwords
-        const isMatch = await User.comparePassword(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ error: 'Invalid username or password.' });
-        }
-
         // Set session with user info
         req.session.user = {
             id: user.id,
@@ -143,7 +148,7 @@ router.post('/login', async (req, res) => {
 
         res.status(200).json({
             message: 'Login successful!',
-            redirectUrl: '/play',
+            redirectUrl: `/play?id=${btoa(user.id)}&username=${btoa(user.username)}`,
         });
     } catch (err) {
         console.error('❌ Error during login:', err);
