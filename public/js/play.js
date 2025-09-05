@@ -333,6 +333,7 @@ buttons.quit.addEventListener('click', () => {
     message.innerHTML = `Are you sure you want to quit?<br />You will complete the level ${slot-1}`;
     const quitButton = document.getElementById('quit-dialog-quit');
     const cancelButton = document.getElementById('quit-dialog-cancel');
+    const logoutButton = document.getElementById('quit-dialog-logout');
 
     quitButton.addEventListener('click', () => {
         isQuit = true;
@@ -347,6 +348,10 @@ buttons.quit.addEventListener('click', () => {
         dialogs.quitDialog.style.display = 'none';
         close_overlay();
         startResumeTimer();
+    });
+
+    logoutButton.addEventListener('click', () => {
+        window.location.href = `${current_url}/logout`;
     });
 });
 

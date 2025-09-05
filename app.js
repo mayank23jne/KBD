@@ -62,6 +62,11 @@ app.get('/', (req, res) => {
     // res.redirect('/login');
 });
 
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login');
+});
+
 // Protected Routes - Require Authentication
 app.get('/play', isAuthenticated, (req, res) => {
     req.session.visitedIndex = false;
