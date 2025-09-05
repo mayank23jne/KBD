@@ -64,7 +64,7 @@ app.get('/', (req, res) => {
 
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/login');
+    res.render('login');
 });
 
 // Protected Routes - Require Authentication
