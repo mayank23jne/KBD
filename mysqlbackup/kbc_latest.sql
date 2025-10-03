@@ -12,7 +12,8 @@ MySQL - 8.0.40 : Database - kbds
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`kbds` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `kbds` 
+DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 USE `kbds`;
 
@@ -2514,6 +2515,39 @@ insert  into `scorecard`(`id`,`user_id`,`username`,`user_type`,`play_time`,`tota
 ('d56febb5-503b-11f0-ab95-0a40ae7a93ba','d2fcd9b9-503b-11f0-ab95-0a40ae7a93ba','Guest','guest','00h:00m:03s','00h:00m:03s',1,0,'Basic'),
 ('d9f765c9-503a-11f0-ab95-0a40ae7a93ba','d7c27b51-503a-11f0-ab95-0a40ae7a93ba','Guest','guest','00h:00m:03s','00h:00m:03s',1,0,'Basic');
 
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_type` enum('guest','registered') COLLATE utf8mb4_general_ci DEFAULT 'registered',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `mobile_no` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `mobile_no` (`mobile_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `users` */
+
+insert  into `users`(`id`,`username`,`email`,`password`,`user_type`,`created_at`,`mobile_no`) values 
+('0f176402-50be-11f0-ab95-0a40ae7a93ba','00at1uzvga','00at1uzvga@guest.com','$2a$10$T9ADZfVjoCT1OpRRi2PQ6.jLrFPsjbNHune4mlr5uDrfd7Dwmj1CO','guest','2025-06-24 05:42:47','00at1uzvga'),
+('164657bb-50b5-11f0-ab95-0a40ae7a93ba','srprpuir3f','srprpuir3f@guest.com','$2a$10$upkFrt8bUn2ldnO9DDI14e8foA.XTJoRRedQhHtIimD0x5RIIUtXm','guest','2025-06-24 04:38:34','srprpuir3f'),
+('5601dc66-4ea1-11f0-87ae-a0d3c123dec9','admin','admin1234567891@gmail.com','$2a$10$IPqCgaLnCVZYfkgarWIs.u5Ebta/Z291.6uDOOrZSlCrhFmNKa79W','registered','2025-06-21 18:42:08','1234567891'),
+('7d28ce0f-503a-11f0-ab95-0a40ae7a93ba','z8rwk9pszo','z8rwk9pszo@guest.com','$2a$10$xl0YMFPCzBdYLc34H5.CsertcAd1Sf6IkXJxSIucX64CGNXWKoWX2','guest','2025-06-23 14:00:58','z8rwk9pszo'),
+('d2fcd9b9-503b-11f0-ab95-0a40ae7a93ba','nno72isvd1','nno72isvd1@guest.com','$2a$10$r2.zbCE48DucIcyp5LimbulyqYXy.U98uVHXjL2Wz3G66siAw.Ca6','guest','2025-06-23 14:10:32','nno72isvd1'),
+('d7c27b51-503a-11f0-ab95-0a40ae7a93ba','aun778eupv','aun778eupv@guest.com','$2a$10$cM9rmphpASZoKHejxW77tuiefpUGeneiRSVD0dke5oZ3x./5PDo0W','guest','2025-06-23 14:03:30','aun778eupv');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
 /*Table structure for table `used_questions` */
 
 DROP TABLE IF EXISTS `used_questions`;
@@ -2548,35 +2582,4 @@ insert  into `used_questions`(`id`,`question_id`,`user_id`,`used_datetime`) valu
 ('c8313114-50bc-11f0-ab95-0a40ae7a93ba','5d018182-0ec7-11f0-8d58-a0d3c123dec9','5601dc66-4ea1-11f0-87ae-a0d3c123dec9','2025-06-24 05:33:39'),
 ('cbb731fe-50bc-11f0-ab95-0a40ae7a93ba','5cbe99fb-0ec7-11f0-8d58-a0d3c123dec9','5601dc66-4ea1-11f0-87ae-a0d3c123dec9','2025-06-24 05:33:45');
 
-/*Table structure for table `users` */
 
-DROP TABLE IF EXISTS `users`;
-
-CREATE TABLE `users` (
-  `id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `user_type` enum('guest','registered') COLLATE utf8mb4_general_ci DEFAULT 'registered',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `mobile_no` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `mobile_no` (`mobile_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `users` */
-
-insert  into `users`(`id`,`username`,`email`,`password`,`user_type`,`created_at`,`mobile_no`) values 
-('0f176402-50be-11f0-ab95-0a40ae7a93ba','00at1uzvga','00at1uzvga@guest.com','$2a$10$T9ADZfVjoCT1OpRRi2PQ6.jLrFPsjbNHune4mlr5uDrfd7Dwmj1CO','guest','2025-06-24 05:42:47','00at1uzvga'),
-('164657bb-50b5-11f0-ab95-0a40ae7a93ba','srprpuir3f','srprpuir3f@guest.com','$2a$10$upkFrt8bUn2ldnO9DDI14e8foA.XTJoRRedQhHtIimD0x5RIIUtXm','guest','2025-06-24 04:38:34','srprpuir3f'),
-('5601dc66-4ea1-11f0-87ae-a0d3c123dec9','admin','admin1234567891@gmail.com','$2a$10$IPqCgaLnCVZYfkgarWIs.u5Ebta/Z291.6uDOOrZSlCrhFmNKa79W','registered','2025-06-21 18:42:08','1234567891'),
-('7d28ce0f-503a-11f0-ab95-0a40ae7a93ba','z8rwk9pszo','z8rwk9pszo@guest.com','$2a$10$xl0YMFPCzBdYLc34H5.CsertcAd1Sf6IkXJxSIucX64CGNXWKoWX2','guest','2025-06-23 14:00:58','z8rwk9pszo'),
-('d2fcd9b9-503b-11f0-ab95-0a40ae7a93ba','nno72isvd1','nno72isvd1@guest.com','$2a$10$r2.zbCE48DucIcyp5LimbulyqYXy.U98uVHXjL2Wz3G66siAw.Ca6','guest','2025-06-23 14:10:32','nno72isvd1'),
-('d7c27b51-503a-11f0-ab95-0a40ae7a93ba','aun778eupv','aun778eupv@guest.com','$2a$10$cM9rmphpASZoKHejxW77tuiefpUGeneiRSVD0dke5oZ3x./5PDo0W','guest','2025-06-23 14:03:30','aun778eupv');
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

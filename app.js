@@ -75,11 +75,8 @@ app.get('/play', isAuthenticated, (req, res) => {
 });
 
 app.get('/play-with-google', async (req, res) => {
-    console.log("play-with-google",req.query);
     const email = atob(req.query.email);
-    console.log("email",email);
     const user = await User.findOneWithGoogle({ email });
-    console.log("user",user);
     if (!user) { 
         return res.redirect('/');
     }
@@ -111,9 +108,7 @@ app.get('/login',  (req, res) => {
 });
 
 app.get('/login-with-google', async (req, res) => {
-    console.log("login-with-google",req.query);
     const email = atob(req.query.email);
-    console.log("email",email);
     const user = await User.findOneWithGoogle({ email });
     if (!user) { 
         return res.redirect('/');
@@ -214,6 +209,8 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
         // Render the scorecard page with top scorers
         res.render('scorecard', {
             username,
+            id,
+            user_type,
             questionType: question_type || '',
             level: level || '1',
             time: time || '',

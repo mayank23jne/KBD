@@ -652,7 +652,11 @@
             const user_type = getQueryParam('user_type') || ''; 
 
             function goHome() {
-                window.location.href = '/';
+                if(user_type == 'guest') {
+                    window.location.href = '/';
+                } else {
+                    window.location.href = `${window.location.origin}/?id=${btoa('<%= id %>')}&username=${btoa('<%= username %>')}`;
+                }
             }
 
             function playAgain() {

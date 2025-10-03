@@ -230,8 +230,8 @@
             function toggleUserType(type) {
                 const credentialsContainer = document.getElementById("credentials-container");
                 const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
-
-                if (type === 'guest') {
+                
+                if (type === 'guest' || isUser.username) {
                     credentialsContainer.style.display = "none";
                 } else {
                     credentialsContainer.style.display = isShortScreen ? "flex" : "block";
