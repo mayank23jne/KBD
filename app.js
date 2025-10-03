@@ -17,7 +17,7 @@ app.locals.GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Session Middleware (For Authentication)
 app.use(session({
