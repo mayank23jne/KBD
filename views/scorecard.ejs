@@ -652,11 +652,14 @@
             const user_type = getQueryParam('user_type') || ''; 
 
             function goHome() {
-                if(user_type == 'guest') {
-                    window.location.href = '/';
-                } else {
-                    window.location.href = `${window.location.origin}/?id=${btoa('<%= id %>')}&username=${btoa('<%= username %>')}`;
-                }
+                    let user = localStorage.getItem("last_user") ;
+                    if(user){
+                    user = JSON.parse(user);
+                    window.location.href = `${window.location.origin}/?id=${user?.id}&username=${user?.username}`;
+                    }else{
+                        window.location.href ='/'
+                    }
+
             }
 
             function playAgain() {

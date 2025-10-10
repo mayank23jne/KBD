@@ -531,8 +531,25 @@
       <script src="/js/play.js" type="text/javascript"></script>
 
       <script>
-         let tooltipTimeout;
-      
+         const queryString = window.location.search;
+
+         // Create a URLSearchParams object
+         const urlParams = new URLSearchParams(queryString);
+
+         // Get all query parameters as an object
+         let queryParams = {};
+         urlParams.forEach((value, key) => {
+            queryParams[key] = value;
+         });
+         if(queryParams.user_type !== "guest"){
+            const user ={
+               id:queryParams.id,
+               username:queryParams.username
+            }
+            localStorage.setItem("last_user",JSON.stringify(user));
+         }
+
+         let tooltipTimeout;      
          function showTooltip() {
             const tooltip = document.getElementById("username-tooltip");
       
