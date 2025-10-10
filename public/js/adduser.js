@@ -59,7 +59,7 @@ signupForm.submit.addEventListener('click', () => {
             } else {
                 // alert('User registered successfully!');
                 clearSignupForm();
-                window.location.href =current_url+`${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
+                window.location.href =current_url+`${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
                 // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
 
             }
