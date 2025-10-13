@@ -270,6 +270,9 @@
                 }
                 
                 async function shareImage() {
+                    window.location.href = "/api/share"
+                    return;
+
                     const scorecard = document.querySelector(".scorecard-container");
 
                     // Hide unnecessary elements during capture
