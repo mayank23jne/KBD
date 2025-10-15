@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Rankers</title>
+  <style>
+
+body {
+  background-color: #1f1f1f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  margin: 0;
+}
+
+.ranker-container {
+  background-color: #222;
+  border-radius: 10px;
+  width: 80%;
+  padding: 20px;
+  height: 90vh;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+}
+
+.ranker-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, #f5a623, #ff6348);
+  border-radius: 25px;
+  padding: 10px 0;
+  position: relative;
+}
+.ranker-header:hover {
+    background: linear-gradient(45deg, #ff6348, #f5a623);
+}
+
+
+.ranker-header h2 {
+  color: #000;
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 5px;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.ranker-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.ranker-table th, .ranker-table td {
+  border: 1px solid #333;
+  padding: 10px;
+}
+
+.ranker-table th {
+  background-color: #1a1a1a;
+  color: #ffa500;
+  font-weight: 600;
+}
+
+.ranker-table td {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="ranker-container">
+    <div class="ranker-header">
+      <h2>Top Rankers 🏆</h2>
+    </div>
+
+    <table class="ranker-table">
+      <thead>
+        <tr>
+          <th><span class="icon">🏅</span> Rank</th>
+          <th><span class="icon">👤</span> Username</th>
+          <th><span class="icon">🚀</span> Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (topScorers.length > 0) { %>
+            <% topScorers.slice(0, 50).forEach((scorer, index) => { %>
+                <tr>
+                    <td>#<%= scorer.rank %></td>
+                    <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                    <td><%= scorer.question_score %></td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="4">No top scorers yet</td>
+            </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

@@ -233,6 +233,21 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
     }
 });
 
+app.get('/api/top-score', async (req, res) => {
+    try {
+      // Fetch data from your model/service
+      const topScorers = await Topscore.getTopRanked();
+  
+      // Render view and send ranked data
+      res.render('top_rankers', { topScorers });
+  
+    } catch (error) {
+      console.error("Error fetching top scores:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  });
+  
+
 
 
 

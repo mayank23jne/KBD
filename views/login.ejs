@@ -68,7 +68,18 @@
                 background: linear-gradient(135deg, #3f4bf7, #f14dec);
                 box-shadow: 0 12px 35px rgba(248, 87, 166, 0.7);
             }
-
+            .button-btn button {
+                width: 8rem;
+                padding: 12px 5px;
+                font-size: 11px;
+                margin-top: 10px;
+                width: 50%;
+            }
+            .button-btn{
+                display: flex;
+                gap:5px;
+                width: 100%;
+            }
         </style>
 
         <!-- Load GIS client -->
@@ -143,6 +154,10 @@
                 <div id="login_buttons">
 
                     <button type="submit" class="login" id="btn-login">Login</button>
+                    <div class="button-btn">
+                        <button class="top-score-btn">Donate 💰</button>
+                        <button class="top-score-btn" onclick="window.location.href ='/api/top-score'">Top Scores 🏆</button>
+                    </div>
     
                     <!-- Google One Tap or Sign-in button -->
                     <!-- <div id="g_id_onload"

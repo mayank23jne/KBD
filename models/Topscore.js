@@ -227,6 +227,7 @@ class Topscore {
                         question_type
                     FROM scorecard
                     WHERE question_type = "Basic"
+                    AND user_type != "guest"
                     GROUP BY user_id, username, user_type, question_type, play_time, play_level
                     ORDER BY play_level DESC, play_time ASC
                 ) AS sorted_scores
@@ -299,7 +300,7 @@ class Topscore {
 
     static async getQuestionScoresWithRank(questionType) {
         try {
-          const query = `
+            const query = `
             SELECT * FROM (
                 SELECT 
                     user_id,
@@ -319,16 +320,56 @@ class Topscore {
                     INNER JOIN questions ON questions.id = used_questions.question_id
                     INNER JOIN users ON users.id = used_questions.user_id
                     WHERE questions.question_type = ?
-                    AND used_questions.used_datetime IS NOT NULL
+                      AND used_questions.used_datetime IS NOT NULL
+                      AND users.user_type != 'guest'
                     GROUP BY used_questions.user_id, users.username, users.user_type
                     ORDER BY question_score DESC
                 ) AS ordered_scores
                 CROSS JOIN (SELECT @rank := 0) AS vars
             ) AS ranked;
-        `;
+        `;        
 
     
           const [rows] = await pool.query(query, [questionType]);
+          return rows;
+        } catch (error) {
+          console.error('Error fetching ranked question scores:', error);
+          throw error;
+        }
+    }
+
+    static async getTopRanked() {
+        try {
+            const query = `
+            SELECT * FROM (
+                SELECT 
+                    user_id,
+                    CASE 
+                        WHEN user_type = 'guest' THEN 'Guest'
+                        ELSE username
+                    END AS username,
+                    question_score,
+                    @rank := @rank + 1 AS \`rank\`
+                FROM (
+                    SELECT 
+                        used_questions.user_id,
+                        users.username,
+                        users.user_type,
+                        COUNT(*) AS question_score
+                    FROM used_questions 
+                    INNER JOIN questions ON questions.id = used_questions.question_id
+                    INNER JOIN users ON users.id = used_questions.user_id
+                    WHERE used_questions.used_datetime IS NOT NULL
+                      AND users.user_type != 'guest'
+                    GROUP BY used_questions.user_id, users.username, users.user_type
+                    ORDER BY question_score DESC
+                ) AS ordered_scores
+                CROSS JOIN (SELECT @rank := 0) AS vars
+            ) AS ranked;
+        `;        
+
+    
+          const [rows] = await pool.query(query);
           return rows;
         } catch (error) {
           console.error('Error fetching ranked question scores:', error);
@@ -413,6 +454,7 @@ class Topscore {
                     FROM scorecard 
                     INNER JOIN users ON users.id = scorecard.user_id
                     WHERE scorecard.question_type = ?
+                    AND users.user_type != 'guest'
                     GROUP BY scorecard.user_id, users.username, users.user_type, scorecard.game_played
                     ORDER BY game_played DESC
                 ) AS ordered_scores
@@ -504,6 +546,7 @@ class Topscore {
                         FROM scorecard 
                         INNER JOIN users ON users.id = scorecard.user_id
                         WHERE scorecard.question_type = ?
+                        AND users.user_type != 'guest'
                         GROUP BY scorecard.user_id, users.username, users.user_type, scorecard.total_play_time
                         ORDER BY total_play_time DESC
                     ) AS ordered_scores

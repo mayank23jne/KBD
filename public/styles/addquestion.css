@@ -302,6 +302,7 @@ button.danger:hover {
     display: flex;
     justify-content: center;
     width: 100%;
+    flex-direction: column;
     gap: 10px;
 }
 #id_logingmail{

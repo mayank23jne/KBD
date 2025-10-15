@@ -64,7 +64,7 @@ const fiftyFiftyDetailsContainer = {
 // Buttons Container
 const buttons = {
     lock: document.getElementById('lock-button'),
-    quit: document.getElementById('quit-button'),
+    quit: document.querySelectorAll('#quit-button'),
     lamp_btn: document.getElementById('lamp-button'),
     next_btn: document.getElementById('next-button')
 
@@ -319,39 +319,41 @@ btnOk.addEventListener('click', () => {
 
 });
 
-buttons.quit.addEventListener('click', () => {
-    // Show Dialog
-    dialogs.quitDialog.style.display = 'block';
-    show_overlay();
+buttons.quit.forEach(button => {
+    button.addEventListener('click', () => {
+        // Show Dialog
+        dialogs.quitDialog.style.display = 'block';
+        show_overlay();
 
-    // Pause timer if exists
-    if (slot <= 16) {
-        pauseTimer();
-    }
+        // Pause timer if exists
+        if (slot <= 16) {
+            pauseTimer();
+        }
 
-    const message = document.getElementById('quit-dialog-message');
-    message.innerHTML = `Are you sure you want to quit?<br />You will complete the level ${slot-1}`;
-    const quitButton = document.getElementById('quit-dialog-quit');
-    const cancelButton = document.getElementById('quit-dialog-cancel');
-    const logoutButton = document.getElementById('quit-dialog-logout');
+        const message = document.getElementById('quit-dialog-message');
+        message.innerHTML = `Are you sure you want to quit?<br />You will complete the level ${slot-1}`;
+        const quitButton = document.getElementById('quit-dialog-quit');
+        const cancelButton = document.getElementById('quit-dialog-cancel');
+        const logoutButton = document.getElementById('quit-dialog-logout');
 
-    quitButton.addEventListener('click', () => {
-        isQuit = true;
-        dialogs.quitDialog.style.display = 'none';
-        // dialogs.quitMessage.style.display = 'block';
-        close_overlay();
+        quitButton.addEventListener('click', () => {
+            isQuit = true;
+            dialogs.quitDialog.style.display = 'none';
+            // dialogs.quitMessage.style.display = 'block';
+            close_overlay();
 
-        endGame();
-    });
+            endGame();
+        });
 
-    cancelButton.addEventListener('click', () => {
-        dialogs.quitDialog.style.display = 'none';
-        close_overlay();
-        startResumeTimer();
-    });
+        cancelButton.addEventListener('click', () => {
+            dialogs.quitDialog.style.display = 'none';
+            close_overlay();
+            startResumeTimer();
+        });
 
-    logoutButton.addEventListener('click', () => {
-        window.location.href = `${current_url}/logout`;
+        logoutButton.addEventListener('click', () => {
+            window.location.href = `${current_url}/logout`;
+        });
     });
 });
 

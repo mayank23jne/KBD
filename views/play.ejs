@@ -541,7 +541,7 @@
          urlParams.forEach((value, key) => {
             queryParams[key] = value;
          });
-         if(queryParams.user_type !== "guest"){
+         if(queryParams.user_type !== "guest" && queryParams.action !== "playagain"){
             const user ={
                id:queryParams.id,
                username:queryParams.username
