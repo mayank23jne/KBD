@@ -68,7 +68,7 @@
                 background: #6a11cb;
             }
 
-            #btn-play-again , #donate_button {
+            #btn-play-again {
                 margin-top: 1rem;
                 padding: 10px 20px;
                 font-size: 1rem;
@@ -81,7 +81,7 @@
                 transition: background 0.3s ease;
             }
 
-            #btn-play-again:hover , #donate_button:hover {
+            #btn-play-again:hover {
                 background: #6a11cb;
             }
 
@@ -283,9 +283,6 @@
                         document.getElementById("id_share_icon").style.display = "none";
                         document.getElementById("btn-home").style.display = "none";
                         document.getElementById("btn-play-again").style.display = "none";
-                        document.getElementById("btn-winner").style.display = "none";
-                        // document.getElementById("share_button").style.visibility = "hidden";
-                        document.getElementById("donate_button").style.display = "none";
                         document.getElementById("spinner_id").style.display = "block";
 
                         try {
@@ -327,9 +324,6 @@
                             document.getElementById("btn-home").style.display = "block";
                             document.getElementById("btn-play-again").style.display = "block";
                             document.getElementById("id_share_icon").style.display = "block";
-                            document.getElementById("btn-winner").style.display = "block";
-                            document.getElementById("share_button").style.visibility = "visible";
-                            document.getElementById("donate_button").style.display = "block";
                         }
                         }
 
@@ -363,7 +357,7 @@
 
             <button id="btn-home" onclick="goHome()">Back to Home</button>
             <button id="btn-play-again" onclick="playAgain()">Play Again</button>
-            <button id="donate_button"  onclick="playAgain()">Donate</button>
+            <button id="btn-play-again"  onclick="playAgain()">Donate</button>
 
 
             <p class="bottom-tag-line">Directed by Vikas Jain</p>
