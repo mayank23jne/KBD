@@ -276,8 +276,28 @@
                 }
                 
                 async function shareImage() {
-                    window.location.href = "/api/share"
-                    return;
+                    const payload = {
+                            type: "share",
+                            message: "I just played KBDS! You should try it too!"
+                            };
+                        
+                            // ✅ This sends the message to your Ionic app
+                            try {
+                            if (window.cordova_iab && window.cordova_iab.postMessage) {
+                                window.cordova_iab.postMessage(JSON.stringify(payload));
+                                console.log("Message sent to Ionic app:", payload);
+                            } else {
+                                console.warn("cordova_iab not available — probably running in browser, not InAppBrowser.");
+                                alert("Sharing only works inside the KBDS app.");
+                            }
+                            } catch (err) {
+                            console.error("Failed to send message to app:", err);
+                            }
+
+
+
+                    // window.location.href = "/api/share"
+                    // return;
 
                     const scorecard = document.querySelector(".scorecard-container");
 
