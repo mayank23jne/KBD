@@ -299,45 +299,45 @@
                     // window.location.href = "/api/share"
                     // return;
 
-                    const scorecard = document.querySelector(".scorecard-container");
+                    // const scorecard = document.querySelector(".scorecard-container");
 
-                    // Hide unnecessary elements during capture
-                    document.getElementById("id_share_icon").style.display = "none";
-                    document.getElementById("btn-home").style.display = "none";
-                    document.getElementById("btn-play-again").style.display = "none";
-                    document.getElementById("spinner_id").style.display = "block";
+                    // // Hide unnecessary elements during capture
+                    // document.getElementById("id_share_icon").style.display = "none";
+                    // document.getElementById("btn-home").style.display = "none";
+                    // document.getElementById("btn-play-again").style.display = "none";
+                    // document.getElementById("spinner_id").style.display = "block";
 
-                    await html2canvas(scorecard, {
-                        scale: window.devicePixelRatio * 2,
-                        useCORS: true,
-                        backgroundColor: null,
-                        allowTaint: true,
-                        removeContainer: true
-                    }).then(canvas => {
-                        canvas.toBlob(async blob => {
-                        const file = new File([blob], "scorecard.png", { type: "image/png" });
+                    // await html2canvas(scorecard, {
+                    //     scale: window.devicePixelRatio * 2,
+                    //     useCORS: true,
+                    //     backgroundColor: null,
+                    //     allowTaint: true,
+                    //     removeContainer: true
+                    // }).then(canvas => {
+                    //     canvas.toBlob(async blob => {
+                    //     const file = new File([blob], "scorecard.png", { type: "image/png" });
 
-                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                            try {
-                            await navigator.share({
-                                files: [file],
-                                title: "My KBDS Quiz Scorecard",
-                                text: `Check out my score on KBDS! 🏆\n\nDownload the game:\nhttps://play.google.com/store/apps/details?id=com.pepcus.kbds`
-                            });
-                            } catch (err) {
-                            console.error("Share failed:", err);
-                            }
-                        } else {
-                            alert("Your device doesn't support sharing files.");
-                        }
+                    //     if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    //         try {
+                    //         await navigator.share({
+                    //             files: [file],
+                    //             title: "My KBDS Quiz Scorecard",
+                    //             text: `Check out my score on KBDS! 🏆\n\nDownload the game:\nhttps://play.google.com/store/apps/details?id=com.pepcus.kbds`
+                    //         });
+                    //         } catch (err) {
+                    //         console.error("Share failed:", err);
+                    //         }
+                    //     } else {
+                    //         alert("Your device doesn't support sharing files.");
+                    //     }
 
-                        // Restore UI after sharing
-                        document.getElementById("spinner_id").style.display = "none";
-                        document.getElementById("btn-home").style.display = "block";
-                        document.getElementById("btn-play-again").style.display = "block";
-                        document.getElementById("id_share_icon").style.display = "block";
-                        }, "image/png");
-                    });
+                    //     // Restore UI after sharing
+                    //     document.getElementById("spinner_id").style.display = "none";
+                    //     document.getElementById("btn-home").style.display = "block";
+                    //     document.getElementById("btn-play-again").style.display = "block";
+                    //     document.getElementById("id_share_icon").style.display = "block";
+                    //     }, "image/png");
+                    // });
                 }
 
 
