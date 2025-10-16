@@ -276,69 +276,57 @@
                 }
                 
                 async function shareImage() {
-                    const payload = {
+                        const scorecard = document.querySelector(".scorecard-container");
+                        const timeTaken= "<%= time %>"
+
+                        // Hide extra UI elements for a clean screenshot
+                        document.getElementById("id_share_icon").style.display = "none";
+                        document.getElementById("btn-home").style.display = "none";
+                        document.getElementById("btn-play-again").style.display = "none";
+                        document.getElementById("spinner_id").style.display = "block";
+
+                        try {
+                            // Capture the scorecard as canvas
+                            const canvas = await html2canvas(scorecard, {
+                            scale: window.devicePixelRatio * 2,
+                            useCORS: true,
+                            backgroundColor: null,
+                            allowTaint: true,
+                            removeContainer: true
+                            });
+
+                            // Convert to Base64 image (data URL)
+                            const base64Image = canvas.toDataURL("image/png");
+
+                            // Create your custom share message
+                            const shareMessage = `Yey, I played KBDS and finished the game in ${timeTaken} seconds! It's amazing. You should also try this Amazing Jain Game.\n\nDownload from Play Store: https://play.google.com/store/apps/details?id=com.pepcus.kbds`;
+
+                            // Prepare the payload
+                            const payload = {
                             type: "share",
-                            message: "I just played KBDS! You should try it too!"
+                            message: shareMessage,
+                            image: base64Image
                             };
-                        
-                            // ✅ This sends the message to your Ionic app
-                            try {
+
+                            // ✅ Send the message to Ionic app
                             if (window.cordova_iab && window.cordova_iab.postMessage) {
-                                window.cordova_iab.postMessage(JSON.stringify(payload));
-                                console.log("Message sent to Ionic app:", payload);
+                            window.cordova_iab.postMessage(JSON.stringify(payload));
+                            console.log("Message sent to Ionic app:", payload);
                             } else {
-                                console.warn("cordova_iab not available — probably running in browser, not InAppBrowser.");
-                                alert("Sharing only works inside the KBDS app.");
+                            console.warn("cordova_iab not available — probably running in browser, not InAppBrowser.");
+                            alert("Sharing only works inside the KBDS app.");
                             }
-                            } catch (err) {
-                            console.error("Failed to send message to app:", err);
-                            }
+                        } catch (err) {
+                            console.error("Error capturing or sharing:", err);
+                        } finally {
+                            // Restore UI elements
+                            document.getElementById("spinner_id").style.display = "none";
+                            document.getElementById("btn-home").style.display = "block";
+                            document.getElementById("btn-play-again").style.display = "block";
+                            document.getElementById("id_share_icon").style.display = "block";
+                        }
+                        }
 
-
-
-                    // window.location.href = "/api/share"
-                    // return;
-
-                    // const scorecard = document.querySelector(".scorecard-container");
-
-                    // // Hide unnecessary elements during capture
-                    // document.getElementById("id_share_icon").style.display = "none";
-                    // document.getElementById("btn-home").style.display = "none";
-                    // document.getElementById("btn-play-again").style.display = "none";
-                    // document.getElementById("spinner_id").style.display = "block";
-
-                    // await html2canvas(scorecard, {
-                    //     scale: window.devicePixelRatio * 2,
-                    //     useCORS: true,
-                    //     backgroundColor: null,
-                    //     allowTaint: true,
-                    //     removeContainer: true
-                    // }).then(canvas => {
-                    //     canvas.toBlob(async blob => {
-                    //     const file = new File([blob], "scorecard.png", { type: "image/png" });
-
-                    //     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    //         try {
-                    //         await navigator.share({
-                    //             files: [file],
-                    //             title: "My KBDS Quiz Scorecard",
-                    //             text: `Check out my score on KBDS! 🏆\n\nDownload the game:\nhttps://play.google.com/store/apps/details?id=com.pepcus.kbds`
-                    //         });
-                    //         } catch (err) {
-                    //         console.error("Share failed:", err);
-                    //         }
-                    //     } else {
-                    //         alert("Your device doesn't support sharing files.");
-                    //     }
-
-                    //     // Restore UI after sharing
-                    //     document.getElementById("spinner_id").style.display = "none";
-                    //     document.getElementById("btn-home").style.display = "block";
-                    //     document.getElementById("btn-play-again").style.display = "block";
-                    //     document.getElementById("id_share_icon").style.display = "block";
-                    //     }, "image/png");
-                    // });
-                }
 
 
             </script>
