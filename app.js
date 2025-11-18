@@ -30,11 +30,12 @@ app.use(session({
 // Import Routes
 const questionRoute = require('./routes/questions');
 const userRoute = require('./routes/user');
+const donation = require('./routes/donationRoutes');
 
 // Routes Middlewares
 app.use('/api', questionRoute);
 app.use('/api', userRoute);
-
+app.use('/api', donation);
 // Authentication Middleware
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
@@ -62,6 +63,10 @@ app.get('/', (req, res) => {
     // res.redirect('/login');
 });
 
+app.get('/donate' , (req, res) => {
+    const key = Buffer.from(process.env.RAZORPAY_KEY).toString('base64');
+    res.render('donate', { razor_key: key });
+})
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.render('login',{isUser: {id: null, username: null}});
