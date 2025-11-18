@@ -5,7 +5,7 @@ const Donation = require('../models/Donation');
 // Save donation after successful payment
 router.post('/save-donation', async (req, res) => {
     try {
-        const { payment_id, name, email, mobile, amount } = req.body;
+        const { payment_id, name, email, mobile, amount , status } = req.body;
 
         // Validation
         if (!payment_id) {
@@ -38,7 +38,7 @@ router.post('/save-donation', async (req, res) => {
             email: email || null,
             mobile: mobile || null,
             amount: parseFloat(amount),
-            status: 'success'
+            status: status
         });
 
         res.status(200).json({
