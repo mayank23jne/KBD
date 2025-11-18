@@ -269,7 +269,9 @@
                     ondismiss: function () {
                         console.log("Payment popup closed");
                         showMessage('error', 'Payment cancelled by user');
-                        document.getElementById('donateBtn').disabled = false;
+                        const donateBtn = document.getElementById('donateBtn')
+                        donateBtn.disabled = false;
+                        donateBtn.textContent = 'Donate Now';
                     },
                 },
             };
