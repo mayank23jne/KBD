@@ -118,6 +118,12 @@ class User {
     static async comparePassword(enteredPassword, storedPassword) {
         return await bcrypt.compare(enteredPassword, storedPassword);
     }
+
+    static async updateOne(id, username) {
+        console.log(id, username);
+        const query = 'UPDATE users SET fullname = ? WHERE id = ?';
+        await pool.query(query, [username, id]);
+    }
 }
 
 module.exports = User;

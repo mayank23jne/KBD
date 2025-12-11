@@ -7,14 +7,14 @@ const signupForm = {
     mobile: document.getElementById('mobile'),
     password: document.getElementById('new-password'),
     confirmPassword: document.getElementById('confirm-password'),
-    language_select: document.getElementById('language-select'),
-    question_type: document.getElementById('question_type'),
+    language_select: document.querySelector('input[name="language"]:checked'),
+    question_type: document.querySelector('input[name="question_type"]:checked'),
     userType: document.querySelector('input[name="userType"]:checked'),
     submit: document.getElementById('btn-signup'),
 };
 
 signupForm.submit.addEventListener('click', () => {
-    let user_type =  document.querySelector('input[name="userType"]:checked').value
+    let user_type = document.querySelector('input[name="userType"]:checked').value
 
     let selected_level = document.querySelector('input[name="level"]:checked').value;
 
@@ -33,19 +33,18 @@ signupForm.submit.addEventListener('click', () => {
         mobile: signupForm.mobile.value,
         password: signupForm.password.value,
         confirmPassword: signupForm.confirmPassword.value,
-        language_select: signupForm.language_select.value,
-        question_type: signupForm.question_type.value,
-        userType: signupForm.userType ? signupForm.userType.value : 'registered',
+        language_select: document.querySelector('input[name="language"]:checked')?.value,
+        question_type: document.querySelector('input[name="question_type"]:checked')?.value,
+        userType: document.querySelector('input[name="userType"]:checked') ? document.querySelector('input[name="userType"]:checked').value : 'registered',
     };
 
-    fetch(current_url+'/api/register', {
+    fetch(current_url + '/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData),
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log("get response from the api: ",data);
             if (data.error) {
                 if (data.error.toLowerCase().includes("username")) {
                     alert("❌ Username is already taken. Please choose another one.");
@@ -59,7 +58,7 @@ signupForm.submit.addEventListener('click', () => {
             } else {
                 // alert('User registered successfully!');
                 clearSignupForm();
-                window.location.href =current_url+`${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
+                window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
                 // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
 
             }
@@ -90,8 +89,8 @@ function generateRandomString(length) {
 const loginForm = {
     username: document.getElementById('username'),
     password: document.getElementById('password'),
-    language_select: document.getElementById('language-select'),
-    question_type: document.getElementById('question_type'),
+    language_select: document.querySelector('input[name="language"]:checked'),
+    question_type: document.querySelector('input[name="question_type"]:checked'),
     userType: document.querySelector('input[name="userType"]:checked'),
     email: document.getElementById('email'),
     id: document.getElementById('id'),
@@ -100,10 +99,10 @@ const loginForm = {
 
 loginForm.submit.addEventListener('click', () => {
 
-    let user_type =  document.querySelector('input[name="userType"]:checked').value
+    let user_type = document.querySelector('input[name="userType"]:checked').value
 
     let selected_level = document.querySelector('input[name="level"]:checked').value;
-
+    localStorage.setItem('user_type', user_type);
     // If user type is 'guest', generate a random string and set it into the fields.
     if (user_type === 'guest') {
         const randomStr = generateRandomString(10); // Change length as needed
@@ -113,15 +112,15 @@ loginForm.submit.addEventListener('click', () => {
         signupForm.password.value = randomStr;
         signupForm.confirmPassword.value = randomStr;
 
-        
+
         const requestData = {
             username: signupForm.username.value,
             email: signupForm.email.value,
             mobile: signupForm.mobile.value,
             password: signupForm.password.value,
             confirmPassword: signupForm.confirmPassword.value,
-            language_select: signupForm.language_select.value,
-            question_type: signupForm.question_type.value,
+            language_select: document.querySelector('input[name="language"]:checked')?.value,
+            question_type: document.querySelector('input[name="question_type"]:checked')?.value,
             userType: user_type,
         };
 
@@ -130,71 +129,69 @@ loginForm.submit.addEventListener('click', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestData),
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.error) {
-                alert(data.error);
-            } else {
-                // Optionally, clear the signup form
-                clearSignupForm();
-                // console.log(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`)
-            
-                window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
-                // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Optionally, clear the signup form
+                    clearSignupForm();
+                    // console.log(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`)
 
-            }
-        })
-        .catch((err) => console.error('Error:', err));
+                    window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
+                    // window.open(current_url + `${data.redirectUrl}?lang=${requestData.language_select}&q_type=${requestData.question_type}`, "_self");
 
-    }else if(user_type === 'google'){
-        console.log("google",loginForm.email.value);
+                }
+            })
+            .catch((err) => console.error('Error:', err));
+
+    } else if (user_type === 'google') {
         const requestData = {
             email: loginForm.email.value,
-            language_select: loginForm.language_select.value,
-            question_type: loginForm.question_type.value,
+            language_select: document.querySelector('input[name="language"]:checked')?.value,
+            question_type: document.querySelector('input[name="question_type"]:checked')?.value,
             userType: user_type,
         };
-        fetch(current_url+'/api/login-with-google', {
+        fetch(current_url + '/api/login-with-google', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestData),
         })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("data",data);
-            if (data.error) {
-                alert(data.error);
-            } else {
-                window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
-            }
-        });
-    }else{
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
+                }
+            });
+    } else {
 
         const requestData = {
             username: loginForm.username.value,
             password: loginForm.password.value,
-            language_select: loginForm.language_select.value,
-            question_type: loginForm.question_type.value,
-            userType: loginForm.userType ? loginForm.userType.value : 'registered',
+            language_select: document.querySelector('input[name="language"]:checked')?.value,
+            question_type: document.querySelector('input[name="question_type"]:checked')?.value,
+            userType: document.querySelector('input[name="userType"]:checked') ? document.querySelector('input[name="userType"]:checked').value : 'registered',
             id: loginForm.id.value,
         };
 
-        fetch(current_url+'/api/login', {
+        fetch(current_url + '/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestData),
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.error) {
-                alert(data.error);
-            } else {
-                console.log('User login successfully!');
-                
-                window.location.href =current_url+`${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
-            }
-        })
-        .catch((err) => console.error('Error:', err));
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    console.log('User login successfully!');
+
+                    window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`
+                }
+            })
+            .catch((err) => console.error('Error:', err));
     }
 });
 
@@ -202,24 +199,97 @@ loginForm.submit.addEventListener('click', () => {
 
 function handleCredentialResponse(response) {
 
-    language_select = document.getElementById('language-select');
-    questiontype = document.getElementById('question_type').value;
+    language_select = document.querySelector('input[name="language"]:checked').value;
+    questiontype = document.querySelector('input[name="question_type"]:checked').value;
     usertype = document.querySelector('input[name="userType"]:checked');
     selectedLevel = document.querySelector('input[name="level"]:checked').value;
 
 
     // Send ID token to backend
     fetch("/api/google-token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_token: response.credential })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_token: response.credential })
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.redirectUrl) {
-        window.location.href = `${data.redirectUrl}?lang=${language_select}&q_type=${questiontype}&level=${selectedLevel}&user_type=${usertype}`;
-      } else {
-        alert("Login failed: " + data.error);
-      }
-    });
+        .then(res => res.json())
+        .then(data => {
+            if (data.redirectUrl) {
+                window.location.href = `${data.redirectUrl}?lang=${language_select}&q_type=${questiontype}&level=${selectedLevel}&user_type=${usertype}`;
+            } else {
+                alert("Login failed: " + data.error);
+            }
+        });
+}
+
+
+async function shareAppLink() {
+
+    try {
+        // Your share message + Play Store link
+        const shareMessage =
+            "Hey! I am playing KBDS – an amazing Jain quiz game.\n\n" +
+            "Download the app from Play Store:";
+
+
+        // Prepare payload WITHOUT image
+        const payload = {
+            type: "share",
+            message: shareMessage,
+            image: null   // <- No image
+        };
+
+        // Send to Ionic app via InAppBrowser
+        if (window.cordova_iab && window.cordova_iab.postMessage) {
+            window.cordova_iab.postMessage(JSON.stringify(payload));
+            console.log("App link shared to Ionic app:", payload);
+        } else {
+            console.warn("cordova_iab not available — probably running in browser.");
+            alert("Sharing only works inside the KBDS app.");
+        }
+
+    } catch (error) {
+        console.error("Error sharing app link:", error);
+    }
+}
+function startEditUsername() {
+    const text = document.getElementById("username_text");
+    const input = document.getElementById("update_user_name");
+    const editBtn = document.getElementById("edit_btn");
+    const saveBtn = document.getElementById("save_btn");
+
+    input.value = text.innerText;
+    // text.style.display = "none";
+    input.style.display = "block";
+    editBtn.style.display = "none";
+    saveBtn.style.display = "inline-block";
+
+    input.focus();
+}
+
+function saveUsername(userId) {
+    const input = document.getElementById("update_user_name");
+    const text = document.getElementById("username_text");
+    const editBtn = document.getElementById("edit_btn");
+    const saveBtn = document.getElementById("save_btn");
+
+    const newName = input.value.trim();
+    if (!newName) return alert("Username cannot be empty");
+
+    // ✅ API Call
+    fetch(`/api/update-user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: userId, username: newName })
+    })
+        .then(res => res.json())
+        .then(() => {
+            console.log("Username updated successfully!");
+            text.innerText = newName;
+
+            input.style.display = "none";
+            text.style.display = "inline";
+            saveBtn.style.display = "none";
+            editBtn.style.display = "inline-block";
+        })
+        .catch(() => alert("Update failed"));
 }

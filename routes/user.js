@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
         const { username, email, mobile, password, confirmPassword, userType = 'registered' } = req.body;
 
         // Validation
-        if (!username || !email ||!mobile || !password || !confirmPassword) {
+        if (!username || !email || !mobile || !password || !confirmPassword) {
             return res.status(400).json({ error: 'All fields are required.' });
         }
         if (password !== confirmPassword) {
@@ -35,10 +35,10 @@ router.post('/register', async (req, res) => {
         const user = await User.findOne({ username });
         console.log(user)
         let user_name;
-        if (user.user_type === 'guest'){
+        if (user.user_type === 'guest') {
             user_name = "Guest"
         }
-        else{
+        else {
             user_name = user.username;
         }
         // Set session with user info
@@ -69,7 +69,7 @@ router.post('/register-with-google', async (req, res) => {
 
         // Check if user already exists
         const existingUser = await User.findOneWithGoogle({ email: email });
-        
+
         if (existingUser) {
             return res.status(200).json({
                 status: true,
@@ -78,7 +78,7 @@ router.post('/register-with-google', async (req, res) => {
             });
         }
         // Create new user
-        await User.createUser({ username, email, mobile:null, password:'', userType: 'google' }); 
+        await User.createUser({ username, email, mobile: null, password: '', userType: 'google' });
         const redirectUrl = `/login-with-google?email=${btoa(email)}`;
         res.status(200).json({
             status: true,
@@ -86,7 +86,7 @@ router.post('/register-with-google', async (req, res) => {
             redirectUrl: redirectUrl,
         });
     } catch (err) {
-        
+
         console.error('❌ Error registering user:', err);
         res.status(500).json({ error: 'Server error: ' + err.message });
     }
@@ -115,12 +115,12 @@ router.post('/login', async (req, res) => {
     try {
         const { username, password, id } = req.body;
         let user = null;
-        if(id){
+        if (id) {
             user = await User.findOne({ id });
-            if(!user){
+            if (!user) {
                 return res.status(400).json({ error: 'Invalid id.' });
             }
-        }else{
+        } else {
             // Validate input
             if (!username || !password) {
                 return res.status(400).json({ error: 'Username and password are required.' });
@@ -160,7 +160,7 @@ router.post('/login', async (req, res) => {
 
 const { OAuth2Client } = require('google-auth-library');
 
-const CLIENT_ID =  process.env.GOOGLE_CLIENT_ID; // Load from .env
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID; // Load from .env
 const client = new OAuth2Client(CLIENT_ID);
 
 router.post('/google-token', async (req, res) => {
@@ -174,22 +174,22 @@ router.post('/google-token', async (req, res) => {
         const payload = ticket.getPayload();
         const email = payload.email;
         const username = payload.name;
-    
+
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (!existingUser) {
             // Create new user
-            await User.createUser({ username, email, mobile:null, password:'' });
+            await User.createUser({ username, email, mobile: null, password: '' });
         }
-        
+
         // Retrieve newly created user
         const user = await User.findOne({ email });
         console.log(user)
         let user_name;
-        if (user.user_type === 'guest'){
+        if (user.user_type === 'guest') {
             user_name = "Guest"
         }
-        else{
+        else {
             user_name = user.username;
         }
         // Set session with user info
@@ -206,6 +206,19 @@ router.post('/google-token', async (req, res) => {
     }
 });
 
+router.get('/get-user', async (req, res) => {
+    const user_id = req.query.id;
+    const decodedId = atob(user_id);
+    const user = await User.findOne({ id: decodedId });
+    res.json(user);
+});
+
+router.post('/update-user', async (req, res) => {
+    const { id, username } = req.body;
+    console.log(id, username);
+    await User.updateOne(id, username);
+    res.json({ message: 'User updated successfully!' });
+});
 
 
 module.exports = router;

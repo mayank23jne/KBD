@@ -211,6 +211,7 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
         const userTimeRankData = await Topscore.getUserTimeRank(id, question_type);
         const userTimeRank = userTimeRankData?.rank || 'N/A';
 
+        
         // Render the scorecard page with top scorers
         res.render('scorecard', {
             username,
@@ -231,7 +232,6 @@ app.get('/api/scorecard', isAuthenticated, async (req, res) => {
             time_played,
             userTimeRank
         });
-
     } catch (error) {
         console.error("Error in /api/scorecard:", error);
         res.status(500).send("Internal Server Error");

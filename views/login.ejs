@@ -1,172 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Welcome to KBD</title>
-        <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <link
-            href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            .input-container {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Welcome to KBD</title>
+    <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap" rel="stylesheet" />
+    <style>
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .input-container label {
+            width: 100px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 5px;
+        }
+
+        #password,
+        #new-password,
+        #confirm-password {
+            width: 150px;
+        }
+
+        #select_container {
+            display: flex;
+            gap: 0.5rem;
+            width: 60%;
+        }
+
+        #header {
+            width: 100%;
+        }
+
+        #question_type {
+            width: 60%;
+        }
+
+        #language-select {
+            width: 50%;
+        }
+
+        #btn-login {
+            left: 0% !important;
+            transform: none !important;
+        }
+
+        /* Login Button - Sunset Orange */
+        button.login {
+            background: linear-gradient(135deg, #5762f8, #ff58fa);
+            color: white;
+        }
+
+        button.login:hover {
+            background: linear-gradient(135deg, #3f4bf7, #f14dec);
+            box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
+        }
+
+        /* Signup Button - Hot Pink */
+        button.signup {
+            background: linear-gradient(135deg, #5762f8, #ff58fa);
+            color: white;
+        }
+
+        button.signup:hover {
+            background: linear-gradient(135deg, #3f4bf7, #f14dec);
+            box-shadow: 0 12px 35px rgba(248, 87, 166, 0.7);
+        }
+
+        .button-btn button {
+            width: 8rem;
+            padding: 12px 5px;
+            font-size: 11px;
+            margin-top: 10px;
+            width: 50%;
+        }
+
+        .button-btn {
+            display: flex;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .logo-container {
+            text-align: center;
+            width: 100%;
+            padding: 10px;
+            padding-top: 0;
+        }
+
+        .logo-container img {
+            width: 100px;
+        }
+
+        .footer {
+            text-align: center;
+            width: 100%;
+            padding: 20px 0 10px 0;
+        }
+
+        #update_button {
+            cursor: pointer;
+            float: right;
+        }
+
+        #update_user_name {
+            display: none;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        .flex-2 {
+            flex: 2;
+        }
+
+        .align-center {
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .gap-2 {
+            gap: 5px;
+        }
+
+        .action-btn {
+            margin-left: auto;
+            cursor: pointer;
+        }
+
+
+        @media (max-width: 640px) {
+            .mobile-flex-col {
+                flex-direction: column;
             }
 
-            .input-container label {
-                width: 100px;
+            .mobile-flex-col label {
+                margin: 5px 0;
+                font-size: 15px;
             }
 
-            .input-container input {
-                flex: 1;
-                padding: 5px;
+            .mobile-flex-col span {
+                font-size: 15px;
             }
 
-            #password, #new-password, #confirm-password {
-                width: 150px;
-            }
-            #select_container{
-                display: flex;
-                gap: 0.5rem;
-                width: 60%;
-            }
-            #header {
-                width: 100%;
-            }
-            #question_type{
-                width: 60%;
-            }
-            #language-select{
-                width: 50%;
-            }
-            #btn-login{
-                left: 0% !important;
-                transform: none !important;
-            }
-
-            /* Login Button - Sunset Orange */
-            button.login {
-                background: linear-gradient(135deg, #5762f8, #ff58fa);
-                color: white;
-            }
-
-            button.login:hover {
-                background: linear-gradient(135deg, #3f4bf7, #f14dec);
-                box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
-            }
-
-            /* Signup Button - Hot Pink */
-            button.signup {
-                background: linear-gradient(135deg, #5762f8, #ff58fa);
-                color: white;
-            }
-
-            button.signup:hover {
-                background: linear-gradient(135deg, #3f4bf7, #f14dec);
-                box-shadow: 0 12px 35px rgba(248, 87, 166, 0.7);
-            }
-            .button-btn button {
-                width: 8rem;
-                padding: 12px 5px;
-                font-size: 11px;
+            .mt-3 {
                 margin-top: 10px;
-                width: 50%;
             }
-            .button-btn{
-                display: flex;
-                gap:5px;
-                width: 100%;
-            }
-        </style>
+        }
+    </style>
 
-        <!-- Load GIS client -->
-        <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Load GIS client -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-    </head>
-    <body>
-        <div class="form">
-            <!-- Header and Language Selector -->
-            <div class="header-container">
-                <div id="header">Welcome to KBDS</div>
-                <div id="select_container">
-                    <select name="question_type" id="question_type" onchange="handleQuestionTypeChange()">
+</head>
+
+<body>
+    <div class="form">
+        <!-- Header and Language Selector -->
+        <div class="header-container">
+            <!-- <div class="logo-container">
+                <img src="/img/LogoBG.png" alt="" />
+            </div> -->
+            <div id="header">Welcome to KBDS</div>
+            <div id="select_container">
+                <!-- <select name="question_type" id="question_type" onchange="handleQuestionTypeChange()">
                         <option value="Basic" id="option-beginner">Basic</option>
                         <option value="Chhahdhala" id="option-advance">Chhahdhala</option>
                     </select>
                     <select id="language-select" onchange="changeLanguage()">
-                        <option value="en" >English</option>
+                        <option value="en">English</option>
                         <option value="hi" selected>हिन्दी</option>
-                    </select>
-                </div>
+                    </select> -->
             </div>
-
-            <div class="flex items-center space-x-6" style="display: flex;">
-                <label class="text-white font-medium">Levels:</label>
-              
+        </div>
+        <div class="flex items-center space-x-6 mobile-flex-col mt-3">
+            <label class="text-white font-medium flex-1">Question Type :</label>
+            <div class="flex items-center space-x-6 flex-2">
                 <label class="inline-flex items-center space-x-2">
-                  <input type="radio" name="level" value="basic" class="accent-pink-500" style="margin-left: 25px;" checked>
-                  <span class="text-white">Basic</span>
+                    <input type="radio" name="question_type" onchange="handleQuestionTypeChange()" value="Basic"
+                        class="accent-pink-500" checked>
+                    <span class="text-white">Basic</span>
                 </label>
-              
+
                 <label class="inline-flex items-center space-x-2">
-                  <input type="radio" name="level" value="expert" class="accent-pink-500" style="margin-left: 25px;">
-                  <span class="text-white">Expert</span>
+                    <input type="radio" name="question_type" onchange="handleQuestionTypeChange()" value="Chhahdhala"
+                        class="accent-pink-500" style="margin-left: 25px;">
+                    <span class="text-white">Chhahdhala</span>
                 </label>
             </div>
-              
+        </div>
 
-            <!-- User Type Selection (Visible in both modes) -->
-            <div class="user-type" id="user-type">
+        <div class="flex items-center space-x-6 mobile-flex-col">
+            <label class="text-white font-medium flex-1">Language :</label>
+
+            <div class="flex items-center space-x-6 flex-2">
+                <label class="inline-flex items-center space-x-2">
+                    <input type="radio" name="language" onchange="changeLanguage()" value="en" class="accent-pink-500"
+                        checked>
+                    <span class="text-white">English</span>
+                </label>
+
+                <label class="inline-flex items-center space-x-2">
+                    <input type="radio" name="language" onchange="changeLanguage()" value="hi" class="accent-pink-500"
+                        style="margin-left: 25px;">
+                    <span class="text-white">हिन्दी</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-6 mobile-flex-col">
+            <label class="text-white font-medium flex-1">Levels :</label>
+            <div class="flex items-center space-x-6 flex-2">
+                <label class="inline-flex items-center space-x-2">
+                    <input type="radio" name="level" value="basic" class="accent-pink-500" checked>
+                    <span class="text-white">Basic</span>
+                </label>
+
+                <label class="inline-flex items-center space-x-2">
+                    <input type="radio" name="level" value="expert" class="accent-pink-500" style="margin-left: 25px;">
+                    <span class="text-white">Expert</span>
+                </label>
+            </div>
+        </div>
+
+
+        <!-- User Type Selection (Visible in both modes) -->
+        <div class="user-type" id="user-type">
+
+            <% if(!isUser.username){ %>
                 <label style="width: fit-content;">
                     <input type="radio" name="userType" value="guest" onchange="toggleUserType('guest')" />
                     Guest User
                 </label>
-                <label style="width: fit-content;">
-                    <input type="radio" name="userType" value="registered" onchange="toggleUserType('registered')" checked />
-                   <% if(isUser.username){ %>
-                        <%= isUser.username %>
-                   <% }else{ %>
-                        Registered User
-                   <% } %>
-                </label>
-            </div>
+                <% } %>
 
-            <!-- Login Form -->
-            <div id="login-form" style="margin-top: 10px;">
-                <div class="login_landscape">
-                    <input type="hidden" id="id" value="<%= isUser.id %>" />
-                    <div id="credentials-container" style="display: <%= isUser.id ? 'none' : 'block' %>;">
-                            <div class="input-container">
-                                <label for="username">Username:</label>
-                                <input type="text" id="username" placeholder="Enter your username" />
-                            </div>
-        
-                            <div class="input-container">
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" placeholder="Enter your password" />
-                            </div>
+                    <label style="justify-content: space-between;">
+                        <div class="flex items-center space-x-2 gap-2">
+                            <input type="radio" name="userType" value="registered"
+                                onchange="toggleUserType('registered')" checked />
+
+                            <% if(isUser.username){ %>
+                                <span id="username_text">
+                                    <%= isUser.username %>
+                                </span>
+                                <div class="action-btn">
+                                    <p id="edit_btn" type="button" onclick="startEditUsername()">
+                                        Update?
+                                    </p>
+
+                                    <p id="save_btn" type="button" style="display:none"
+                                        onclick="saveUsername('<%= isUser.id %>')">
+                                        Save
+                                    </p>
+                                </div>
+                        </div>
+
+                        <% }else{ %>
+                            Registered User
+                            <% } %>
+                    </label>
+
+                    <input type="text" id="update_user_name" value="<%= isUser.username %>"
+                        style="display:none; margin:auto;" />
+        </div>
+
+
+
+        <!-- Login Form -->
+        <div id="login-form" style="margin-top: 10px;">
+            <div class="login_landscape">
+                <input type="hidden" id="id" value="<%= isUser.id %>" />
+                <div id="credentials-container" style="display: <%= isUser.id ? 'none' : 'block' %>;">
+                    <div class="input-container">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" placeholder="Enter your username" />
                     </div>
 
+                    <div class="input-container">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" placeholder="Enter your password" />
+                    </div>
                 </div>
-                <div id="login_buttons">
 
-                    <button type="submit" class="login" id="btn-login">Login</button>
-                    <div class="button-btn">
-                        <button class="top-score-btn" onclick="window.location.href ='/donate'" >Donate 💰</button>
-                        <button class="top-score-btn" onclick="window.location.href ='/api/top-score'">Top Scores 🏆</button>
-                    </div>
-    
-                    <!-- Google One Tap or Sign-in button -->
-                    <!-- <div id="g_id_onload"
+            </div>
+            <div id="login_buttons">
+
+                <button type="submit" class="login" id="btn-login" style="margin-top: 10px;">
+                    <% if(isUser.username){ %>
+                        Play Game
+                        <% }else{ %>
+                            Login
+                            <% } %>
+                </button>
+                <div class="button-btn">
+                    <button class="top-score-btn" onclick="window.location.href ='/donate'">Donate 💰</button>
+                    <button class="top-score-btn" onclick="window.location.href ='/api/top-score'">Top Scores
+                        🏆</button>
+                </div>
+                <div class="button-btn">
+                    <button class="top-score-btn flex align-center flex-1" onclick="shareAppLink()">Share <svg
+                            xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="10.5" cy="2.5" r="2" />
+                            <circle cx="3.5" cy="7" r="2" />
+                            <circle cx="10.5" cy="11.5" r="2" />
+                            <line x1="5" y1="7.8" x2="8.8" y2="10" />
+                            <line x1="8.8" y1="4" x2="5" y2="6.2" />
+                        </svg>
+                    </button>
+                    <% if(isUser.username){ %>
+                        <button class="top-score-btn flex align-center" onclick="window.location.href ='/logout'">Logout
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5.5 13H3a1.5 1.5 0 0 1-1.5-1.5V2.5A1.5 1.5 0 0 1 3 1h2.5" />
+                                <polyline points="10 10 13 7 10 4" />
+                                <line x1="13" y1="7" x2="5.5" y2="7" />
+                            </svg>
+                        </button>
+                        <% } %>
+                </div>
+
+                <!-- Google One Tap or Sign-in button -->
+                <!-- <div id="g_id_onload"
                         data-client_id="<%= GOOGLE_CLIENT_ID %>"
                         data-callback="handleCredentialResponse"
                         data-auto_prompt="false">
                     </div> -->
-    
-                    <!-- <div class="g_id_signin" id="id_logingmail"
+
+                <!-- <div class="g_id_signin" id="id_logingmail"
                         data-type="standard"
                         data-size="large"
                         data-theme="outline"
@@ -174,102 +348,143 @@
                         data-shape="rectangular"
                         data-logo_alignment="left">
                     </div> -->
-                </div>
-
-                <p style="margin-top: 10px;">Don't have an account? <a  style="color: #ff77b9;" href="#" onclick="showSignupForm()">Sign up here</a></p>
             </div>
+            <% if(!isUser.username){ %>
+                <p style="margin-top: 10px; font-size: 14px;">Don't have an account? <a style="color: #ff77b9;" href="#"
+                        onclick="showSignupForm()">Sign up here</a></p>
+                <% } %>
+        </div>
 
-            <!-- Signup Form (Initially Hidden) -->
-            <div id="signup-form" style="display: none;margin-top: 10px;">
-                <div class="login_landscape">
-                    <div id="credentials-container">
-                        <div id="two_container">
-                            <div class="input-container">
-                                <label id="singup_label" for="new-username">Username:</label>
-                                <input class="signup_input" type="text" id="new-username" placeholder="Choose a username" />
-                            </div>
-    
-                            <div class="input-container" style="display: none;">
-                                <label id="singup_label" for="email">Email:</label>
-                                <input class="signup_input" type="email" id="email" placeholder="Enter your email" />
-                            </div>
-                            <div class="input-container">
-                                <label id="signup_label" for="mobile">Mobile:</label>
-                                <input class="signup_input" type="text" id="mobile" placeholder="Enter your mobile number" maxlength="10" />
-                            </div>
-                            
+        <!-- Signup Form (Initially Hidden) -->
+        <div id="signup-form" style="display: none;margin-top: 10px;">
+            <div class="login_landscape">
+                <div id="credentials-container">
+                    <div id="two_container">
+                        <div class="input-container">
+                            <label id="singup_label" for="new-username">Username:</label>
+                            <input class="signup_input" type="text" id="new-username" placeholder="Choose a username" />
                         </div>
-                        <div id="two_container">             
-                            <div class="input-container">
-                                <label id="singup_label" for="new-password">Password:</label>
-                                <input class="signup_input" type="password" id="new-password" placeholder="Create a password" />
-                            </div>
-    
-                            <div class="input-container">
-                                <label id="singup_label" for="confirm-password">Confirm Password:</label>
-                                <input class="signup_input" type="password" id="confirm-password" placeholder="Confirm your password" />
-                            </div>
+
+                        <div class="input-container" style="display: none;">
+                            <label id="singup_label" for="email">Email:</label>
+                            <input class="signup_input" type="email" id="email" placeholder="Enter your email" />
                         </div>
-                        
+                        <div class="input-container">
+                            <label id="signup_label" for="mobile">Mobile:</label>
+                            <input class="signup_input" type="text" id="mobile" placeholder="Enter your mobile number"
+                                maxlength="10" />
+                        </div>
+
+                    </div>
+                    <div id="two_container">
+                        <div class="input-container">
+                            <label id="singup_label" for="new-password">Password:</label>
+                            <input class="signup_input" type="password" id="new-password"
+                                placeholder="Create a password" />
+                        </div>
+
+                        <div class="input-container">
+                            <label id="singup_label" for="confirm-password">Confirm Password:</label>
+                            <input class="signup_input" type="password" id="confirm-password"
+                                placeholder="Confirm your password" />
+                        </div>
                     </div>
 
                 </div>
-                <button type="submit" class="signup" id="btn-signup">Sign Up</button>
 
-                <p style="margin-top: 10px;">Already have an account? <a style="color: #ff77b9;" href="#" onclick="showLoginForm()">Login here</a></p>
             </div>
+            <button type="submit" class="signup" id="btn-signup">Sign Up</button>
+
+            <p style="margin-top: 10px; font-size: 14px;">Already have an account? <a style="color: #ff77b9;" href="#"
+                    onclick="showLoginForm()">Login here</a></p>
         </div>
+        <div class="footer">
+            <p>Directed by vikas jain</p>
+        </div>
+    </div>
 
-        <script>
-            function handleQuestionTypeChange() {
-                const questionType = document.getElementById("question_type").value;
-                const languageSelect = document.getElementById("language-select");
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const userId = '<%= isUser.id %>';
+            if (userId) {
+                fetch(`api/get-user?id=${btoa(userId)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        setUserDetails(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user:', error);
+                    });
+            }
+        })
 
-                // If "Chhahdhala" is selected, switch to Hindi
-                if (questionType === "Chhahdhala") {
-                    languageSelect.value = "hi";
-                    languageSelect.disabled = true;
-                }else{
-                    languageSelect.value = "hi";
-                    languageSelect.disabled = false;
-                }
-                changeLanguage();
+        function setUserDetails(data) {
+            if (!data) return;
+            if (data.user_type === "google") {
+                const username = document.getElementById("username_text");
+                const updateUserInput = document.getElementById("update_user_name");
+                username.textContent = data.fullname;
+                updateUserInput.value = data.fullname;
+            } else {
+                const actionBtn = document.querySelector(".action-btn");
+                actionBtn.style.display = "none";
             }
-            function changeLanguage() {
-                const lang = document.getElementById("language-select").value;
-                const header = document.getElementById("header");
-                header.textContent = lang === "hi" ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है" : "Welcome to KBDS";
+        }
+
+        function handleQuestionTypeChange() {
+            const questionType = document.querySelector("input[name='question_type']:checked").value;
+            const hindiRadio = document.querySelector('input[name="language"][value="hi"]');
+            const englishRadio = document.querySelector('input[name="language"][value="en"]');
+
+            if (questionType === "Chhahdhala") {
+                hindiRadio.checked = true;
+                hindiRadio.disabled = false;
+                englishRadio.disabled = true;
+            } else {
+                englishRadio.checked = true;
+                hindiRadio.disabled = false;
+                englishRadio.disabled = false;
             }
+
             changeLanguage();
+        }
 
-            function toggleUserType(type) {
-                const credentialsContainer = document.getElementById("credentials-container");
-                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
-                const isUser = '<%= isUser.username %>';
-                if (type === 'guest' || isUser) {
-                    credentialsContainer.style.display = "none";
-                } else {
-                    credentialsContainer.style.display = isShortScreen ? "flex" : "block";
-                    
-                }
+        function changeLanguage() {
+            const lang = document.querySelector('input[name="language"]:checked').value;
+            const header = document.getElementById("header");
+            header.textContent = lang === "hi" ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है" : "Welcome to KBDS";
+        }
+        changeLanguage();
+
+        function toggleUserType(type) {
+            const credentialsContainer = document.getElementById("credentials-container");
+            const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
+            const isUser = '<%= isUser.username %>';
+            if (type === 'guest' || isUser) {
+                credentialsContainer.style.display = "none";
+            } else {
+                credentialsContainer.style.display = isShortScreen ? "flex" : "block";
+
             }
+        }
 
-            function showSignupForm() {
-                document.getElementById("login-form").style.display = "none";
-                document.getElementById("signup-form").style.display = "block";
-                document.getElementById("user-type").style.display = "none";
-            }
+        function showSignupForm() {
+            document.getElementById("login-form").style.display = "none";
+            document.getElementById("signup-form").style.display = "block";
+            document.getElementById("user-type").style.display = "none";
+        }
 
-            function showLoginForm() {
-                document.getElementById("signup-form").style.display = "none";
-                document.getElementById("login-form").style.display = "block";
+        function showLoginForm() {
+            document.getElementById("signup-form").style.display = "none";
+            document.getElementById("login-form").style.display = "block";
 
-                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
-                const user_type_div = document.getElementById('user-type');
-                user_type_div.style.display = isShortScreen ? "flex" : "block";
-            }
-        </script>
-        <script src="/js/adduser.js"></script>
+            const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
+            const user_type_div = document.getElementById('user-type');
+            user_type_div.style.display = isShortScreen ? "flex" : "block";
+        }
+    </script>
+    <script src="/js/adduser.js"></script>
 
-    </body>
+</body>
+
 </html>

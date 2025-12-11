@@ -160,12 +160,14 @@ body {
 }
 
 /* Form Messages */
-#form-messages, #status {
+#form-messages,
+#status {
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 12px;
     font-weight: bold;
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
 }
 
 /* Error Message */
@@ -213,7 +215,7 @@ input[type='email']:focus,
 input[type='password']:focus,
 select:focus {
     box-shadow: 0 0 15px rgba(255, 105, 180, 0.7);
-    transform: scale(1.02);
+    /* transform: scale(1.02); */
 }
 
 /* Placeholder Text Style */
@@ -282,7 +284,8 @@ button.danger:hover {
 }
 
 /* Language Selector */
-#language-select , #question_type {
+#language-select,
+#question_type {
     padding: 10px 16px;
     border-radius: 12px;
     background: linear-gradient(45deg, #f5a623, #ff6348);
@@ -293,19 +296,21 @@ button.danger:hover {
 }
 
 /* Hover Effect for Language Selector */
-#language-select:hover , #question_type:hover {
+#language-select:hover,
+#question_type:hover {
     background: linear-gradient(45deg, #ff6348, #f5a623);
 }
 
 
-#login_buttons{
+#login_buttons {
     display: flex;
     justify-content: center;
     width: 100%;
     flex-direction: column;
     gap: 10px;
 }
-#id_logingmail{
+
+#id_logingmail {
     margin-top: 30px;
     border-radius: 12px;
 }
@@ -327,13 +332,17 @@ button.danger:hover {
     button {
         font-size: 16px;
     }
-    .header-container{
+
+    .header-container {
         display: block;
     }
+
     body {
         align-items: start;
-    };
-    
+    }
+
+    ;
+
 }
 
 @media screen and (max-width: 480px) {
@@ -346,17 +355,22 @@ button.danger:hover {
         font-size: 20px;
     }
 
-    input, select, button {
+    input,
+    select,
+    button {
         font-size: 14px;
     }
-    #select_container{
+
+    #select_container {
         width: 100% !important;
     }
-    #id_logingmail{
+
+    #id_logingmail {
         margin-top: 10px;
         border-radius: 12px;
     }
-    #login_buttons{
+
+    #login_buttons {
         display: block;
     }
 }
@@ -367,6 +381,7 @@ button.danger:hover {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -406,32 +421,39 @@ option {
             width: 60%;
             margin-top: -10px;
         }
-        #user-type{
+
+        #user-type {
             margin-top: -10px;
             display: flex;
             gap: 10px;
         }
-        label{
+
+        label {
             margin: 15px 0 8px;
             font-size: 14px;
         }
+
         #header {
             font-size: 18px;
             width: 50% !important;
             margin-bottom: 0px;
         }
-        .header-container{
+
+        .header-container {
             display: flex;
         }
+
         .form {
             padding: 15px;
             margin-top: 0rem !important;
         }
 
-        #language-select, #question_type {
+        #language-select,
+        #question_type {
             width: 50%;
         }
-        button{
+
+        button {
             position: relative;
             left: 50%;
             transform: translateX(-50%);
@@ -440,38 +462,47 @@ option {
             font-size: 14px !important;
             padding: 0px !important;
         }
-        .signup{
+
+        .signup {
             margin-top: 6px !important;
         }
-        .login_landscape{
+
+        .login_landscape {
             display: flex;
             margin-top: 0px;
         }
-        #credentials-container{
-            display: flex ;
+
+        #credentials-container {
+            display: flex;
             gap: 10px;
         }
-        .input-container{
+
+        .input-container {
             margin-bottom: 0px !important;
-          
+
         }
 
-        #singup_label{
+        #singup_label {
             margin: 5px 0 8px !important;
         }
-        .signup_input{
+
+        .signup_input {
             margin: 5px 5px 8px !important;
         }
-        p{
+
+        p {
             text-align: center;
         }
 
-        #password, #new-password, #confirm-password{
+        #password,
+        #new-password,
+        #confirm-password {
             width: fit-content !important;
         }
-        #login-form{
+
+        #login-form {
             margin-top: -12px !important;
         }
-        
+
     }
 }

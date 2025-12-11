@@ -42,7 +42,7 @@ const dialogs = {
     quitDialog: document.getElementById('quit-dialog'),
     quitMessage: document.getElementById('quit-message'),
     endGameDialog: document.getElementById('end-game-dialog'),
-    overlay_dailog:  document.getElementById('id_overlay'),
+    overlay_dailog: document.getElementById('id_overlay'),
     lamp_dailog: document.getElementById('lamp-dialog')
 };
 
@@ -58,7 +58,7 @@ const lifelines = {
 const fiftyFiftyDetailsContainer = {
     is50: false,
     removedOptions: [],
-    used_question_id:''
+    used_question_id: ''
 };
 
 // Buttons Container
@@ -79,13 +79,13 @@ function getQueryParam(param) {
 
 // Get language from the URL (e.g., ?language=english)
 // const language = getQueryParam('lang') || ''; // Default to 'english'
-const question_type = getQueryParam('q_type') || ''; 
-const selected_level = getQueryParam('level') || ''; 
-const user_type = getQueryParam('user_type') || ''; 
+const question_type = getQueryParam('q_type') || '';
+const selected_level = getQueryParam('level') || '';
+const user_type = getQueryParam('user_type') || '';
 
 let slots = [];
 
-if(selected_level === 'expert'){
+if (selected_level === 'expert') {
     // Slot Container (Started array from 1)
     const levelslots = [
         0,
@@ -102,7 +102,7 @@ if(selected_level === 'expert'){
         10000000
     ];
     slots = levelslots;
-}else{
+} else {
     const levelslots = [
         0,
         1000,
@@ -159,19 +159,19 @@ buttons.lock.addEventListener('click', () => {
     lockButtons(buttons);
     lockLifelines(lifelines);
 
-    
+
     // Gets the selected input radio button
     const selectedAnswer = Array.from(
         document.getElementsByName('answer')
     ).filter(element => element.checked == true);
-    
+
     if (selectedAnswer.length == 1) {
 
         // Pause timer if exists
         if (slot <= 16) {
             pauseTimer();
         }
-        
+
         // Answer is selected
         // Gets the parent of input button -> Label
         const answerLabel = selectedAnswer[0].parentNode;
@@ -254,7 +254,7 @@ document.getElementById('answer-container').addEventListener('click', function (
 //     const allInputs = document.querySelectorAll('input[name="answer"]');
 //     allInputs.forEach(input => input.disabled = true);
 
-      
+
 //     // ✅ Select and lock the clicked one
 //     radio.checked = true;
 
@@ -285,23 +285,23 @@ document.getElementById('answer-container').addEventListener('click', function (
 // });
 
 
-function show_overlay(){
+function show_overlay() {
     dialogs.overlay_dailog.classList.add('open')
 }
-function close_overlay(){
+function close_overlay() {
     dialogs.overlay_dailog.classList.remove('open')
 }
 
 buttons.next_btn.addEventListener('click', () => {
-    if(is_correct){
+    if (is_correct) {
         endQuestion(true);
-    }else{
+    } else {
         endQuestion(false);
     }
     // setTimeout(() => {
     // }, 1000);
-    document.getElementById('bottom_btn').style.display='none';
-    document.getElementById('lock-button').style.display='block';
+    document.getElementById('bottom_btn').style.display = 'none';
+    document.getElementById('lock-button').style.display = 'block';
     document.getElementsByClassName('quit-btn')[0].style.display = 'block';
 
 });
@@ -331,7 +331,7 @@ buttons.quit.forEach(button => {
         }
 
         const message = document.getElementById('quit-dialog-message');
-        message.innerHTML = `Are you sure you want to quit?<br />You will complete the level ${slot-1}`;
+        message.innerHTML = `Are you sure you want to quit?<br />You will complete the level ${slot - 1}`;
         const quitButton = document.getElementById('quit-dialog-quit');
         const cancelButton = document.getElementById('quit-dialog-cancel');
         const logoutButton = document.getElementById('quit-dialog-logout');
@@ -340,9 +340,18 @@ buttons.quit.forEach(button => {
             isQuit = true;
             dialogs.quitDialog.style.display = 'none';
             // dialogs.quitMessage.style.display = 'block';
-            close_overlay();
-
-            endGame();
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const userId = urlParams.get('id');
+            const username = urlParams.get('username');
+            const userType = urlParams.get('user_type');
+            if (userType == 'guest') {
+                window.location.href = window.location.origin;
+            } else {
+                window.location.href = `${window.location.origin}/?id=${userId}&username=${username}`;
+            }
+            // close_overlay();
+            // endGame();
         });
 
         cancelButton.addEventListener('click', () => {
@@ -366,7 +375,7 @@ const englishRadio = document.getElementById("lang-en");
 // If "Chhahdhala" is selected, switch to Hindi and disable language change
 if (question_type === "Chhahdhala") {
     hindiRadio.checked = true;
-    englishRadio.disabled = true; 
+    englishRadio.disabled = true;
 } else {
     englishRadio.disabled = false; // Enable for other types
 }
@@ -380,7 +389,7 @@ function changeLanguage() {
     lockLifelines(lifelines);
 
 
-    let language = document.querySelector('input[name="language"]:checked').value || ''; 
+    let language = document.querySelector('input[name="language"]:checked').value || '';
     // console.log(`Level: ${slot}, Language: ${language}`);
 
     // Make question AJAX request
@@ -399,9 +408,9 @@ function changeLanguage() {
                 // If question is received successfully set the question
                 console.log('Question:', responseObject);
                 setQuestion(responseObject);
-                
+
                 const div = document.getElementById('50-50-div');
-                if ((fiftyFiftyDetailsContainer.is50) && (used_slot === slot) &&  (fiftyFiftyDetailsContainer.used_question_id === responseObject.id)){
+                if ((fiftyFiftyDetailsContainer.is50) && (used_slot === slot) && (fiftyFiftyDetailsContainer.used_question_id === responseObject.id)) {
                     console.log('Entered 50-50 to Experts');
                     let removedOption1 = fiftyFiftyDetailsContainer.removedOptions[0];
                     let removedOption2 = fiftyFiftyDetailsContainer.removedOptions[1];
@@ -422,8 +431,8 @@ function changeLanguage() {
                     );
                     incorrectAnswer2.innerHTML = '&nbsp;';
                     div.classList.remove('unused');
-                } 
-            } 
+                }
+            }
             else if (questionRequest.status == 404) {
                 console.error('No questions found');
             } else {
@@ -438,7 +447,7 @@ function changeLanguage() {
     );
 
     questionRequest.send();
-    
+
 
 
 
@@ -451,16 +460,16 @@ function getQuestion(price) {
     lockButtons(buttons);
     lockLifelines(lifelines);
 
-    
-    if(slot > 10 ){
+
+    if (slot > 10) {
         endQuestion(false);
         return '';
     }
-    if((user_type === 'guest') && (slot > 4)){
+    if ((user_type === 'guest') && (slot > 4)) {
         endQuestion(false);
-        return  '';
+        return '';
     }
-    
+
     const questionshow = new Audio("../audio/questionshow.wav");
     questionshow.play();
 
@@ -477,11 +486,11 @@ function getQuestion(price) {
         setTimer(null);
     }
 
-    document.getElementById('bottom_btn').style.display='none';
+    document.getElementById('bottom_btn').style.display = 'none';
     // document.getElementById('lock-button').style.display='block';
     // document.getElementById('quit-button').style.display='block';
 
-    let language = document.querySelector('input[name="language"]:checked').value || ''; 
+    let language = document.querySelector('input[name="language"]:checked').value || '';
     // console.log(`Level: ${slot}, Language: ${language}`);
 
     document.getElementById('levels-btn').innerHTML = `Level :- ${slot}`;
@@ -503,7 +512,7 @@ function getQuestion(price) {
                 // If question is received successfully set the question
                 console.log('Question:', responseObject);
                 setQuestion(responseObject);
-            } 
+            }
             else if (questionRequest.status == 404) {
                 console.error('No questions found');
             } else {
@@ -521,13 +530,13 @@ function getQuestion(price) {
             `${current_url}/api/lifelines/flipthequestion/${questionId}/${price}?language=${language}&question_type=${question_type}`,
             true
         );
-    } else if(is_correct){
+    } else if (is_correct) {
         questionRequest.open(
             'get',
             `${current_url}/api/question/${price}?questionId=${questionId}&is_correct=${is_correct}&question_type=${question_type}`,
             true
         );
-    }else {
+    } else {
         questionRequest.open(
             'get',
             `${current_url}/api/question/${price}?language=${language}&question_type=${question_type}`,
@@ -539,9 +548,9 @@ function getQuestion(price) {
 
 
 function setQuestion(questionObject) {
-    let language = document.querySelector('input[name="language"]:checked').value || ''; 
+    let language = document.querySelector('input[name="language"]:checked').value || '';
 
-    if(questionObject.question_type === 'Chhahdhala'){
+    if (questionObject.question_type === 'Chhahdhala') {
         language = 'hi';
     }
     // Set global variables
@@ -575,7 +584,7 @@ function setQuestion(questionObject) {
 
     explain_button = document.getElementById('bottom_btn').style.display;
     // Start the timer if slots < 10
-    if ((slot <= 16) && (explain_button==='none')) {
+    if ((slot <= 16) && (explain_button === 'none')) {
         startResumeTimer();
     }
     // }, 1000);
@@ -609,7 +618,7 @@ function checkAnswer(selectedAnswer) {
 
                         console.log('Correct answer!');
                         is_correct = true;
-                        
+
 
                         // if (!isMobileLandscape()) {
                         //     selectedAnswerLabel.style.background =
@@ -633,8 +642,8 @@ function checkAnswer(selectedAnswer) {
                         //         endQuestion(true);
                         //     }, 1000);
                         // }else{
-                        document.getElementById('bottom_btn').style.display='flex';
-                        document.getElementById('lock-button').style.display='none';
+                        document.getElementById('bottom_btn').style.display = 'flex';
+                        document.getElementById('lock-button').style.display = 'none';
                         document.getElementsByClassName('quit-btn')[0].style.display = 'none';
 
                         // }
@@ -672,8 +681,8 @@ function checkAnswer(selectedAnswer) {
 
                         is_correct = false;
 
-                        document.getElementById('bottom_btn').style.display='flex';
-                        document.getElementById('lock-button').style.display='none';
+                        document.getElementById('bottom_btn').style.display = 'flex';
+                        document.getElementById('lock-button').style.display = 'none';
                         document.getElementsByClassName('quit-btn')[0].style.display = 'none';
 
                         // Since answer is incorrect end the game
@@ -700,14 +709,14 @@ function endQuestion(isCorrect) {
     // TODO Display a dialog
 
     // setTimeout(() => {
-        // Set all label backgrounds and text color to default settings and empty labels
+    // Set all label backgrounds and text color to default settings and empty labels
     container.question.innerHTML = '&nbsp;';
     document.querySelectorAll('.answer').forEach(label => {
         label.innerHTML = '&nbsp';
         // if (!isMobileLandscape()){
         //     label.style.background = '#390f4e';     
         // }else{
-            // label.style.background = 'transparent';
+        // label.style.background = 'transparent';
         label.style.width = '98%';
         label.style.background = "url('./../img/box.png') no-repeat center center";
         label.style.backgroundSize = '100% 100%';
@@ -761,14 +770,14 @@ function nextQuestion() {
 function endGame() {
     let price = null;
     if (isQuit) {
-        price = `Level  ${slot-1}`;
+        price = `Level  ${slot - 1}`;
         // console.log(`You have won Rs ${slots[slot - 1]}`);
-        console.log(`You have completed the level ${slot-1}`);
+        console.log(`You have completed the level ${slot - 1}`);
         flipTheQuestionMethod();
     } else {
-        price = `Level  ${slot-1}`;
+        price = `Level  ${slot - 1}`;
         // console.log(`You have won Rs ${slots[slot]}`);
-        console.log(`You have completed the level ${slot-1}`);
+        console.log(`You have completed the level ${slot - 1}`);
     }
 
     dialogs.endGameDialog.style.display = 'block';
@@ -777,7 +786,7 @@ function endGame() {
     get_time = getTimeElapsed();
 
     setTimeout(() => {
-        window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot-1}&time=${get_time}`;
+        window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot - 1}&time=${get_time}`;
     }, 100);
 
     // Clear markers
@@ -814,12 +823,12 @@ lifelines.audiencePoll.addEventListener('click', () => {
                     innerDiv.classList.remove('unused');
                 }
             });
-            
+
 
             console.log("🚫 Unused Lifelines updated visually.");
         }
 
-        
+
         // Pause the timer if it exists
         if (slot <= 16) {
             pauseTimer();
@@ -982,7 +991,7 @@ lifelines.flipTheQuestion.addEventListener('click', () => {
     if (div.classList.contains('unused')) {
         // Example: Adding a lifeline
         if (Object.keys(count_lifeline).length < 3) {
-            const key = 'flip-the-question-div' ;
+            const key = 'flip-the-question-div';
             count_lifeline[key] = lifelines.flipTheQuestion;
         }
 
@@ -1005,7 +1014,7 @@ lifelines.flipTheQuestion.addEventListener('click', () => {
 
             console.log("🚫 Unused Lifelines updated visually.");
         }
-    
+
         lifelineAudio.play();
         // Use the lifeline
         // dialogs.flipDialog.style.display = 'block';
@@ -1032,7 +1041,7 @@ function flipTheQuestionMethod() {
 
 // Ask the expert
 lifelines.askTheExpert.addEventListener('click', () => {
-    
+
     const div = document.getElementById('ask-the-expert-div');
     if (div.classList.contains('unused')) {
         // Example: Adding a lifeline
@@ -1060,7 +1069,7 @@ lifelines.askTheExpert.addEventListener('click', () => {
 
             console.log("🚫 Unused Lifelines updated visually.");
         }
-        
+
         // Pause the timer if it exists
         if (slot <= 16) {
             pauseTimer();
@@ -1234,7 +1243,7 @@ function decrementTimer() {
                 timer.left.style.width = progress + '%';
                 timer.right.style.width = progress + '%';
                 timer.span.innerHTML = timer.timeLeft;
-                
+
                 if (timer.timeLeft <= 10) {
                     // Show the elements
                     // document.getElementById('progress-bar-left').style.display = "block";
@@ -1244,7 +1253,7 @@ function decrementTimer() {
 
                     // Play ticking sound
                     tickAudio.play();
-                } 
+                }
                 // else {
                 //     // Hide the elements before 10 seconds
                 //     document.getElementById('progress-bar-left').style.display = "none";
@@ -1283,8 +1292,11 @@ function moveLifeline() {
 
     if (!lifelineDiv || !landscapeContainer || !aside) return;
 
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    // const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const isMobile = true;
+    console.log(isMobile, "isMobile");
     const isLandscape = window.innerWidth > window.innerHeight;
+    console.log(isLandscape, "isLandscape");
 
     if (isMobile && isLandscape) {
         // ✅ Only move to landscape container if it's mobile AND in landscape

@@ -745,8 +745,11 @@
                 const y = Math.random() * canvas.height * 0.5;
                 createFirework(x, y);
             }, 700);
-
-            animate();
+           const level ="<%= level %>"
+           console.log(level ,'level');
+           if(level == 10){
+               animate();
+           }
             
 
             function showWinners() {
