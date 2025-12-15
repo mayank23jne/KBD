@@ -53,7 +53,9 @@ router.post('/upload/basic', upload.fields([
 router.post('/upload/chhahdhala', upload.single('hindiFile'), async (req, res) => {
   try {
     const hindiBuffer = req.file.buffer;
+    console.log("test chah")
     const hindiData = await parseXMLBuffer(hindiBuffer);
+    console.log("test chahdhaalalaa")
 
     await SaveChhahdhalaQuestions(hindiData);
 

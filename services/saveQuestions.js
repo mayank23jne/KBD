@@ -38,6 +38,8 @@ const shuffleOptions = (options, correctIndex) => {
 exports.SaveChhahdhalaQuestions = async (hindiData) => {
     try {
         // const hindiData = await parseXML('chhahdhala.xml');
+        console.log("hi hello")
+
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
 
         for (const hin of hindiQuestions) {
@@ -59,10 +61,26 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
                 { en: "N/A", hi: hin.Option1[0] },
                 { en: "N/A", hi: hin.Option2[0] },
                 { en: "N/A", hi: hin.Option3[0] },
-                { en: "N/A", hi: hin.Option4[0] }
+                { en: "N/A", hi: hin.Option4[0] },
             ];
+             
+            let FixOptionRaw = null;
 
-            const { shuffledOptions, newAnswer } = shuffleOptions(options, 1);
+            if (Array.isArray(hin?.FixOption)) {
+                FixOptionRaw = hin.FixOption[0];
+            } else if (typeof hin?.FixOption === 'string') {
+                FixOptionRaw = hin.FixOption;
+            }
+
+
+            const FixOption = FixOptionRaw === '1' ? 1 : null;
+
+            console.log('FixOptionRaw:', FixOptionRaw, '=> FixOption:', FixOption);
+
+            const correctIndex = FixOption ?? 1;
+
+
+            const { shuffledOptions, newAnswer } = shuffleOptions(options, correctIndex);
 
             // Prepare JSON data for each field
             const questionData = {
@@ -74,6 +92,7 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
                 option2: JSON.stringify(shuffledOptions[1]),
                 option3: JSON.stringify(shuffledOptions[2]),
                 option4: JSON.stringify(shuffledOptions[3]),
+                FixOption: JSON.stringify(FixOption),
                 explanation: JSON.stringify({
                     en: "No explanation available.",
                     hi: hin.Explanation ? hin.Explanation[0] : "कोई स्पष्टीकरण उपलब्ध नहीं है।"
@@ -88,8 +107,8 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
             // MySQL INSERT query
             const query = `
                 INSERT INTO questions (
-                    question, option1, option2, option3, option4, explanation, answer, slot, level, question_type, user_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    question, option1, option2, option3, option4,FixOption, explanation, answer, slot, level, question_type, user_id
+                ) VALUES (?, ?, ?, ?, ?, ?,?,?, ?, ?, ?, ?)
             `;
 
             const values = [
@@ -98,6 +117,7 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
                 questionData.option2,
                 questionData.option3,
                 questionData.option4,
+                questionData.FixOption,
                 questionData.explanation,
                 questionData.answer,
                 questionData.slot,
@@ -115,6 +135,7 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
                 option2: JSON.stringify(shuffledOptions[1]),
                 option3: JSON.stringify(shuffledOptions[2]),
                 option4: JSON.stringify(shuffledOptions[3]),
+                FixOption: FixOption,
                 explanation: JSON.stringify({
                     en: "No explanation available.",
                     hi: hin.Explanation ? hin.Explanation[0] : "कोई स्पष्टीकरण उपलब्ध नहीं है।"
@@ -138,12 +159,11 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
 // SaveChhahdhalaQuestions();
 
 
-// const SaveBasicQuestions = async () => {
-exports.SaveBasicQuestions = async (hindiData, englishData) => {
+const SaveBasicQuestions = async () => {
+// exports.SaveBasicQuestions = async (hindiData, englishData) => {
     try {
-        // const englishData = await parseXML('english.xml');
-        // const hindiData = await parseXML('hindi.xml');
-
+        const englishData = await parseXML('english.xml');
+        const hindiData = await parseXML('hindi.xml');
         const englishQuestions = englishData.KBDS.Questions[0].Question;
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
 
@@ -229,4 +249,4 @@ exports.SaveBasicQuestions = async (hindiData, englishData) => {
 };
 
 // Run the function
-// SaveBasicQuestions();
+SaveBasicQuestions();

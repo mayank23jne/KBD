@@ -89,16 +89,16 @@ const pool = require('../db');
 
 class Question {
     // Create a new question
-    static async createQuestion({ question, option1, option2, option3, option4, explanation, answer, slot, level, question_type, user_id = '' }) {
+    static async createQuestion({ question, option1, option2, option3, option4, FixOption, explanation, answer, slot, level, question_type, user_id = '' }) {
         try {
             const query = `
                 INSERT INTO questions (
-                    id, question, option1, option2, option3, option4, explanation, answer, slot, level, question_type, user_id
-                ) VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    id, question, option1, option2, option3, option4, FixOption, explanation, answer, slot, level, question_type, user_id
+                ) VALUES (UUID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
             const [result] = await pool.query(query, [
-                question, option1, option2, option3, option4, explanation, answer, slot, level, question_type, user_id
+                question, option1, option2, option3, option4, FixOption, explanation, answer, slot, level, question_type, user_id
             ]);
             return result.insertId; // Return the newly inserted question ID
         } catch (error) {

@@ -38,7 +38,7 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
     try {
         // const hindiData = await parseXML('chhahdhala.xml');
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
-
+        console.log()
         for (const hin of hindiQuestions) {
             // Prepare options and shuffle them
             const options = [

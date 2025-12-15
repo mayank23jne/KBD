@@ -75,9 +75,23 @@ app.get('/logout', (req, res) => {
 // Protected Routes - Require Authentication
 app.get('/play', isAuthenticated, (req, res) => {
     req.session.visitedIndex = false;
-    const username = req.session.user ? req.session.user.username : 'Guest';
-    res.render('play', { language: req.session.language , username: username});
+
+    // Fetch user data from session
+    const userId = req.session.user?.id || '';
+    const username = req.session.user?.username || 'Guest';
+    const userType = req.session.user?.user_type || 'registered';
+    const fullname = req.session.user?.fullname || username; // fallback to username if fullname not set
+
+    // Render play.ejs with all required variables
+    res.render('play', {
+        language: req.session.language || 'en',
+        userId,
+        username,
+        userType,
+        fullname
+    });
 });
+
 
 app.get('/play-with-google', async (req, res) => {
     const email = atob(req.query.email);
@@ -85,13 +99,15 @@ app.get('/play-with-google', async (req, res) => {
     if (!user) { 
         return res.redirect('/');
     }
-    req.session.user = {
+     req.session.user = {
         id: user.id,
         username: user.username,
-        user_type: user.user_type
+        user_type: user.user_type,
+        email: user.email,
+        fullname: user.fullname
     };
     req.session.language = user.language_select;
-    res.render('play', { language: req.session.language , username: user.username});
+    res.render('play', { language: req.session.language , username: user.username,  userType: user.user_type, fullname: user.fullname });
 });
 
 // app.get('/api/question', isAuthenticated, (req, res) => {

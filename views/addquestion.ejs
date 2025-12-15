@@ -166,7 +166,7 @@
     function detectLanguageFromText(text) {
       let hindiCount = 0;
       let englishCount = 0;
-  
+      console.log("text is: ",text)
       for (const char of text) {
         const code = char.charCodeAt(0);
         if (code >= 0x0900 && code <= 0x097F) {
@@ -183,8 +183,9 @@
   
     function extractTextFromXML(xmlString) {
       const parser = new DOMParser();
+      console.log("xmlstring ",xmlString)
       const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-  
+      console.log("xmldoc ",xmlDoc)
       const questions = xmlDoc.getElementsByTagName("Question");
       let extractedText = "";
   
@@ -204,46 +205,52 @@
     }
   
     function validateXMLFile(inputId, expectedLang) {
-      const fileInput = document.getElementById(inputId);
-      const file = fileInput.files[0];
-  
-      if (!file || !file.name.endsWith(".xml")) {
-        alert("Please select a valid XML file.");
-        fileInput.value = "";
-        uploadedLanguages[inputId] = null;
-        return;
-      }
-  
-      const reader = new FileReader();
-  
-      reader.onload = function (e) {
-        const text = e.target.result;
-        const extractedText = extractTextFromXML(text);
-        const detectedLang = detectLanguageFromText(extractedText);
-  
-        // Check expected language
-        if (detectedLang !== expectedLang) {
-          alert(`Invalid file: Expected a ${expectedLang === 'hi' ? 'Hindi' : 'English'} XML file.`);
-          fileInput.value = "";
-          uploadedLanguages[inputId] = null;
-          return;
-        }
-  
-        // Block same language in both inputs
-        const otherInputId = inputId === 'file1' ? 'file2' : 'file1';
-        if (uploadedLanguages[otherInputId] === detectedLang) {
-          alert(`A ${detectedLang === 'hi' ? 'Hindi' : 'English'} file is already uploaded in the other input.`);
-          fileInput.value = "";
-          uploadedLanguages[inputId] = null;
-          return;
-        }
-  
-        uploadedLanguages[inputId] = detectedLang;
-        console.log(`File "${file.name}" accepted as ${detectedLang}`);
-      };
-  
-      reader.readAsText(file, 'utf-16');
+  const fileInput = document.getElementById(inputId);
+  const file = fileInput.files[0];
+
+  if (!file || !file.name.endsWith(".xml")) {
+    alert("Please select a valid XML file.");
+    fileInput.value = "";
+    uploadedLanguages[inputId] = null;
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    // ✅ UTF-16 SAFE DECODING
+    const arrayBuffer = e.target.result;
+    const decoder = new TextDecoder("utf-16");
+    const text = decoder.decode(arrayBuffer);
+
+    const extractedText = extractTextFromXML(text);
+    const detectedLang = detectLanguageFromText(extractedText);
+
+    console.log("Detected language:", detectedLang);
+
+    if (detectedLang !== expectedLang) {
+      alert(`Invalid file: Expected a ${expectedLang === 'hi' ? 'Hindi' : 'English'} XML file.`);
+      fileInput.value = "";
+      uploadedLanguages[inputId] = null;
+      return;
     }
+
+    const otherInputId = inputId === 'file1' ? 'file2' : 'file1';
+    if (uploadedLanguages[otherInputId] === detectedLang) {
+      alert(`A ${detectedLang === 'hi' ? 'Hindi' : 'English'} file is already uploaded.`);
+      fileInput.value = "";
+      uploadedLanguages[inputId] = null;
+      return;
+    }
+
+    uploadedLanguages[inputId] = detectedLang;
+    console.log(`File "${file.name}" accepted as ${detectedLang}`);
+  };
+
+  // ✅ IMPORTANT
+  reader.readAsArrayBuffer(file);
+}
+
   
     async function handleAddQuestion() {
       const type = document.getElementById("question_type").value;
@@ -263,6 +270,7 @@
             hideLoader();
             return;
           }
+          console.log("detect uploadedLanguages: ",uploadedLanguages)
           if (uploadedLanguages.file1 !== 'hi' || uploadedLanguages.file2 !== 'en') {
             alert("Invalid file selection. Make sure Hindi file is on the first and English on the second.");
             hideLoader();

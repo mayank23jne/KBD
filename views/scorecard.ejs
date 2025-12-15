@@ -689,11 +689,26 @@
 
             }
 
-            function playAgain() {
-                let question_type = document.getElementById('question-type').innerText ;
-                // let timestamp = Date.now(); // Current timestamp in ms
-                window.location.href = `/play?q_type=${question_type}&level=${selected_level}&user_type=${user_type}&action=playagain`;
+           function playAgain() {
+            let user = localStorage.getItem("last_user");
+            if (!user) {
+                window.location.href = '/';
+                return;
             }
+
+            user = JSON.parse(user);
+            console.log("users", user.l)
+            let question_type = document.getElementById('question-type').innerText;
+
+            window.location.href =
+                `/play?lang=hi` +
+                `&id=${encodeURIComponent(user.id)}` +
+                `&username=${encodeURIComponent(user.username)}` +
+                `&q_type=${encodeURIComponent(question_type)}` +
+                `&level=${encodeURIComponent(selected_level)}` +
+                `&user_type=${encodeURIComponent(user_type)}` +
+                `&action=playagain`;
+        }
 
             // Fireworks Animation
             const canvas = document.getElementById('fireworksCanvas');

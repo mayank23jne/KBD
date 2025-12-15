@@ -64,15 +64,17 @@
          <div id="right_header">
             <div id="side_profile_bar">
 
-               <div id="id_username" class="mobile-tooltip" title="<%= username %>" onclick="showTooltip()">
+               <div id="id_username" class="mobile-tooltip" title="<%= fullname || username %>" onclick="showTooltip()">
                   <i class="fa-solid fa-user"></i>
                   <span>
-                     <%= username.length> 6 ? username.substring(0, 6) + '...' : username %>
-                        <span id="username-tooltip" class="tooltip-text">
-                           <%= username %>
-                        </span>
+                     <%= fullname || username %>
+                     <span id="username-tooltip" class="tooltip-text">
+                        <%= fullname || username %>
+                     </span>
                   </span>
                </div>
+
+
                <button id="quit-button" style="color: white;">✖</button>
             </div>
             <div id="landscape_lifelines">
@@ -562,6 +564,37 @@
             tooltip.classList.remove("show");
          }, 3000);
       }
+          window.addEventListener("DOMContentLoaded", () => {
+    const userId = "<%= userId %>";
+
+    if (userId) {
+        fetch(`/api/get-user?id=${btoa(userId)}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log("Response from /api/get-user:", data);
+
+                // Determine display name
+                let displayName;
+
+                if (data.user_type && data.user_type.toLowerCase() === "guest") {
+                    displayName = "Guest"; // Guest user shows Guest
+                } else {
+                    displayName = data.fullname && data.fullname.trim() !== "" ? data.fullname : data.username;
+                }
+
+                const usernameSpan = document.getElementById('id_username').querySelector('span');
+                const tooltipSpan = document.getElementById('username-tooltip');
+
+                // Set text correctly
+                usernameSpan.firstChild.textContent = displayName;
+                tooltipSpan.textContent = displayName;
+
+            })
+            .catch(err => console.error('Error fetching user:', err));
+    }
+});
+
+
 
    </script>
 
