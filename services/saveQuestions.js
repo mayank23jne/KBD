@@ -159,8 +159,8 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
 // SaveChhahdhalaQuestions();
 
 
-const SaveBasicQuestions = async () => {
-// exports.SaveBasicQuestions = async (hindiData, englishData) => {
+// const SaveBasicQuestions = async () => {
+exports.SaveBasicQuestions = async (hindiData, englishData) => {
     try {
         const englishData = await parseXML('english.xml');
         const hindiData = await parseXML('hindi.xml');
@@ -249,4 +249,4 @@ const SaveBasicQuestions = async () => {
 };
 
 // Run the function
-SaveBasicQuestions();
+// SaveBasicQuestions();
