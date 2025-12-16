@@ -47,13 +47,13 @@ signupForm.submit.addEventListener('click', () => {
         .then((data) => {
             if (data.error) {
                 if (data.error.toLowerCase().includes("username")) {
-                    alert("❌ Username is already taken. Please choose another one.");
+                    showToast("❌ Username is already taken. Please choose another one.");
                 } else if (data.error.toLowerCase().includes("email")) {
-                    alert("❌ Email is already registered.");
+                    showToast("❌ Email is already registered.");
                 } else if (data.error.toLowerCase().includes("mobile")) {
-                    alert("❌ Mobile number is already in use.");
+                    showToast("❌ Mobile number is already in use.");
                 } else {
-                    alert("❌ " + data.error); // fallback for unknown errors
+                    showToast("❌ " + data.error); // fallback for unknown errors
                 }
             } else {
                 // alert('User registered successfully!');
@@ -132,7 +132,7 @@ loginForm.submit.addEventListener('click', () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
-                    alert(data.error);
+                    showToast(data.error);
                 } else {
                     // Optionally, clear the signup form
                     clearSignupForm();
@@ -160,7 +160,7 @@ loginForm.submit.addEventListener('click', () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
-                    alert(data.error);
+                    showToast(data.error);
                 } else {
                     window.location.href = current_url + `${data.redirectUrl}&lang=${requestData.language_select}&q_type=${requestData.question_type}&level=${selected_level}&user_type=${user_type}`;
                 }
@@ -184,7 +184,7 @@ loginForm.submit.addEventListener('click', () => {
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
-                    alert(data.error);
+                    showToast(data.error);
                 } else {
                     console.log('User login successfully!');
 
@@ -216,7 +216,7 @@ function handleCredentialResponse(response) {
             if (data.redirectUrl) {
                 window.location.href = `${data.redirectUrl}?lang=${language_select}&q_type=${questiontype}&level=${selectedLevel}&user_type=${usertype}`;
             } else {
-                alert("Login failed: " + data.error);
+                showToast("Login failed: " + data.error);
             }
         });
 }
@@ -244,7 +244,7 @@ async function shareAppLink() {
             console.log("App link shared to Ionic app:", payload);
         } else {
             console.warn("cordova_iab not available — probably running in browser.");
-            alert("Sharing only works inside the KBDS app.");
+            showToast("Sharing only works inside the KBDS app.");
         }
 
     } catch (error) {
@@ -273,7 +273,7 @@ function saveUsername(userId) {
     const saveBtn = document.getElementById("save_btn");
 
     const newName = input.value.trim();
-    if (!newName) return alert("Username cannot be empty");
+    if (!newName) return showToast("Username cannot be empty");
 
     // ✅ API Call
     fetch(`/api/update-user`, {
@@ -291,5 +291,5 @@ function saveUsername(userId) {
             saveBtn.style.display = "none";
             editBtn.style.display = "inline-block";
         })
-        .catch(() => alert("Update failed"));
+        .catch(() => showToast("Update failed"));
 }

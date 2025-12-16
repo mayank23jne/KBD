@@ -903,5 +903,15 @@
                 background: rgba(255, 255, 255, 0.2);
             }
         </style>
+        <script>
+        // Page load par ek fake state daal do
+        window.history.pushState({ page: "score" }, "", window.location.href);
+
+        window.addEventListener("popstate", function (event) {
+            // User ne back dabaya → fir se aage bhej do
+            window.history.go(1);
+        });
+        </script>
+
     </body>
 </html>

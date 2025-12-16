@@ -598,21 +598,17 @@
 
    </script>
 
-   <!-- <script>
+<script>
+  // Game page par aate hi
+  history.pushState({ page: "game" }, "", location.href);
 
-         // Now push the real page back into history
-         history.pushState({}, '', location.href);
-         
-         window.addEventListener('popstate', function () {
-            // Clear local storage
-            localStorage.clear();
+  window.addEventListener("popstate", function (event) {
+    // Yaha direct redirect mat karo, sirf back ko cancel karo
+    history.go(1);
+  });
+</script>
 
-            // Clear session storage
-            sessionStorage.clear();
-            window.location.href = '/'; // Redirect to home page on back
-         });
 
-      </script> -->
 
 
 
