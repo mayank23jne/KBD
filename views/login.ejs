@@ -214,7 +214,7 @@
             <div class="flex items-center space-x-6 flex-2">
                 <label class="inline-flex items-center space-x-2">
                     <input type="radio" name="question_type" onchange="handleQuestionTypeChange()" value="Basic"
-                        class="accent-pink-500" checked>
+                        class="accent-pink-500" checked> 
                     <span class="text-white">Basic</span>
                 </label>
 
@@ -265,7 +265,7 @@
 
             <% if(!isUser.username){ %>
                 <label style="width: fit-content;">
-                    <input type="radio" name="userType" value="guest" onchange="toggleUserType('guest')" />
+                    <input type="radio" name="userType" value="guest"  style="margin-top: 20px;" onchange="toggleUserType('guest')" />
                     Guest User
                 </label>
                 <% } %>

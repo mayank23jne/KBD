@@ -117,13 +117,15 @@
         }
 
         /* ACTION BUTTONS */
-        .action-btn p {
-            margin: 0;
+       .action-btn p {
+            margin-top: 7px;
             padding: 0 5px;
             color: #ff77b9;
             cursor: pointer;
             font-weight: 600;
+            font-size: 12px;   /* 👈 yaha size kam kar diya */
         }
+
         /* ============================= */
 /* RESPONSIVE ALIGNMENT FIX */
 /* SAME AS WORKING FILE */
@@ -176,6 +178,7 @@
             .user-type .flex {
                 justify-content: space-between;
                 width: 100%;
+                margin-top: 10px;
             }
 
             /* Username input full width */
@@ -267,9 +270,11 @@
 
                     <!-- Update + Save buttons -->
                     <div class="action-btn">
-                        <p id="edit_btn" onclick="startEditUsername()">Update?</p>
+                        <p id="add_btn" onclick="startEditUsername()" style="display:none;">Add Name</p>
+                        <p id="edit_btn" onclick="startEditUsername()">Update Name</p>
                         <p id="save_btn" onclick="saveUsername()" style="display:none;">Save</p>
                     </div>
+
                 </div>
             </label>
 
@@ -321,17 +326,33 @@
     <!-- SCRIPT -->
     <script>
         // Always show buttons; no condition
-        function setUserDetails(data) {
+     function setUserDetails(data) {
             if (!data) return;
 
-            const username = document.getElementById("username_text");
+            const usernameText = document.getElementById("username_text");
             const updateUserInput = document.getElementById("update_user_name");
-            const actionBtn = document.querySelector(".action-btn");
 
-            if (username) username.textContent = data.fullname || data.username || "";
-            if (updateUserInput) updateUserInput.value = data.fullname || data.username || "";
-            if (actionBtn) actionBtn.style.display = "flex";
+            const addBtn = document.getElementById("add_btn");
+            const editBtn = document.getElementById("edit_btn");
+
+            const name = (data.fullname || data.username || "").trim();
+
+            // Username set
+            usernameText.textContent = name || "No Name";
+            updateUserInput.value = name;
+
+            // 👇 CONDITION
+            if (!name) {
+                // First time user
+                addBtn.style.display = "block";
+                editBtn.style.display = "none";
+            } else {
+                // Existing user
+                addBtn.style.display = "none";
+                editBtn.style.display = "block";
+            }
         }
+
 
         window.addEventListener("DOMContentLoaded", () => {
             const userId = "<%= req.session.user ? req.session.user.id : '' %>";
@@ -367,15 +388,15 @@
 
             const userId = "<%= req.session.user.id %>";
 
-            // Update UI
             const usernameText = document.getElementById('username_text');
             usernameText.textContent = newName;
 
             input.style.display = 'none';
+
+            document.getElementById('add_btn').style.display = 'none';
             document.getElementById('edit_btn').style.display = 'block';
             document.getElementById('save_btn').style.display = 'none';
 
-            // Save to backend
             fetch('/api/update-user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -383,6 +404,7 @@
             })
             .catch(() => alert('Failed to update username'));
         }
+
 
 
         function handleQuestionTypeChange() {
