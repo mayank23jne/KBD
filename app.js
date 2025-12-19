@@ -31,6 +31,7 @@ app.use(session({
 const questionRoute = require('./routes/questions');
 const userRoute = require('./routes/user');
 const donation = require('./routes/donationRoutes');
+const razorpayRoutes = require('./routes/razorpayRoutes');
 
 // Routes Middlewares
 app.use('/api', questionRoute);
@@ -73,6 +74,8 @@ app.get('/logout', (req, res) => {
 });
 
 // Protected Routes - Require Authentication
+
+app.use('/api/razorpay', razorpayRoutes);
 app.get('/play', isAuthenticated, (req, res) => {
     req.session.visitedIndex = false;
 

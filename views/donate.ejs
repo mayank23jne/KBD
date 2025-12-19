@@ -238,38 +238,50 @@
         }
 
         // Start Razorpay payment
-        function startPayment(amount, user, onSuccess, onError) {
-            if (!window.Razorpay) {
-                showMessage('error', 'Razorpay SDK not loaded. Please refresh the page.');
+       async function startPayment(amount, user, onSuccess, onError) {
+        try {
+            // 1️⃣ Create order from backend
+            const orderRes = await fetch('/api/razorpay/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount })
+            });
+
+            const orderData = await orderRes.json();
+
+            if (!orderData.success) {
+                showMessage('error', 'Unable to create order');
                 return;
             }
 
+            // 2️⃣ Open Razorpay with ORDER ID
             const options = {
                 key: atob(RAZORPAY_KEY),
-                amount: amount * 100,
+                amount: orderData.order.amount,
                 currency: "INR",
                 name: "KBDS",
                 description: "Donation Payment",
+                order_id: orderData.order.id,   // ✅ MOST IMPORTANT
                 image: "/img/LogoBG.png",
-                notes: {
-                    platform: "KBDS Platform"
-                },
+
                 handler: function (response) {
                     onSuccess(response);
                 },
+
                 prefill: {
                     name: user.name || "",
                     email: user.email || "",
                     contact: user.mobile || "",
                 },
+
                 theme: {
                     color: "#5762f8",
                 },
+
                 modal: {
                     ondismiss: function () {
-                        console.log("Payment popup closed");
-                        showMessage('error', 'Payment cancelled by user');
-                        const donateBtn = document.getElementById('donateBtn')
+                        showMessage('error', 'Payment cancelled');
+                        const donateBtn = document.getElementById('donateBtn');
                         donateBtn.disabled = false;
                         donateBtn.textContent = 'Donate Now';
                     },
@@ -277,14 +289,19 @@
             };
 
             const rzp = new Razorpay(options);
-            
+
             rzp.on("payment.failed", function (response) {
-                console.error("PAYMENT FAILED:", response);
                 if (onError) onError(response);
             });
 
             rzp.open();
+
+        } catch (err) {
+            console.error(err);
+            showMessage('error', 'Something went wrong');
         }
+    }
+
 
         // Handle form submission
         document.getElementById("donationForm").addEventListener("submit", function (e) {
@@ -390,13 +407,16 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        payment_id: paymentResponse.razorpay_payment_id,
-                        name: user.name,
-                        email: user.email,
-                        mobile: user.mobile,
-                        amount: amount,
-                        status: status
-                    })
+                    payment_id: paymentResponse.razorpay_payment_id,
+                    order_id: paymentResponse.razorpay_order_id,
+                    signature: paymentResponse.razorpay_signature,
+                    name: user.name,
+                    email: user.email,
+                    mobile: user.mobile,
+                    amount: amount,
+                    status: status
+                })
+
                 });
                 
                 const data = await response.json();

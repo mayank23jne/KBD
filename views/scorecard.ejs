@@ -671,118 +671,151 @@
 
 
         <script>
-            function getQueryParam(param) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(param);
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+    const selected_level = getQueryParam('selected_level') || ''; 
+    const user_type = getQueryParam('user_type') || ''; 
+
+    function goHome() {
+        let user = localStorage.getItem("last_user");
+        
+        // Check if user exists and has valid user data (not guest)
+        if (user) {
+            try {
+                user = JSON.parse(user);
+                // Check if user has proper id and username (guest won't have these)
+                if (user?.id && user?.username && user.id !== "guest") {
+                    window.location.href = `${window.location.origin}/?id=${user.id}&username=${user.username}`;
+                    return;
+                }
+            } catch (e) {
+                // Invalid JSON, treat as guest
+                localStorage.removeItem("last_user");
             }
-            const selected_level = getQueryParam('selected_level') || ''; 
-            const user_type = getQueryParam('user_type') || ''; 
+        }
+        
+        // Guest user or no valid user → redirect to login/home
+        window.location.href = '/';
+    }
 
-            function goHome() {
-                    let user = localStorage.getItem("last_user") ;
-                    if(user){
-                    user = JSON.parse(user);
-                    window.location.href = `${window.location.origin}/?id=${user?.id}&username=${user?.username}`;
-                    }else{
-                        window.location.href ='/'
-                    }
+    function playAgain() {
+        // For guests: Allow play again WITHOUT login
+        const urlParams = new URLSearchParams(window.location.search);
+        const userType = urlParams.get('user_type');
+        
+        if (userType === 'guest') {
+            // Guest can play again directly
+            let question_type = document.getElementById('question-type').innerText;
+            window.location.href = `/play?lang=hi` +
+                `&user_type=guest` +
+                `&q_type=${encodeURIComponent(question_type)}` +
+                `&level=${encodeURIComponent(selected_level)}` +
+                `&action=playagain`;
+            return;
+        }
 
-            }
+        // Registered user logic
+        let user = localStorage.getItem("last_user");
+        if (!user) {
+            window.location.href = '/';
+            return;
+        }
 
-           function playAgain() {
-            let user = localStorage.getItem("last_user");
-            if (!user) {
+        try {
+            user = JSON.parse(user);
+            if (!user?.id || !user?.username || user.id === "guest" || user.username === "guest") {
                 window.location.href = '/';
                 return;
             }
-
-            user = JSON.parse(user);
-            console.log("users", user.l)
-            let question_type = document.getElementById('question-type').innerText;
-
-            window.location.href =
-                `/play?lang=hi` +
-                `&id=${encodeURIComponent(user.id)}` +
-                `&username=${encodeURIComponent(user.username)}` +
-                `&q_type=${encodeURIComponent(question_type)}` +
-                `&level=${encodeURIComponent(selected_level)}` +
-                `&user_type=${encodeURIComponent(user_type)}` +
-                `&action=playagain`;
+        } catch (e) {
+            window.location.href = '/';
+            return;
         }
 
-            // Fireworks Animation
-            const canvas = document.getElementById('fireworksCanvas');
-            const ctx = canvas.getContext('2d');
+        let question_type = document.getElementById('question-type').innerText;
+        window.location.href = `/play?lang=hi` +
+            `&id=${encodeURIComponent(user.id)}` +
+            `&username=${encodeURIComponent(user.username)}` +
+            `&q_type=${encodeURIComponent(question_type)}` +
+            `&level=${encodeURIComponent(selected_level)}` +
+            `&user_type=${encodeURIComponent(user_type)}` +
+            `&action=playagain`;
+    }
 
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+    // Fireworks Animation
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
 
-            const particles = [];
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-            function createFirework(x, y) {
-                for (let i = 0; i < 80; i++) {
-                    particles.push({
-                        x: x,
-                        y: y,
-                        speedX: Math.random() * 4 - 2,
-                        speedY: Math.random() * 4 - 2,
-                        color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-                        life: 100
-                    });
-                }
-            }
+    const particles = [];
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear without affecting background
-
-                for (let i = particles.length - 1; i >= 0; i--) {
-                    const p = particles[i];
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-                    p.life--;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color;
-                    ctx.fill();
-
-                    if (p.life <= 0) {
-                        particles.splice(i, 1);
-                    }
-                }
-
-                requestAnimationFrame(animate);
-            }
-
-            // Create fireworks at intervals
-            setInterval(() => {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height * 0.5;
-                createFirework(x, y);
-            }, 700);
-           const level ="<%= level %>"
-           console.log(level ,'level');
-           if(level == 10){
-               animate();
-           }
-            
-
-            function showWinners() {
-                document.getElementById("winner-modal").style.display = "block";
-                document.getElementById("score_overlay").style.display = "block";
-            }
-
-            function closeModal() {
-                document.getElementById("winner-modal").style.display = "none";
-                document.getElementById("score_overlay").style.display = "none";
-            }
-
-            document.getElementById("score_overlay").addEventListener('click',()=>{
-                closeModal();
+    function createFirework(x, y) {
+        for (let i = 0; i < 80; i++) {
+            particles.push({
+                x: x,
+                y: y,
+                speedX: Math.random() * 4 - 2,
+                speedY: Math.random() * 4 - 2,
+                color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                life: 100
             });
+        }
+    }
 
-        
-        </script>
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.speedX;
+            p.y += p.speedY;
+            p.life--;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+
+            if (p.life <= 0) {
+                particles.splice(i, 1);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Create fireworks at intervals
+    setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height * 0.5;
+        createFirework(x, y);
+    }, 700);
+    
+    const level ="<%= level %>"
+    console.log(level ,'level');
+    if(level == 10){
+        animate();
+    }
+
+    function showWinners() {
+        document.getElementById("winner-modal").style.display = "block";
+        document.getElementById("score_overlay").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("winner-modal").style.display = "none";
+        document.getElementById("score_overlay").style.display = "none";
+    }
+
+    document.getElementById("score_overlay").addEventListener('click',()=>{
+        closeModal();
+    });
+</script>
+
 
         <!-- <script>
             // Now push the real page back into history
