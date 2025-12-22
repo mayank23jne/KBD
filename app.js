@@ -37,6 +37,8 @@ const razorpayRoutes = require('./routes/razorpayRoutes');
 app.use('/api', questionRoute);
 app.use('/api', userRoute);
 app.use('/api', donation);
+app.use('/api/razorpay', razorpayRoutes);
+
 // Authentication Middleware
 const isAuthenticated = (req, res, next) => {
     if (req.session.user) {
@@ -75,7 +77,6 @@ app.get('/logout', (req, res) => {
 
 // Protected Routes - Require Authentication
 
-app.use('/api/razorpay', razorpayRoutes);
 app.get('/play', isAuthenticated, (req, res) => {
     req.session.visitedIndex = false;
 
