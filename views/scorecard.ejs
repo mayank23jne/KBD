@@ -277,7 +277,20 @@
                 
                 async function shareImage() {
                         const scorecard = document.querySelector(".scorecard-container");
-                        const timeTaken= "<%= time %>"
+                        let timeTaken = "<%= time %>";
+
+                        const timesec = timeTaken
+                        // sec → second / seconds
+                        .replace(/\b(\d+)\s*sec\b/gi, (match, num) => {
+                            return num === "1" ? `${num} second` : `${num} seconds`;
+                        })
+                        // min → minute / minutes
+                        .replace(/\b(\d+)\s*min\b/gi, (match, num) => {
+                            return num === "1" ? `${num} minute` : `${num} minutes`;
+                        });
+
+                        console.log(timesec);
+
 
                         // Hide extra UI elements for a clean screenshot
                         document.getElementById("id_share_icon").style.display = "none";
@@ -302,7 +315,7 @@
                             const base64Image = canvas.toDataURL("image/png");
 
                             // Create your custom share message
-                            const shareMessage = `Yey, I played KBDS and finished the game in ${timeTaken} seconds! It's amazing. You should also try this Amazing Jain Game.\n\nDownload from Play Store`;
+                            const shareMessage = `Yey, I played KBDS and finished the game in ${timesec} ! It's amazing. You should also try this Amazing Jain Game.\n\nDownload from Play Store`;
 
                             // Prepare the payload
                             const payload = {
@@ -552,9 +565,6 @@
                                 <%= formattedTimeScore || '-' %>
 
                               </span>
-                
-                       
-                              
                             </div>
                         </div>
                     </div>

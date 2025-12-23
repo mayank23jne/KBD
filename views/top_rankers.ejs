@@ -64,7 +64,25 @@ body {
   margin-top: 20px;
   text-align: center;
 }
-
+/* FIX HEADER */
+.ranker-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+.ranker-table tbody {
+  display: block;
+  max-height: 75vh; /* adjust height */
+  overflow-y: auto;
+  overflow-x: hidden; 
+  width: 100%;
+}
+/* ROW FIX WIDTH */
+.ranker-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
 .ranker-table th, .ranker-table td {
   border: 1px solid #333;
   padding: 10px;
@@ -84,6 +102,45 @@ body {
 .icon {
   margin-right: 5px;
 }
+@media (max-width: 499px) {
+
+  /* icon upar, text niche — WITHOUT breaking table */
+  .th-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .th-inner .icon {
+    font-size: 18px;
+  }
+
+  /* column width control */
+  .ranker-table th:nth-child(1),
+  .ranker-table td:nth-child(1) {
+    width: 30%;
+  }
+
+  .ranker-table th:nth-child(2),
+  .ranker-table td:nth-child(2) {
+    width: 52%;   /* Username biggest */
+    word-break: break-word;
+  }
+
+  .ranker-table th:nth-child(3),
+  .ranker-table td:nth-child(3) {
+    width: 30%;
+  }
+
+  /* font & padding adjust */
+  .ranker-table th,
+  .ranker-table td {
+    font-size: 13px;
+    padding: 8px 4px;
+  }
+}
+
 
   </style>
 </head>
@@ -95,11 +152,27 @@ body {
 
     <table class="ranker-table">
       <thead>
-        <tr>
-          <th><span class="icon">🏅</span> Rank</th>
-          <th><span class="icon">👤</span> Username</th>
-          <th><span class="icon">🚀</span> Score</th>
-        </tr>
+      <tr>
+        <th>
+          <div class="th-inner">
+            <span class="icon">🏅</span>
+            <span>Rank</span>
+          </div>
+        </th>
+        <th>
+          <div class="th-inner">
+            <span class="icon">👤</span>
+            <span>Username</span>
+          </div>
+        </th>
+        <th>
+          <div class="th-inner">
+            <span class="icon">🚀</span>
+            <span>Score</span>
+          </div>
+        </th>
+      </tr>
+
       </thead>
       <tbody>
         <% if (topScorers.length > 0) { %>
