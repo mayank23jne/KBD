@@ -13,7 +13,7 @@ class LogoutManager {
         this.clearAllStorage();
         
         // Redirect to login
-        window.location.href = '/logout';
+       window.location.href ='/logout'
     }
 }
 
