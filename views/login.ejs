@@ -267,12 +267,17 @@
         <!-- User Type Selection (Visible in both modes) -->
         <div class="user-type" id="user-type">
 
-            <% if(!isUser.username){ %>
-                <label style="width: fit-content;">
-                    <input type="radio" name="userType" value="guest"  style="margin-top: 20px;" onchange="toggleUserType('guest')" />
-                    Guest User
-                </label>
-                <% } %>
+                    <div id="guest-option">
+                        <% if(!isUser.username){ %>
+                            <label style="width: fit-content;">
+                                <input type="radio" name="userType" value="guest"
+                                    style="margin-top: 20px;"
+                                    onchange="toggleUserType('guest')" />
+                                Guest User
+                            </label>
+                        <% } %>
+                    </div>
+
 
                     <label style="justify-content: space-between;">
                         <div class="flex items-center space-x-2 gap-2">
@@ -509,12 +514,16 @@
             document.getElementById("login-form").style.display = "none";
             document.getElementById("signup-form").style.display = "block";
             // document.getElementById("user-type").style.display = "none";
+              // ❌ Guest user hide
+            const guest = document.getElementById("guest-option");
+            if (guest) guest.style.display = "none";
         }
 
         function showLoginForm() {
             document.getElementById("signup-form").style.display = "none";
             document.getElementById("login-form").style.display = "block";
-
+            const guest = document.getElementById("guest-option");
+                if (guest) guest.style.display = "block";
             const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
             const user_type_div = document.getElementById('user-type');
             user_type_div.style.display = isShortScreen ? "flex" : "block";
