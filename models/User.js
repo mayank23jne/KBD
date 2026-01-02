@@ -120,7 +120,7 @@ class User {
     }
 
     static async updateOne(id, username) {
-        console.log(id, username);
+        // console.log(id, username);
         const query = 'UPDATE users SET fullname = ? WHERE id = ?';
         await pool.query(query, [username, id]);
     }

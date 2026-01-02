@@ -289,8 +289,7 @@
                             return num === "1" ? `${num} minute` : `${num} minutes`;
                         });
 
-                        console.log(timesec);
-
+                        // console.log(timesec);
 
                         // Hide extra UI elements for a clean screenshot
                         document.getElementById("id_share_icon").style.display = "none";
@@ -327,7 +326,7 @@
                             // ✅ Send the message to Ionic app
                             if (window.cordova_iab && window.cordova_iab.postMessage) {
                             window.cordova_iab.postMessage(JSON.stringify(payload));
-                            console.log("Message sent to Ionic app:", payload);
+                            // console.log("Message sent to Ionic app:", payload);
                             } else {
                             console.warn("cordova_iab not available — probably running in browser, not InAppBrowser.");
                             alert("Sharing only works inside the KBDS app.");
@@ -349,13 +348,46 @@
 
 
             </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const timeStr = "<%= time %>"; // e.g. "45sec" | "1min 5sec" | "2min"
+
+                    let min = 0;
+                    let sec = 0;
+
+                    const minMatch = timeStr.match(/(\d+)\s*min/i);
+                    const secMatch = timeStr.match(/(\d+)\s*sec/i);
+
+                    if (minMatch) min = parseInt(minMatch[1], 10);
+                    if (secMatch) sec = parseInt(secMatch[1], 10);
+
+                    let displayTime = "-";
+
+                    if (min > 0) {
+                    displayTime = `${min} m${min > 1 ? "" : ""}`;
+                    if (sec > 0) {
+                        displayTime += ` ${sec} se${sec > 1 ? "c" : ""}`;
+                    }
+                    } else if (sec > 0) {
+                    displayTime = `${sec} se${sec > 1 ? "c" : ""}`;
+                    }
+
+                    document.getElementById("play-time").textContent = displayTime;
+                });
+                </script>
+
                 
 
 
             <div class="scorecard">
                 <div class="score-item">
                     <label id="label-username">Player:</label>
-                    <span id="username" style="margin: 20px 0 8px;"><%= username %></span>
+                    <!-- <span id="username" ><%= username %></span> -->
+                    <span id="username" style="margin: 20px 0 8px;">
+                        <%= typeof fullname !== "undefined" && fullname ? fullname : username %>
+                        </span>
+
+
                 </div>
 
                 <div class="score-item">
@@ -365,7 +397,7 @@
 
                 <div class="score-item">
                     <label id="label-play-time">Play Time:</label>
-                    <span id="play-time" style="margin-left: 20px;"><%= time %></span>
+                    <span id="play-time" style="margin-left: 20px; "></span>
                 </div>
 
                 <div class="score-item">
@@ -535,7 +567,7 @@
                     <div id="myScores" class="section active">
                         <div class="container">
                             <div class="score-title">Your Score for <%= questionType %> Game</div>
-                            <div class="username"><%= username %></div>
+                            <div class="username"><%= fullname || username %></div>
                         
                             <div class="stats">
                               <div class="stat-box">
@@ -585,7 +617,7 @@
                                     <% question_played.slice(0, 50).forEach((scorer, index) => { %>
                                         <tr>
                                             <td>#<%= scorer.rank %></td>
-                                            <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                                            <td><i class="fa-solid fa-user"></i>  <%= typeof scorer.fullname !== "null" && scorer.fullname ? scorer.fullname : scorer.username %></td>
                                             <td><%= scorer.question_score %></td>
                                         </tr>
                                     <% }); %>
@@ -615,7 +647,7 @@
                                     <% game_played.slice(0, 50).forEach((scorer, index) => { %>
                                         <tr>
                                             <td>#<%= scorer.rank %></td>
-                                            <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                                            <td><i class="fa-solid fa-user"></i> <%= typeof scorer.fullname !== "null" && scorer.fullname ? scorer.fullname : scorer.username %></td>
                                             <td><%= scorer.game_played %></td>
                                         </tr>
                                     <% }); %>
@@ -644,7 +676,7 @@
                                     <% time_played.slice(0, 50).forEach((scorer, index) => { %>
                                         <tr>
                                             <td>#<%= scorer.rank %></td>
-                                            <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
+                                            <td><i class="fa-solid fa-user"></i>  <%= typeof scorer.fullname !== "null" && scorer.fullname ? scorer.fullname : scorer.username %></td>
                                            
                                             <td>
                                                 <% 
@@ -753,7 +785,7 @@
             `&user_type=${encodeURIComponent(user_type)}` +
             `&action=playagain`;
     }
-
+    
     // Fireworks Animation
     const canvas = document.getElementById('fireworksCanvas');
     const ctx = canvas.getContext('2d');
@@ -784,7 +816,6 @@
             p.x += p.speedX;
             p.y += p.speedY;
             p.life--;
-
             ctx.beginPath();
             ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
             ctx.fillStyle = p.color;
@@ -806,7 +837,7 @@
     }, 700);
     
     const level ="<%= level %>"
-    console.log(level ,'level');
+    // console.log(level ,'level');
     if(level == 10){
         animate();
     }
@@ -824,6 +855,62 @@
     document.getElementById("score_overlay").addEventListener('click',()=>{
         closeModal();
     });
+
+      window.addEventListener("DOMContentLoaded", () => {
+    const usernameEl = document.getElementById("username");
+    const userData = localStorage.getItem("last_user");
+
+    if (!usernameEl) return;
+
+    // Default fallback (EJS already rendered username)
+    if (!userData) return;
+
+    let user;
+    try {
+        user = JSON.parse(userData);
+    } catch {
+        return;
+    }
+
+    // ✅ Guest handling (MOST IMPORTANT)
+    if (
+        user.user_type === "guest" ||
+        user.id === "guest" ||
+        !user.id
+    ) {
+        usernameEl.textContent = "Guest";
+        return;
+    }
+
+    // ✅ Registered user
+    fetch(`/api/get-user?id=${user.id}`)
+        .then(res => res.json())
+        .then(data => {
+            const displayName =
+                data?.fullname && data.fullname.trim() !== ""
+                    ? data.fullname
+                    : data?.username || "Player";
+
+            usernameEl.textContent = displayName;
+        })
+        .catch(err => {
+            console.error("User fetch failed:", err);
+        });
+});
+</script>
+<audio id="endgameAudio" src="/audio/background.wav"></audio>
+
+<script>
+  window.addEventListener("load", () => {
+    const audio = document.getElementById("endgameAudio");
+
+    audio.currentTime = 0;
+    audio.volume = 1;
+
+    audio.play().catch(err => {
+      console.log("Audio blocked:", err);
+    });
+  });
 </script>
 
 

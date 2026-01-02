@@ -26,7 +26,7 @@ router.post('/razorpay/create-order', async (req, res) => {
       order
     });
   } catch (err) {
-    console.log(err,"errerere")
+    // console.log(err,"errerere")
     res.status(500).json({ success: false, error: err.message });
   }
 });

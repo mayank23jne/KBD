@@ -1,413 +1,485 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Welcome to KBD</title>
 
     <!-- MAIN CSS -->
     <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap" rel="stylesheet" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        /* INPUT ROWS */
-        
-        .input-container {
-            display: flex;
-            align-items: center;
-            /* margin-bottom: 10px; */
-        }
+      /* INPUT ROWS */
 
-        .input-container label {
-            width: 100px;
-        }
+      .input-container {
+        display: flex;
+        align-items: center;
+        /* margin-bottom: 10px; */
+      }
 
-        .input-container input {
-            flex: 1;
-            padding: 5px;
-        }
-         #header {
-            width: 100%;
-        }
+      .input-container label {
+        width: 100px;
+      }
 
-        #question_type {
-            width: 60%;
-        }
+      .input-container input {
+        flex: 1;
+        padding: 5px;
+      }
+      #header {
+        width: 100%;
+      }
 
-        #language-select {
-            width: 50%;
-        }
-        /* PLAY BUTTON */
-        #btn-login {
-            left: 0% !important;
-            transform: none !important;
-        }
+      #question_type {
+        width: 60%;
+      }
 
-        button.login {
-            background: linear-gradient(135deg, #5762f8, #ff58fa);
-            color: white;
-            /* width: 100%;
+      #language-select {
+        width: 50%;
+      }
+      /* PLAY BUTTON */
+      #btn-login {
+        left: 0% !important;
+        transform: none !important;
+      }
+
+      button.login {
+        background: linear-gradient(135deg, #5762f8, #ff58fa);
+        color: white;
+        border: none;
+        /* width: 100%;
             padding: 12px 0;
             border-radius: 8px;
             margin-top: 15px;
             border: none;
             font-size: 15px;
             cursor: pointer; */
-        }
+      }
 
-        /* button.login:hover {
+      /* button.login:hover {
             background: linear-gradient(135deg, #3f4bf7, #f14dec);
             box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
         } */
 
-        /* BUTTON GROUP WRAPPER */
-        
-        .button-btn button {
-            width: 8rem;
-            padding: 12px 5px;
-            font-size: 11px;
-            margin-top: 10px;
-            width: 50%;
-        }
+      /* BUTTON GROUP WRAPPER */
 
-        .button-btn {
-            display: flex;
-            gap: 5px;
-            width: 100%;
-        }
+      .button-btn button {
+        width: 8rem;
+        padding: 12px 5px;
+        font-size: 11px;
+        margin-top: 10px;
+        width: 50%;
+      }
 
-        /* WHITE ROUND BUTTONS */
-        .top-score-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            background: #ffffff;
-            border: none;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.2s ease;
-        }
+      .button-btn {
+        display: flex;
+        gap: 5px;
+        width: 100%;
+      }
 
-        .top-score-btn:hover {
-            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);
-        }
+      /* WHITE ROUND BUTTONS */
+      .top-score-btn {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        background: #ffffff;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.2s ease;
+      }
 
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            width: 100%;
-            padding: 20px 0 10px 0;
-            font-size: 14px;
-            color: #ddd;
-        }
+      .top-score-btn:hover {
+        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);
+      }
 
-        /* FLEX UTILITIES */
-        .flex {
-            display: flex;
-        }
+      /* FOOTER */
+      .footer {
+        text-align: center;
+        width: 100%;
+        padding: 20px 0 10px 0;
+        font-size: 14px;
+        color: #ddd;
+      }
 
-        .flex-1 {
-            flex: 1;
-        }
+      /* FLEX UTILITIES */
+      .flex {
+        display: flex;
+      }
 
-        .flex-2 {
-            flex: 2;
-        }
+      .flex-1 {
+        flex: 1;
+      }
 
-        /* ACTION BUTTONS */
-       .action-btn p {
-            margin-top: 7px;
-            padding: 0 5px;
-            color: #ff77b9;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;   /* 👈 yaha size kam kar diya */
-        }
+      .flex-2 {
+        flex: 2;
+      }
 
-        /* ============================= */
-/* RESPONSIVE ALIGNMENT FIX */
-/* SAME AS WORKING FILE */
-/* ============================= */
+      /* ACTION BUTTONS */
+      .action-btn p {
+        margin-top: 7px;
+        padding: 0 5px;
+        color: #ff77b9;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px; /* 👈 yaha size kam kar diya */
+      }
 
-/* Default (Desktop) stays SAME */
-        /* .flex.items-center {
+      /* ============================= */
+      /* RESPONSIVE ALIGNMENT FIX */
+      /* SAME AS WORKING FILE */
+      /* ============================= */
+
+      /* Default (Desktop) stays SAME */
+      /* .flex.items-center {
             align-items: center;
         } */
 
-        /* --- Mobile Fix --- */
-        @media (max-width: 640px) {
-
-            /* Stack label + options */
-            .mobile-flex-col {
-                flex-direction: column !important;
-                align-items: flex-start;
-            }
-
-            /* Labels spacing */
-            .mobile-flex-col > label {
-                margin-bottom: 6px;
-                font-size: 15px;
-            }
-
-            /* Options container */
-            .mobile-flex-col .flex-2 {
-                width: 100%;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 18px;
-            }
-
-            /* Radio alignment */
-            .inline-flex {
-                margin-left: 0 !important;
-            }
-
-            /* Levels / Language / Question spacing */
-            .mobile-flex-col span {
-                font-size: 15px;
-            }
-
-            /* USER TYPE SECTION */
-            .user-type label {
-                display: block;
-                margin-bottom: 6px;
-            }
-
-            .user-type .flex {
-                justify-content: space-between;
-                width: 100%;
-                margin-top: 10px;
-            }
-
-            /* Username input full width */
-            #update_user_name {
-                width: 100%;
-            }
-
-            /* Top margin consistency */
-            .mt-3 {
-                margin-top: 10px;
-            }
+      /* --- Mobile Fix --- */
+      @media (max-width: 640px) {
+        /* Stack label + options */
+        .mobile-flex-col {
+          flex-direction: column !important;
+          align-items: flex-start;
         }
 
-        /* Radio accent color */
-        input[type="radio"] {
-            accent-color: #ff5fa2;
+        /* Labels spacing */
+        .mobile-flex-col > label {
+          margin-bottom: 6px;
+          font-size: 15px;
         }
-.logout-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
 
-.logout-btn span {
-  line-height: 1;
-}
+        /* Options container */
+        .mobile-flex-col .flex-2 {
+          width: 100%;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 18px;
+        }
 
-.logout-btn svg {
-  flex-shrink: 0;
-}
-.top-score-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
+        /* Radio alignment */
+        .inline-flex {
+          margin-left: 0 !important;
+        }
 
-.top-score-btn span {
-  line-height: 1;
-}
+        /* Levels / Language / Question spacing */
+        .mobile-flex-col span {
+          font-size: 15px;
+        }
 
-.top-score-btn svg {
-  flex-shrink: 0;
-}
+        /* USER TYPE SECTION */
+        .user-type label {
+          display: block;
+          margin-bottom: 6px;
+        }
 
-        
+        .user-type .flex {
+          justify-content: space-between;
+          width: 100%;
+          margin-top: 10px;
+        }
+
+        /* Username input full width */
+        #update_user_name {
+          width: 100%;
+        }
+
+        /* Top margin consistency */
+        .mt-3 {
+          margin-top: 10px;
+        }
+      }
+
+      /* Radio accent color */
+      input[type='radio'] {
+        accent-color: #ff5fa2;
+      }
+      .logout-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .logout-btn span {
+        line-height: 1;
+      }
+
+      .logout-btn svg {
+        flex-shrink: 0;
+      }
+      .top-score-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .top-score-btn span {
+        line-height: 1;
+      }
+
+      .top-score-btn svg {
+        flex-shrink: 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="form">
+      <!-- HEADER -->
+      <div class="header-container">
+        <div id="header">Welcome to KBDS</div>
+      </div>
 
-        <!-- HEADER -->
-        <div class="header-container">
-            <div id="header">Welcome to KBDS</div>
+      <!-- QUESTION TYPE -->
+      <div class="flex items-center space-x-6 mobile-flex-col mt-3">
+        <label class="text-white font-medium flex-1">Question Type :</label>
+        <div class="flex items-center space-x-6 flex-2">
+          <label class="inline-flex items-center space-x-2">
+            <input
+              type="radio"
+              name="question_type"
+              value="Basic"
+              id="question-basic"
+              checked
+              onchange="handleQuestionTypeChange()"
+            />
+            <span class="text-white">Basic</span>
+          </label>
+          <label class="inline-flex items-center space-x-2">
+            <input
+              type="radio"
+              name="question_type"
+              value="Chhahdhala"
+              id="question-chhahdhala"
+              onchange="handleQuestionTypeChange()"
+              style="margin-left: 30px"
+            />
+            <span class="text-white">Chhahdhala</span>
+          </label>
         </div>
+      </div>
 
-        <!-- QUESTION TYPE -->
-        <div class="flex items-center space-x-6 mobile-flex-col mt-3">
-            <label class="text-white font-medium flex-1">Question Type :</label>
-            <div class="flex items-center space-x-6 flex-2">
-                <label class="inline-flex items-center space-x-2">
-                    <input type="radio" name="question_type" value="Basic" id="question-basic" checked onchange="handleQuestionTypeChange()" />
-                    <span class="text-white">Basic</span>
-                </label>
-                <label class="inline-flex items-center space-x-2">
-                    <input type="radio" name="question_type" value="Chhahdhala" id="question-chhahdhala" onchange="handleQuestionTypeChange()" style="margin-left: 30px;" />
-                    <span class="text-white">Chhahdhala</span>
-                </label>
-            </div>
+      <!-- LANGUAGE -->
+      <div class="flex items-center space-x-6 mobile-flex-col">
+        <label class="text-white font-medium flex-1">Language :</label>
+        <div class="flex items-center space-x-6 flex-2">
+          <label class="inline-flex items-center space-x-2">
+            <input
+              type="radio"
+              name="language"
+              value="en"
+              id="lang-en"
+              checked
+            />
+            <span class="text-white">English</span>
+          </label>
+          <label class="inline-flex items-center space-x-2">
+            <input
+              type="radio"
+              name="language"
+              value="hi"
+              id="lang-hi"
+              style="margin-left: 15px"
+            />
+            <span class="text-white">हिन्दी</span>
+          </label>
         </div>
+      </div>
 
-        <!-- LANGUAGE -->
-        <div class="flex items-center space-x-6 mobile-flex-col">
-            <label class="text-white font-medium flex-1">Language :</label>
-            <div class="flex items-center space-x-6 flex-2">
-                <label class="inline-flex items-center space-x-2">
-                    <input type="radio" name="language" value="en" id="lang-en" checked />
-                    <span class="text-white">English</span>
-                </label>
-                <label class="inline-flex items-center space-x-2">
-                    <input type="radio" name="language" value="hi" id="lang-hi" style="margin-left: 15px;" />
-                    <span class="text-white">हिन्दी</span>
-                </label>
-            </div>
+      <!-- LEVELS -->
+      <div class="flex items-center space-x-6 mobile-flex-col">
+        <label class="text-white font-medium flex-1">Levels :</label>
+        <div class="flex items-center space-x-6 flex-2">
+          <label class="inline-flex items-center space-x-2">
+            <input type="radio" name="level" value="basic" checked />
+            <span class="text-white">Basic</span>
+          </label>
+          <label class="inline-flex items-center space-x-2">
+            <input
+              type="radio"
+              name="level"
+              value="expert"
+              style="margin-left: 30px"
+            />
+            <span class="text-white">Expert</span>
+          </label>
         </div>
+      </div>
 
-        <!-- LEVELS -->
-        <div class="flex items-center space-x-6 mobile-flex-col">
-            <label class="text-white font-medium flex-1">Levels :</label>
-            <div class="flex items-center space-x-6 flex-2">
-                <label class="inline-flex items-center space-x-2">
-                    <input type="radio" name="level" value="basic" checked>
-                    <span class="text-white">Basic</span>
-                </label>
-                <label class="inline-flex items-center space-x-2">
-                    <input type="radio" name="level" value="expert" style="margin-left: 30px;">
-                    <span class="text-white">Expert</span>
-                </label>
-            </div>
-        </div>
-
-        <!-- USER TYPE -->
-        <div class="user-type" id="user-type" style="margin-top: 10px;">
-            <!-- <label>
+      <!-- USER TYPE -->
+      <div class="user-type" id="user-type" style="margin-top: 10px">
+        <!-- <label>
                 <input type="radio" name="userType" value="guest" onchange="toggleUserType('guest')" />
                 Guest User
             </label> -->
 
-            <label style="width:100%;">
-                <div class="flex items-center space-x-2" style="justify-content: space-between;">
-                    <div>
-                        <input type="radio" name="userType" value="google" checked onchange="toggleUserType('google')" />
-                        <span id="username_text"><%= req.session.user.username %></span>
-                    </div>
-
-                    <!-- Update + Save buttons -->
-                    <div class="action-btn">
-                        <p id="add_btn" onclick="startEditUsername()" style="display:none;">Add Name</p>
-                        <p id="edit_btn" onclick="startEditUsername()">Update Name</p>
-                        <p id="save_btn" onclick="saveUsername()" style="display:none;">Save</p>
-                    </div>
-
-                </div>
-            </label>
-
-            <!-- Editable username input -->
-            <input type="text" id="update_user_name" value="<%= req.session.user.username %>" style="display:none; margin-top:8px; width:100%; padding:6px;" />
-        </div>
-
-        <!-- LOGIN FORM -->
-        <div id="login-form" style="margin-top: 10px;">
-            <input type="hidden" id="email" value="<%= req.session.user.email %>" />
-
-                <button type="button" class="login" id="btn-login" onclick="playGame()">
-        Play Game
-    </button>
-
-            <div class="button-btn">
-                <button class="top-score-btn" onclick="window.location.href='/donate'">Donate 💰</button>
-                <button class="top-score-btn" onclick="window.location.href='/api/top-score'">Top Scores 🏆</button>
+        <label style="width: 100%">
+          <div
+            class="flex items-center space-x-2"
+            style="justify-content: space-between"
+          >
+            <div>
+              <input
+                type="radio"
+                name="userType"
+                value="google"
+                checked
+                onchange="toggleUserType('google')"
+              />
+              <span id="username_text"><%= req.session.user.username %></span>
             </div>
 
-            <div class="button-btn">
-                <button class="top-score-btn share-btn" onclick="shareAppLink()">
-                <span>Share</span>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                >
-                    <circle cx="10.5" cy="2.5" r="2" />
-                    <circle cx="3.5" cy="7" r="2" />
-                    <circle cx="10.5" cy="11.5" r="2" />
-                    <line x1="5" y1="7.8" x2="8.8" y2="10" />
-                    <line x1="8.8" y1="4" x2="5" y2="6.2" />
-                </svg>
-                </button>
-
-                <button class="top-score-btn logout-btn" onclick="LogoutManager.handleLogout()">
-                <span>Logout</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
-                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5.5 13H3a1.5 1.5 0 0 1-1.5-1.5V2.5A1.5 1.5 0 0 1 3 1h2.5" />
-                    <polyline points="10 10 13 7 10 4" />
-                    <line x1="13" y1="7" x2="5.5" y2="7" />
-                </svg>
-                </button>
-
+            <!-- Update + Save buttons -->
+            <div class="action-btn">
+              <p
+                id="add_btn"
+                onclick="startEditUsername()"
+                style="display: none"
+              >
+                Add Name
+              </p>
+              <p id="edit_btn" onclick="startEditUsername()">Update Name</p>
+              <p id="save_btn" onclick="saveUsername()" style="display: none">
+                Save
+              </p>
             </div>
+          </div>
+        </label>
+
+        <!-- Editable username input -->
+        <input
+          type="text"
+          id="update_user_name"
+          value="<%= req.session.user.username %>"
+          style="display: none; margin-top: 8px; width: 100%; padding: 6px"
+        />
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="login-form" style="margin-top: 10px">
+        <input type="hidden" id="email" value="<%= req.session.user.email %>" />
+
+        <button type="button" class="login" id="btn-login" onclick="playGame()">
+          Play Game
+        </button>
+
+        <div class="button-btn">
+          <button
+            class="top-score-btn"
+            onclick="window.location.href = '/donate'"
+          >
+            Donate 💰
+          </button>
+          <button
+            class="top-score-btn"
+            onclick="window.location.href = '/api/top-score'"
+          >
+            Top Scores 🏆
+          </button>
         </div>
 
-        <div class="footer">
-            Directed by Vikas Jain
-        </div>
+        <div class="button-btn">
+          <button class="top-score-btn share-btn" onclick="shareAppLink()">
+            <span>Share</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="10.5" cy="2.5" r="2" />
+              <circle cx="3.5" cy="7" r="2" />
+              <circle cx="10.5" cy="11.5" r="2" />
+              <line x1="5" y1="7.8" x2="8.8" y2="10" />
+              <line x1="8.8" y1="4" x2="5" y2="6.2" />
+            </svg>
+          </button>
 
+          <button
+            class="top-score-btn logout-btn"
+            onclick="LogoutManager.handleLogout()"
+          >
+            <span>Logout</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M5.5 13H3a1.5 1.5 0 0 1-1.5-1.5V2.5A1.5 1.5 0 0 1 3 1h2.5"
+              />
+              <polyline points="10 10 13 7 10 4" />
+              <line x1="13" y1="7" x2="5.5" y2="7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="footer">Directed by Vikas Jain</div>
     </div>
 
     <!-- SCRIPT -->
 
     <script>
-        // Always show buttons; no condition
-     function setUserDetails(data) {
-            if (!data) return;
+      // Always show buttons; no condition
+      function setUserDetails(data) {
+        if (!data) return;
 
-            const usernameText = document.getElementById("username_text");
-            const updateUserInput = document.getElementById("update_user_name");
+        const usernameText = document.getElementById('username_text');
+        const updateUserInput = document.getElementById('update_user_name');
 
-            const addBtn = document.getElementById("add_btn");
-            const editBtn = document.getElementById("edit_btn");
+        const addBtn = document.getElementById('add_btn');
+        const editBtn = document.getElementById('edit_btn');
 
-            const name = (data.fullname || data.username || "").trim();
+        const name = (data.fullname || data.username || '').trim();
 
-            // Username set
-            usernameText.textContent = name || "No Name";
-            updateUserInput.value = name;
+        // Username set
+        usernameText.textContent = name || 'No Name';
+        updateUserInput.value = name;
 
-            // 👇 CONDITION
-            if (!name) {
-                // First time user
-                addBtn.style.display = "block";
-                editBtn.style.display = "none";
-            } else {
-                // Existing user
-                addBtn.style.display = "none";
-                editBtn.style.display = "block";
-            }
+        // 👇 CONDITION
+        if (!name) {
+          // First time user
+          addBtn.style.display = 'block';
+          editBtn.style.display = 'none';
+        } else {
+          // Existing user
+          addBtn.style.display = 'none';
+          editBtn.style.display = 'block';
         }
+      }
 
+      window.addEventListener('DOMContentLoaded', () => {
+        const userId = "<%= req.session.user ? req.session.user.id : '' %>";
 
-        window.addEventListener("DOMContentLoaded", () => {
-            const userId = "<%= req.session.user ? req.session.user.id : '' %>";
+        if (userId) {
+          fetch(`/api/get-user?id=${btoa(userId)}`)
+            .then((res) => res.json())
+            .then((data) => setUserDetails(data))
+            .catch((err) => console.error('Error fetching user:', err));
+        }
+      });
 
-            if (userId) {
-                fetch(`/api/get-user?id=${btoa(userId)}`)
-                    .then(res => res.json())
-                    .then(data => setUserDetails(data))
-                    .catch(err => console.error('Error fetching user:', err));
-            }    
-        });
-
-        // Update username locally
-     function startEditUsername() {
+      // Update username locally
+      function startEditUsername() {
         const usernameText = document.getElementById('username_text');
         const input = document.getElementById('update_user_name');
 
@@ -419,133 +491,130 @@
 
         document.getElementById('edit_btn').style.display = 'none';
         document.getElementById('save_btn').style.display = 'block';
-    }
-
+      }
 
       function saveUsername() {
-            const input = document.getElementById('update_user_name');
-            const newName = input.value.trim();
-            if (!newName) return;
+        const input = document.getElementById('update_user_name');
+        const newName = input.value.trim();
+        if (!newName) return;
 
-            const userId = "<%= req.session.user.id %>";
+        const userId = '<%= req.session.user.id %>';
 
-            const usernameText = document.getElementById('username_text');
-            usernameText.textContent = newName;
+        const usernameText = document.getElementById('username_text');
+        usernameText.textContent = newName;
 
-            input.style.display = 'none';
+        input.style.display = 'none';
 
-            document.getElementById('add_btn').style.display = 'none';
-            document.getElementById('edit_btn').style.display = 'block';
-            document.getElementById('save_btn').style.display = 'none';
+        document.getElementById('add_btn').style.display = 'none';
+        document.getElementById('edit_btn').style.display = 'block';
+        document.getElementById('save_btn').style.display = 'none';
 
-            fetch('/api/update-user', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: userId, username: newName })
-            })
-            .catch(() => alert('Failed to update username'));
+        fetch('/api/update-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: userId, username: newName }),
+        }).catch(() => alert('Failed to update username'));
+      }
+
+      function handleQuestionTypeChange() {
+        const chhahdhalaRadio = document.getElementById('question-chhahdhala');
+        const langHi = document.getElementById('lang-hi');
+        const langEn = document.getElementById('lang-en');
+
+        if (chhahdhalaRadio.checked) {
+          langHi.checked = true;
+          langEn.disabled = true;
+        } else {
+          langEn.disabled = false;
         }
-
-
-
-        function handleQuestionTypeChange() {
-            const chhahdhalaRadio = document.getElementById('question-chhahdhala');
-            const langHi = document.getElementById('lang-hi');
-            const langEn = document.getElementById('lang-en');
-
-            if (chhahdhalaRadio.checked) {
-                langHi.checked = true;
-                langEn.disabled = true;
-            } else {
-                langEn.disabled = false;
-            }
-            changeLanguage();
-        }
-
-        function changeLanguage() {
-            const langHi = document.getElementById('lang-hi');
-            const header = document.getElementById('header');
-            header.textContent = langHi.checked
-                ? "कौन बनेगा धर्म शिरोमणि में आपका स्वागत है"
-                : "Welcome to KBDS";
-        }
-    function playGame() {
-    // Get user info from hidden inputs or session
-    const userId = "<%= req.session.user.id %>";
-    const username = "<%= req.session.user.username %>";
-
-    // Encode user info in base64
-    const encodedId = btoa(userId);
-    const encodedUsername = btoa(username);
-
-    // Get selected options
-    const questionType = document.querySelector('input[name="question_type"]:checked').value;
-    const language = document.querySelector('input[name="language"]:checked').value;
-    const level = document.querySelector('input[name="level"]:checked').value;
-    const userType = document.querySelector('input[name="userType"]:checked').value;
-
-    // Build the URL
-    const url = `/play?id=${encodedId}&username=${encodedUsername}&lang=${language}&q_type=${questionType}&level=${level}&user_type=${userType}`;
-
-    // Redirect
-    window.location.href = url;
-}
-
-        function toggleUserType(type) {
-            const loginForm = document.getElementById('login-form');
-            loginForm.style.display = type === 'guest' ? "none" : "block";
-        }
-
-        document.getElementById('lang-en').addEventListener('change', changeLanguage);
-        document.getElementById('lang-hi').addEventListener('change', changeLanguage);
-
-           function showSignupForm() {
-                document.getElementById("login-form").style.display = "none";
-                document.getElementById("signup-form").style.display = "block";
-                // document.getElementById("user-type").style.display = "none";
-            }
-
-            function showLoginForm() {
-                document.getElementById("signup-form").style.display = "none";
-                document.getElementById("login-form").style.display = "block";
-
-                const isShortScreen = window.matchMedia("(max-height: 600px)").matches;
-                const user_type_div = document.getElementById('user-type');
-                user_type_div.style.display = isShortScreen ? "flex" : "block";
-            }
         changeLanguage();
-        
+      }
+
+      function changeLanguage() {
+        const langHi = document.getElementById('lang-hi');
+        const header = document.getElementById('header');
+        header.textContent = langHi.checked
+          ? 'कौन बनेगा धर्म शिरोमणि में आपका स्वागत है'
+          : 'Welcome to KBDS';
+      }
+      function playGame() {
+        // Get user info from hidden inputs or session
+        const userId = '<%= req.session.user.id %>';
+        const username = '<%= req.session.user.username %>';
+
+        // Encode user info in base64
+        const encodedId = btoa(userId);
+        const encodedUsername = btoa(username);
+
+        // Get selected options
+        const questionType = document.querySelector(
+          'input[name="question_type"]:checked',
+        ).value;
+        const language = document.querySelector(
+          'input[name="language"]:checked',
+        ).value;
+        const level = document.querySelector(
+          'input[name="level"]:checked',
+        ).value;
+        const userType = document.querySelector(
+          'input[name="userType"]:checked',
+        ).value;
+
+        // Build the URL
+        const url = `/play?id=${encodedId}&username=${encodedUsername}&lang=${language}&q_type=${questionType}&level=${level}&user_type=${userType}`;
+
+        // Redirect
+        window.location.href = url;
+      }
+
+      function toggleUserType(type) {
+        const loginForm = document.getElementById('login-form');
+        loginForm.style.display = type === 'guest' ? 'none' : 'block';
+      }
+
+      document
+        .getElementById('lang-en')
+        .addEventListener('change', changeLanguage);
+      document
+        .getElementById('lang-hi')
+        .addEventListener('change', changeLanguage);
+
+      function showSignupForm() {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('signup-form').style.display = 'block';
+        // document.getElementById("user-type").style.display = "none";
+      }
+
+      function showLoginForm() {
+        document.getElementById('signup-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+
+        const isShortScreen = window.matchMedia('(max-height: 600px)').matches;
+        const user_type_div = document.getElementById('user-type');
+        user_type_div.style.display = isShortScreen ? 'flex' : 'block';
+      }
+      changeLanguage();
     </script>
+
     <script>
-        // Game page par aate hi
-        history.pushState({ page: "loginwithgoogle" }, "", location.href);
-
-        window.addEventListener("popstate", function (event) {
-            // Yaha direct redirect mat karo, sirf back ko cancel karo
-            history.go(1);
-        });
-    </script>
-
-<script>
-// Auto-clear storage on login page load (extra safety)
-window.addEventListener('DOMContentLoaded', () => {
-    // Clear invalid user data
-    const userStorage = localStorage.getItem('last_user');
-    if (userStorage) {
-        try {
+      // Auto-clear storage on login page load (extra safety)
+      window.addEventListener('DOMContentLoaded', () => {
+        // Clear invalid user data
+        const userStorage = localStorage.getItem('last_user');
+        if (userStorage) {
+          try {
             const user = JSON.parse(userStorage);
             if (!user?.id || user.id === 'guest') {
-                localStorage.removeItem('last_user');
+              localStorage.removeItem('last_user');
             }
-        } catch (e) {
+          } catch (e) {
             localStorage.removeItem('last_user');
+          }
         }
-    }
-});
-</script>
+      });
+    </script>
 
-    <!-- <script src="/js/adduserGoogle.js"></script> -->
+    <script src="/js/adduser.js"></script>
     <script src="/js/logout.js"></script>
-</body>
-
+  </body>
 </html>

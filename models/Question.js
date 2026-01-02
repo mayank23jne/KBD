@@ -194,7 +194,7 @@ class Question {
                 totalCountQuery += ` AND q.id NOT IN (SELECT uq.question_id FROM used_questions uq WHERE uq.user_id = ?)`;
                 values.push(user_id);
             }
-            console.log(totalCountQuery,values)
+            // console.log(totalCountQuery,values)
             const [countResult] = await pool.query(totalCountQuery, values);
             const totalCount = countResult[0].total;
     
@@ -227,7 +227,7 @@ class Question {
     
             query += ' LIMIT 1 OFFSET ?';
             values.push(randomOffset);
-            console.log(query ,values);
+            // console.log(query ,values);
             const [rows] = await pool.query(query, values);
     
             if (!rows.length) return null;

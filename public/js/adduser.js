@@ -283,7 +283,7 @@ function saveUsername(userId) {
     })
         .then(res => res.json())
         .then(() => {
-            console.log("Username updated successfully!");
+            // console.log("Username updated successfully!");
             text.innerText = newName;
 
             input.style.display = "none";

@@ -37,8 +37,8 @@ const shuffleOptions = (options, correctIndex) => {
 // const SaveChhahdhalaQuestions = async () => {
 exports.SaveChhahdhalaQuestions = async (hindiData) => {
     try {
-        // const hindiData = await parseXML('chhahdhala.xml');
-        console.log("hi hello")
+        const hindiData = await parseXML('chhahdhala.xml');
+        // console.log("hi hello")
 
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
 
@@ -52,7 +52,7 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
 
 
             if (isDuplicate) {
-                console.log(`⚠️ Skipped duplicate question: ${questionTextHi}`);
+                // console.log(`⚠️ Skipped duplicate question: ${questionTextHi}`);
                 continue;
             }
 
@@ -75,7 +75,7 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
 
             const FixOption = FixOptionRaw === '1' ? 1 : null;
 
-            console.log('FixOptionRaw:', FixOptionRaw, '=> FixOption:', FixOption);
+            // console.log('FixOptionRaw:', FixOptionRaw, '=> FixOption:', FixOption);
 
             const correctIndex = FixOption ?? 1;
 
@@ -146,10 +146,10 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
                 question_type: "Chhahdhala",
                 user_id: ""
             });
-            console.log(`✅ Saved Hindi Question: ${hin.QuestionNumber[0]}`);
+            // console.log(`✅ Saved Hindi Question: ${hin.QuestionNumber[0]}`);
         }
 
-        console.log("🎉 All Hindi questions processed successfully!");
+        // console.log("🎉 All Hindi questions processed successfully!");
     } catch (error) {
         console.error("❌ Error processing Hindi questions:", error);
     }
@@ -178,7 +178,7 @@ exports.SaveBasicQuestions = async (hindiData, englishData) => {
             const isDuplicate = await Question.CheckDuplicateQuestion(questionTextHi, questionType);
 
             if (isDuplicate) {
-            console.log(`⚠️ Skipped duplicate Basic question: ${questionTextEn}`);
+            // console.log(`⚠️ Skipped duplicate Basic question: ${questionTextEn}`);
             continue;
             }
 
@@ -239,7 +239,7 @@ exports.SaveBasicQuestions = async (hindiData, englishData) => {
                 }
             );
 
-            console.log(`✅ Saved Question #${questionNumber}`);
+            // console.log(`✅ Saved Question #${questionNumber}`);
         }
 
         console.log("🎉 All questions processed successfully!");

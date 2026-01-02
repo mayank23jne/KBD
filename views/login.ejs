@@ -56,6 +56,7 @@
         button.login {
             background: linear-gradient(135deg, #5762f8, #ff58fa);
             color: white;
+            border: none;
         }
 
         /* button.login:hover {
@@ -64,10 +65,11 @@
         } */
 
         /* Signup Button - Hot Pink */
-        /* button.signup {
+        button.signup {
             background: linear-gradient(120deg, #5762f8, #ff58fa);
             color: white;
-        } */
+            border: none;
+        }
 
         /* button.signup:hover {
             background: linear-gradient(135deg, #3f4bf7, #f14dec);
@@ -79,12 +81,12 @@
             padding: 12px 5px;
             font-size: 11px;
             margin-top: 10px;
-            width: 50%;
+            border: none;
         }
 
         .button-btn {
             display: flex;
-            gap: 5px;
+            gap: 15px;
             width: 100%;
         }
 
@@ -382,7 +384,7 @@
                     </div> -->
             </div>
             <% if(!isUser.username){ %>
-                <p style="margin-top: 10px; font-size: 14px;">Don't have an account? <a style="color: #ff77b9;" href="#"
+                <p style="margin-top: 10px; font-size: 14px;">Don't have an account? <a style="color: #ff77b9;"href="javascript:void(0)"
                         onclick="showSignupForm()">Sign up here</a></p>
                 <% } %>
         </div>
@@ -427,11 +429,11 @@
             </div>
             <button type="submit" class="signup" id="btn-signup">Sign Up</button>
 
-            <p style="margin-top: 10px; font-size: 14px;">Already have an account? <a style="color: #ff77b9;" href="#"
+            <p style="margin-top: 10px; font-size: 14px;">Already have an account? <a style="color: #ff77b9;" href="javascript:void(0)"
                     onclick="showLoginForm()">Login here</a></p>
         </div>
         <div class="footer">
-            <p>Directed by vikas jain</p>
+            <p>Directed by Vikas Jain</p>
         </div>
     </div>
     <div id="toast" class="toast"></div>
@@ -529,16 +531,7 @@
             user_type_div.style.display = isShortScreen ? "flex" : "block";
         }
     </script>
-       <script>
-        // Game page par aate hi
-        history.pushState({ page: "login" }, "", location.href);
-
-        window.addEventListener("popstate", function (event) {
-            // Yaha direct redirect mat karo, sirf back ko cancel karo
-            history.go(1);
-        });
-        
-    </script>
+    
     <script>
 // Auto-clear storage on login page load (extra safety)
 window.addEventListener('DOMContentLoaded', () => {
@@ -556,6 +549,50 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 </script>
+
+      <script>
+      window.addEventListener('DOMContentLoaded', function () {
+        // console.log('DOM LOADED');
+        let alreadyHandled = false;
+
+        function forceLogout() {
+        //   console.log(
+        //     'FORCE LOGOUT TRIGGERED, alreadyHandled:',
+        //     alreadyHandled,
+        //   );
+          if (alreadyHandled) return;
+          alreadyHandled = true;
+          // Make sure LogoutManager exists
+          if (
+            typeof LogoutManager !== 'undefined' &&
+            LogoutManager.handleLogout
+          ) {
+            LogoutManager.handleLogout();
+          } else {
+            console.warn('LogoutManager not defined!');
+          }
+        }
+
+        // console.log('Login back button trap initialized');
+
+        // Make this page the root of history
+        history.replaceState({ page: 'login' }, '', location.href);
+        history.pushState({ page: 'login' }, '', location.href);
+
+        // Handle back button
+        window.addEventListener('popstate', forceLogout);
+
+        // Handle mobile swipe / bfcache restore
+        window.addEventListener('pageshow', function (event) {
+        //   console.log('pageshow fired, persisted:', event.persisted);
+          if (event.persisted) {
+            forceLogout();
+          }
+        });
+      });
+    </script>
+
+    
 
     <script src="/js/adduser.js"></script>
     <script src="/js/logout.js"></script>

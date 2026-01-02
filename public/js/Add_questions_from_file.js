@@ -33,12 +33,13 @@ const shuffleOptions = (options, correctIndex) => {
 
 // for mysql database connectivity 
 
-// const SaveChhahdhalaQuestions = async () => {
-exports.SaveChhahdhalaQuestions = async (hindiData) => {
+const SaveChhahdhalaQuestions = async () => {
+// exports.SaveChhahdhalaQuestions = async (hindiData) => {
+        //    console.log("test")
     try {
-        // const hindiData = await parseXML('chhahdhala.xml');
+        const hindiData = await parseXML('chhahdhala.xml');
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
-        console.log()
+ 
         for (const hin of hindiQuestions) {
             // Prepare options and shuffle them
             const options = [
@@ -51,46 +52,46 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
             const { shuffledOptions, newAnswer } = shuffleOptions(options, 1);
 
             // Prepare JSON data for each field
-            const questionData = {
-                question: JSON.stringify({
-                    en: "N/A",
-                    hi: hin.NewQuestion[0]
-                }),
-                option1: JSON.stringify(shuffledOptions[0]),
-                option2: JSON.stringify(shuffledOptions[1]),
-                option3: JSON.stringify(shuffledOptions[2]),
-                option4: JSON.stringify(shuffledOptions[3]),
-                explanation: JSON.stringify({
-                    en: "No explanation available.",
-                    hi: hin.Explanation ? hin.Explanation[0] : "कोई स्पष्टीकरण उपलब्ध नहीं है।"
-                }),
-                answer: newAnswer,
-                slot: levels[parseInt(hin.Level[0])],
-                level: parseInt(hin.Level[0]),
-                question_type: "Chhahdhala",
-                user_id: ""
-            };
+            // const questionData = {
+            //     question: JSON.stringify({
+            //         en: "N/A",
+            //         hi: hin.NewQuestion[0]
+            //     }),
+            //     option1: JSON.stringify(shuffledOptions[0]),
+            //     option2: JSON.stringify(shuffledOptions[1]),
+            //     option3: JSON.stringify(shuffledOptions[2]),
+            //     option4: JSON.stringify(shuffledOptions[3]),
+            //     explanation: JSON.stringify({
+            //         en: "No explanation available.",
+            //         hi: hin.Explanation ? hin.Explanation[0] : "कोई स्पष्टीकरण उपलब्ध नहीं है।"
+            //     }),
+            //     answer: newAnswer,
+            //     slot: levels[parseInt(hin.Level[0])],
+            //     level: parseInt(hin.Level[0]),
+            //     question_type: "Chhahdhala",
+            //     user_id: ""
+            // };
 
             // MySQL INSERT query
-            const query = `
-                INSERT INTO questions (
-                    question, option1, option2, option3, option4, explanation, answer, slot, level, question_type, user_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
+            // const query = `
+            //     INSERT INTO questions (
+            //         question, option1, option2, option3, option4, explanation, answer, slot, level, question_type, user_id
+            //     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            // `;
 
-            const values = [
-                questionData.question,
-                questionData.option1,
-                questionData.option2,
-                questionData.option3,
-                questionData.option4,
-                questionData.explanation,
-                questionData.answer,
-                questionData.slot,
-                questionData.level,
-                questionData.question_type,
-                questionData.user_id
-            ];
+            // const values = [
+            //     questionData.question,
+            //     questionData.option1,
+            //     questionData.option2,
+            //     questionData.option3,
+            //     questionData.option4,
+            //     questionData.explanation,
+            //     questionData.answer,
+            //     questionData.slot,
+            //     questionData.level,
+            //     questionData.question_type,
+            //     questionData.user_id
+            // ];
 
             await Question.createQuestion({
                 question: JSON.stringify({
@@ -111,10 +112,10 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
                 question_type: "Chhahdhala",
                 user_id: ""
             });
-            console.log(`✅ Saved Hindi Question: ${hin.QuestionNumber[0]}`);
+            // console.log(`✅ Saved Hindi Question: ${hin.QuestionNumber[0]}`);
         }
 
-        console.log("🎉 All Hindi questions processed successfully!");
+        // console.log("🎉 All Hindi questions processed successfully!");
         process.exit(0);
     } catch (error) {
         console.error("❌ Error processing Hindi questions:", error);
@@ -123,14 +124,14 @@ exports.SaveChhahdhalaQuestions = async (hindiData) => {
 };
 
 // Run the function
-// SaveChhahdhalaQuestions();
+SaveChhahdhalaQuestions();
 
 
-// const SaveBasicQuestions = async () => {
-exports.SaveBasicQuestions = async (hindiData, englishData) => {
+const SaveBasicQuestions = async () => {
+// exports.SaveBasicQuestions = async (hindiData, englishData) => {
     try {
-        // const englishData = await parseXML('english.xml');
-        // const hindiData = await parseXML('hindi.xml');
+        const englishData = await parseXML('english.xml');
+        const hindiData = await parseXML('hindi.xml');
 
         const englishQuestions = englishData.KBDS.Questions[0].Question;
         const hindiQuestions = hindiData.KBDS.Questions[0].Question;
@@ -196,10 +197,10 @@ exports.SaveBasicQuestions = async (hindiData, englishData) => {
                 }
             );
 
-            console.log(`✅ Saved Question #${questionNumber}`);
+            // console.log(`✅ Saved Question #${questionNumber}`);
         }
 
-        console.log("🎉 All questions processed successfully!");
+        // console.log("🎉 All questions processed successfully!");
     } catch (error) {
         console.error("❌ Error processing questions:", error);
     } finally {
@@ -208,4 +209,4 @@ exports.SaveBasicQuestions = async (hindiData, englishData) => {
 };
 
 // Run the function
-// SaveBasicQuestions();
+SaveBasicQuestions();

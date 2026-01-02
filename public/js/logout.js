@@ -5,7 +5,7 @@ class LogoutManager {
         localStorage.clear();
         sessionStorage.clear();
         
-        console.log('✅ All storage cleared on logout');
+        // console.log('✅ All storage cleared on logout');
     }
 
     static handleLogout() {

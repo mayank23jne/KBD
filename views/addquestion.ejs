@@ -166,7 +166,7 @@
     function detectLanguageFromText(text) {
       let hindiCount = 0;
       let englishCount = 0;
-      console.log("text is: ",text)
+      // console.log("text is: ",text)
       for (const char of text) {
         const code = char.charCodeAt(0);
         if (code >= 0x0900 && code <= 0x097F) {
@@ -183,9 +183,9 @@
   
     function extractTextFromXML(xmlString) {
       const parser = new DOMParser();
-      console.log("xmlstring ",xmlString)
+      // console.log("xmlstring ",xmlString)
       const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-      console.log("xmldoc ",xmlDoc)
+      // console.log("xmldoc ",xmlDoc)
       const questions = xmlDoc.getElementsByTagName("Question");
       let extractedText = "";
   
@@ -226,7 +226,7 @@
     const extractedText = extractTextFromXML(text);
     const detectedLang = detectLanguageFromText(extractedText);
 
-    console.log("Detected language:", detectedLang);
+    // console.log("Detected language:", detectedLang);
 
     if (detectedLang !== expectedLang) {
       alert(`Invalid file: Expected a ${expectedLang === 'hi' ? 'Hindi' : 'English'} XML file.`);
@@ -244,7 +244,7 @@
     }
 
     uploadedLanguages[inputId] = detectedLang;
-    console.log(`File "${file.name}" accepted as ${detectedLang}`);
+    // console.log(`File "${file.name}" accepted as ${detectedLang}`);
   };
 
   // ✅ IMPORTANT
@@ -270,7 +270,7 @@
             hideLoader();
             return;
           }
-          console.log("detect uploadedLanguages: ",uploadedLanguages)
+          // console.log("detect uploadedLanguages: ",uploadedLanguages)
           if (uploadedLanguages.file1 !== 'hi' || uploadedLanguages.file2 !== 'en') {
             alert("Invalid file selection. Make sure Hindi file is on the first and English on the second.");
             hideLoader();

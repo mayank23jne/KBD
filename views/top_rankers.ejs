@@ -1,195 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Top Rankers</title>
-  <style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Top Rankers</title>
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+/* =========================
+   GLOBAL
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+}
 
 body {
-  background-color: #1f1f1f;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  color: #fff;
-  margin: 0;
+  background: linear-gradient(135deg, #1a1a40, #3a1c71);
+  color: white;
+  min-height: 100vh;
+  padding: 15px;
 }
 
+/* =========================
+   MAIN CARD (MODAL STYLE)
+========================= */
 .ranker-container {
-  background-color: #222;
-  border-radius: 10px;
-  width: 80%;
+  max-width: 900px;
+  margin: auto;
+  background: #222;
+  border-radius: 16px;
   padding: 20px;
-  min-height: 90vh;
-  box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255,165,0,0.4);
 }
 
+/* =========================
+   HEADER
+========================= */
 .ranker-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(45deg, #f5a623, #ff6348);
-  border-radius: 25px;
-  padding: 10px 0;
-  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
 }
-.ranker-header:hover {
-    background: linear-gradient(45deg, #ff6348, #f5a623);
-}
-
 
 .ranker-header h2 {
-  color: #000;
-  font-size: 18px;
-  margin: 0;
-  font-weight: 600;
+  color: orange;
+  font-size: 24px;
+  font-weight: 700;
 }
 
-.close-btn {
-  position: absolute;
-  right: 15px;
-  top: 5px;
-  font-size: 20px;
+/* =========================
+   TABS (NO SCROLL)
+========================= */
+.top-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.top-buttons button {
+  border: 2px solid orange;
   background: transparent;
-  border: none;
-  color: #000;
+  color: orange;
+  font-weight: bold;
+  border-radius: 25px;
+  height: 40px;
+  width: 22%;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.ranker-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.top-buttons button.active {
+  background: orange;
+  color: #3d2b1f;
+  border: none;
+}
+
+@media (max-width: 700px) {
+  .top-buttons button {
+    width: 100%;
+  }
+}
+
+/* =========================
+   SECTIONS
+========================= */
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}
+
+/* =========================
+   MY SCORE SECTION
+========================= */
+.container {
   text-align: center;
 }
-/* FIX HEADER */
-.ranker-table thead {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+
+.score-title {
+  font-size: 18px;
+  margin-bottom: 5px;
 }
-.ranker-table tbody {
+
+.username {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  color: orange;
+  font-size: 22px;
+  margin: 10px;
+}
+
+.stat-box span {
   display: block;
-  max-height: 75vh; /* adjust height */
+  color: white;
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+.footer-time {
+  color: orange;
+  font-size: 22px;
+  margin-top: 15px;
+}
+
+.footer-time span {
+  display: block;
+  color: white;
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+/* =========================
+   USER RANK TEXT
+========================= */
+#user_rank {
+  color: orange;
+  font-size: 18px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* =========================
+   TABLE (SCROLL ONLY TABLE)
+========================= */
+.table-wrap {
+  max-height: 420px;
   overflow-y: auto;
-  overflow-x: hidden; 
-  width: 100%;
 }
-/* ROW FIX WIDTH */
-.ranker-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+
+.table-wrap::-webkit-scrollbar {
+  width: 6px;
 }
-.ranker-table th, .ranker-table td {
-  border: 1px solid #333;
+.table-wrap::-webkit-scrollbar-thumb {
+  background: orange;
+  border-radius: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
   padding: 10px;
+  border: 1px solid rgba(255,255,255,0.3);
+  text-align: center;
 }
 
-.ranker-table th {
-  background-color: #1a1a1a;
-  color: #ffa500;
-  font-weight: 600;
+th {
+  background: #333;
+  color: gold;
+  position: sticky;
+  top: 0;
 }
 
-.ranker-table td {
-  background-color: #2a2a2a;
-  color: #fff;
+tr:nth-child(even) {
+  background: rgba(255,255,255,0.08);
 }
 
-.icon {
-  margin-right: 5px;
+tr:hover {
+  background: rgba(255,255,255,0.15);
 }
-@media (max-width: 499px) {
-
-  /* icon upar, text niche — WITHOUT breaking table */
-  .th-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .th-inner .icon {
-    font-size: 18px;
-  }
-
-  /* column width control */
-  .ranker-table th:nth-child(1),
-  .ranker-table td:nth-child(1) {
-    width: 30%;
-  }
-
-  .ranker-table th:nth-child(2),
-  .ranker-table td:nth-child(2) {
-    width: 52%;   /* Username biggest */
-    word-break: break-word;
-  }
-
-  .ranker-table th:nth-child(3),
-  .ranker-table td:nth-child(3) {
-    width: 30%;
-  }
-
-  /* font & padding adjust */
-  .ranker-table th,
-  .ranker-table td {
-    font-size: 13px;
-    padding: 8px 4px;
-  }
-}
-
-
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="ranker-container">
-    <div class="ranker-header">
-      <h2>Top Rankers 🏆</h2>
-    </div>
 
-    <table class="ranker-table">
-      <thead>
-      <tr>
-        <th>
-          <div class="th-inner">
-            <span class="icon">🏅</span>
-            <span>Rank</span>
-          </div>
-        </th>
-        <th>
-          <div class="th-inner">
-            <span class="icon">👤</span>
-            <span>Username</span>
-          </div>
-        </th>
-        <th>
-          <div class="th-inner">
-            <span class="icon">🚀</span>
-            <span>Score</span>
-          </div>
-        </th>
-      </tr>
+<div class="ranker-container">
 
-      </thead>
-      <tbody>
-        <% if (topScorers.length > 0) { %>
-            <% topScorers.slice(0, 50).forEach((scorer, index) => { %>
-                <tr>
-                    <td>#<%= scorer.rank %></td>
-                    <td><i class="fa-solid fa-user"></i> <%= scorer.username %></td>
-                    <td><%= scorer.question_score %></td>
-                </tr>
-            <% }); %>
-        <% } else { %>
-            <tr>
-                <td colspan="4">No top scorers yet</td>
-            </tr>
-        <% } %>
-      </tbody>
-    </table>
+  <!-- <div class="ranker-header">
+    <h2>🏆 Top Rankers</h2>
+  </div> -->
+
+  <!-- TABS -->
+  <div class="top-buttons">
+    <button class="tab-btn active" onclick="showSection('myScores', this)">My Scores</button>
+    <button class="tab-btn" onclick="showSection('questionsPlayed', this)">Questions Played</button>
+    <button class="tab-btn" onclick="showSection('gamesPlayed', this)">Games Played</button>
+    <button class="tab-btn" onclick="showSection('timePlayed', this)">Time Played</button>
   </div>
+
+  <!-- MY SCORES -->
+ <!-- MY SCORES -->
+<div id="myScores" class="section active">
+<div class="container">
+  <div class="score-title">Your Score for <%= questionType %> Game</div>
+
+  <% if (isLoggedIn) { %>
+    <div class="username"><%= fullname || username || 'Player' %></div>
+    <div class="stats">
+      <div class="stat-box">Total Games <span><%= game_score %></span></div>
+      <div class="stat-box">Total Questions <span><%= question_score %></span></div>
+    </div>
+    <div class="footer-time">Total Time <span><%= time_score || '-' %></span></div>
+  <% } else { %>
+    <div class="username">Please login to show your score</div>
+  <% } %>
+</div>
+
+</div>
+
+
+  <!-- QUESTIONS -->
+  <div id="questionsPlayed" class="section">
+    <p id="user_rank">Your Rank : <%= userQuestionRank %></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🏅 Rank</th>
+            <th>User</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% question_played.forEach(s => { %>
+          <tr>
+            <td>#<%= s.rank %></td>
+            <td><%= s.fullname || s.username %></td>
+            <td><%= s.question_score %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- GAMES -->
+  <div id="gamesPlayed" class="section">
+    <p id="user_rank">Your Rank : <%= userGameRank %></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🏅 Rank</th>
+            <th>User</th>
+            <th>Games</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% game_played.forEach(s => { %>
+          <tr>
+            <td>#<%= s.rank %></td>
+            <td><%= s.fullname || s.username %></td>
+            <td><%= s.game_played %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TIME -->
+  <div id="timePlayed" class="section">
+    <p id="user_rank">Your Rank : <%= userTimeRank %></p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>🏅 Rank</th>
+            <th>User</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% time_played.forEach(s => { %>
+          <tr>
+            <td>#<%= s.rank %></td>
+            <td><%= s.fullname || s.username %></td>
+            <td>
+                <%
+                  let formattedTime = s.total_play_time;
+                  if (s.total_play_time) {
+                    const timeParts = s.total_play_time.split(':'); // [00h, 01m, 24s]
+                    formattedTime =
+                      (timeParts[0] !== '00h' ? timeParts[0] + ':' : '') +
+                      (timeParts[1] !== '00m' ? timeParts[1] + ':' : '') +
+                      timeParts[2];
+                  }
+                %>
+                <%= formattedTime || '-' %>
+              </td>
+
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+
 </body>
 </html>

@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
 
         // Retrieve newly created user
         const user = await User.findOne({ username });
-        console.log(user)
+        // console.log(user)
         let user_name;
         if (user.user_type === 'guest') {
             user_name = "Guest"
@@ -184,7 +184,7 @@ router.post('/google-token', async (req, res) => {
 
         // Retrieve newly created user
         const user = await User.findOne({ email });
-        console.log(user)
+        // console.log(user)
         let user_name;
         if (user.user_type === 'guest') {
             user_name = "Guest"
@@ -215,7 +215,7 @@ router.get('/get-user', async (req, res) => {
 
 router.post('/update-user', async (req, res) => {
     const { id, username } = req.body;
-    console.log(id, username);
+    // console.log(id, username);
     await User.updateOne(id, username);
     res.json({ message: 'User updated successfully!' });
 });

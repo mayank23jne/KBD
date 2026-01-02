@@ -8,7 +8,7 @@ const XML_FILE  = "chhahdhala.xml";  // aapka XML
 // ---------- 1. XML base (UTF-8) ----------
 if (fs.existsSync(XML_FILE)) {
   fs.copyFileSync(XML_FILE, XML_FILE + ".backup.xml");
-  console.log("Backup created:", XML_FILE + ".backup.xml");
+  // console.log("Backup created:", XML_FILE + ".backup.xml");
 } else {
   const baseXml =
     '<?xml version="1.0" encoding="utf-8"?>' +
@@ -17,7 +17,7 @@ if (fs.existsSync(XML_FILE)) {
     "<Questions></Questions></KBDS>";
 
   fs.writeFileSync(XML_FILE, baseXml, "utf8");
-  console.log("Created new XML file:", XML_FILE);
+  // console.log("Created new XML file:", XML_FILE);
 }
 
 // ---------- 2. Read existing XML ----------
@@ -86,7 +86,7 @@ fs.createReadStream(INPUT_CSV, { encoding: "utf8" })
 
     const newXml = builder.build(json);
     fs.writeFileSync(XML_FILE, newXml, "utf8");
-    console.log("✅ All questions and all four options copied exactly from CSV (by index).");
+    // console.log("✅ All questions and all four options copied exactly from CSV (by index).");
   })
   .on("error", (err) => {
     console.error("CSV read error:", err);

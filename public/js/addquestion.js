@@ -16,7 +16,7 @@ const form = {
 };
 
 form.submit.addEventListener('click', () => {
-    console.log('Pressed');
+    // console.log('Pressed');
 
     const request = new XMLHttpRequest();
 
@@ -60,8 +60,8 @@ form.submit.addEventListener('click', () => {
 });
 
 function handleResponse(responseObject, status) {
-    console.log(responseObject);
-    console.log(status);
+    // console.log(responseObject);
+    // console.log(status);
     if (status == 200) {
         const liQuestionId = document.createElement('li');
         liQuestionId.textContent =

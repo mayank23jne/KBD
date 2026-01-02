@@ -28,7 +28,7 @@ router.get('/question/:slot', async (req, res) => {
 
         // Get user_id from session
         const user_id = req.session?.user?.id || null;
-        console.log(slot,questionId, is_correct, question_type,user_id)
+        // console.log(slot,questionId, is_correct, question_type,user_id)
         if (questionId && is_correct === 'true' && user_id) {
             await Question.updateUserId(questionId, user_id);
         }
@@ -294,7 +294,7 @@ router.get(
     async (req, res) => {
         try {
             const question = await Question.findById(req.params.questionId);
-            console.log(question);
+            // console.log(question);
             const removedOption1 = req.params.removedOption1;
             const removedOption2 = req.params.removedOption2;
 
