@@ -734,7 +734,7 @@ function nextQuestion() {
   getQuestion(slots[slot]);
 }
 
-const endgameAudio = new Audio('../audio/background.wav');
+// const endgameAudio = new Audio('../audio/background.wav');
 function endGame() {
   let price = null;
   if (isQuit) {
@@ -753,20 +753,15 @@ function endGame() {
   dialogs.endGameDialog.innerHTML = price;
 
   get_time = getTimeElapsed();
-  console.log('sunccfully render the path :');
+  // console.log('sunccfully render the path :');
   setTimeout(() => {
-    endgameAudio.currentTime = 0;
-    endgameAudio.play();
-
-    console.log('Redirecting now...');
-
-    window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot - 1}&time=${get_time}`;
-  }, 2000); // 2 seconds
+    window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot - 1}&time=${encodeURIComponent(get_time)}`;
+  }, 100);
 
   // Clear markers
-  document.querySelectorAll('.reached').forEach((marker) => {
-    marker.style.visibility = 'hidden';
-  });
+    document.querySelectorAll('.reached').forEach(marker => {
+        marker.style.visibility = 'hidden';
+    });
 }
 
 const lifelineAudio = new Audio('../audio/lifeline.wav');

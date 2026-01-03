@@ -167,120 +167,140 @@ app.use('/api/questions', questionRoutes);
 
 const Topscore = require('./models/Topscore'); // Import the Topscore class
 
-app.get('/api/scorecard', isAuthenticated, async (req, res) => {
-  try {
-    // Ensure user session exists
-    req.session.visitedIndex = false;
-    if (!req.session.user) {
-      return res.redirect('/login'); // Redirect to login if not authenticated
-    }
-    // Extract user details from session
-    const { id, username, user_type, fullname } = req.session.user;
-
-    // console.log(id, username, user_type, req.session.user);
-    let userFullname = fullname; // fallback to session username
-
-    if (!userFullname) {
-      const [rows] = await db
-        .promise()
-        .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
-          id,
-        ]);
-
-      if (rows.length > 0) {
-        userFullname = rows[0].fullname || rows[0].username;
-      } else {
-        userFullname = username; // fallback
+app.get(
+  '/api/scorecard',
+  /*isAuthenticated, */ async (req, res) => {
+    try {
+      // Ensure user session exists
+      req.session.visitedIndex = false;
+      if (!req.session.user) {
+        return res.redirect('/login'); // Redirect to login if not authenticated
       }
+      // Extract user details from session
+      const { id, username, user_type, fullname } = req.session.user;
+
+      // console.log(id, username, user_type, req.session.user);
+      let userFullname = fullname; // fallback to session username
+
+      if (!userFullname) {
+        const [rows] = await db
+          .promise()
+          .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
+            id,
+          ]);
+
+        if (rows.length > 0) {
+          userFullname = rows[0].fullname || rows[0].username;
+        } else {
+          userFullname = username; // fallback
+        }
+      }
+
+      // Get query parameters
+      // const { question_type, level, time } = req.query;
+      const question_type = req.query.question_type || '';
+      const level = Number(req.query.level) || 0;
+      const time = req.query.time
+        ? decodeURIComponent(req.query.time)
+        : '0 min 0 sec';
+      const selected_level = req.query.selected_level || '';
+      // const user_type = req.query.user_type || 'guest';
+      const correctedLevelCheck = String(level)?.length;
+      // console.log(question_type
+      //   , level, time
+      // )
+
+      if (!question_type || !correctedLevelCheck || !time) {
+        return res.status(400).send('Missing required parameters');
+      }
+
+      // Save or update the user's score in the database
+      await Topscore.createOrUpdateTopUser({
+        user_id: id,
+        username,
+        user_type,
+        play_time: time,
+        play_level: parseInt(level),
+        question_type,
+      });
+
+      // Fetch the updated leaderboard (top 10 users)
+      const topScorers = await Topscore.getTopScorers(question_type);
+
+      // Fetch this user's rank
+      const userRankData = await Topscore.getUserRank(id, question_type);
+      const userRank = userRankData?.rank || 'N/A';
+
+      // fetch used questions
+      const question_s = await Topscore.getUsedQuestionCount(id, question_type);
+      const question_score = question_s.question_score;
+
+      // fetch the questions played
+      const question_played =
+        await Topscore.getQuestionScoresWithRank(question_type);
+
+      //fetch user question rank
+      const userQuestionRankData = await Topscore.getUserQuestionRank(
+        id,
+        question_type,
+      );
+      const userQuestionRank = userQuestionRankData?.rank || 'N/A';
+
+      // fetch game played count
+      const game_p = await Topscore.getUserGamePlayCount(id, question_type);
+      const game_score = game_p.game_played;
+
+      // fetch the game played
+      const game_played = await Topscore.getGameScoresWithRank(question_type);
+
+      //fetch user game rank
+      const userGameRankData = await Topscore.getUserGameRank(
+        id,
+        question_type,
+      );
+      const userGameRank = userGameRankData?.rank || 'N/A';
+
+      // fetch time played count
+      const time_p = await Topscore.getUserTimePlayCount(id, question_type);
+      const time_score = time_p.total_play_time;
+
+      // fetch the game played
+      const time_played = await Topscore.getTimeScoresWithRank(question_type);
+
+      //fetch user game rank
+      const userTimeRankData = await Topscore.getUserTimeRank(
+        id,
+        question_type,
+      );
+      const userTimeRank = userTimeRankData?.rank || 'N/A';
+
+      // Render the scorecard page with top scorers
+      res.render('scorecard', {
+        username,
+        fullname: userFullname,
+        id,
+        user_type,
+        questionType: question_type || '',
+        level: level || '1',
+        time: time || '',
+        topScorers,
+        userRank,
+        question_score,
+        question_played,
+        userQuestionRank,
+        game_score,
+        game_played,
+        userGameRank,
+        time_score,
+        time_played,
+        userTimeRank,
+      });
+    } catch (error) {
+      console.error('Error in /api/scorecard:', error);
+      res.status(500).send('Internal Server Error');
     }
-
-    // Get query parameters
-    const { question_type, level, time } = req.query;
-
-    if (!question_type || !level || !time) {
-      return res.status(400).send('Missing required parameters');
-    }
-
-    // Save or update the user's score in the database
-    await Topscore.createOrUpdateTopUser({
-      user_id: id,
-      username,
-      user_type,
-      play_time: time,
-      play_level: parseInt(level),
-      question_type,
-    });
-
-    // Fetch the updated leaderboard (top 10 users)
-    const topScorers = await Topscore.getTopScorers(question_type);
-
-    // Fetch this user's rank
-    const userRankData = await Topscore.getUserRank(id, question_type);
-    const userRank = userRankData?.rank || 'N/A';
-
-    // fetch used questions
-    const question_s = await Topscore.getUsedQuestionCount(id, question_type);
-    const question_score = question_s.question_score;
-
-    // fetch the questions played
-    const question_played =
-      await Topscore.getQuestionScoresWithRank(question_type);
-
-    //fetch user question rank
-    const userQuestionRankData = await Topscore.getUserQuestionRank(
-      id,
-      question_type,
-    );
-    const userQuestionRank = userQuestionRankData?.rank || 'N/A';
-
-    // fetch game played count
-    const game_p = await Topscore.getUserGamePlayCount(id, question_type);
-    const game_score = game_p.game_played;
-
-    // fetch the game played
-    const game_played = await Topscore.getGameScoresWithRank(question_type);
-
-    //fetch user game rank
-    const userGameRankData = await Topscore.getUserGameRank(id, question_type);
-    const userGameRank = userGameRankData?.rank || 'N/A';
-
-    // fetch time played count
-    const time_p = await Topscore.getUserTimePlayCount(id, question_type);
-    const time_score = time_p.total_play_time;
-
-    // fetch the game played
-    const time_played = await Topscore.getTimeScoresWithRank(question_type);
-
-    //fetch user game rank
-    const userTimeRankData = await Topscore.getUserTimeRank(id, question_type);
-    const userTimeRank = userTimeRankData?.rank || 'N/A';
-
-    // Render the scorecard page with top scorers
-    res.render('scorecard', {
-      username,
-      fullname: userFullname,
-      id,
-      user_type,
-      questionType: question_type || '',
-      level: level || '1',
-      time: time || '',
-      topScorers,
-      userRank,
-      question_score,
-      question_played,
-      userQuestionRank,
-      game_score,
-      game_played,
-      userGameRank,
-      time_score,
-      time_played,
-      userTimeRank,
-    });
-  } catch (error) {
-    console.error('Error in /api/scorecard:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+  },
+);
 
 app.get('/api/top-score', async (req, res) => {
   try {
@@ -308,7 +328,8 @@ app.get('/api/top-score', async (req, res) => {
     // console.log('TIME DATA =>', timeData);
 
     // ===== RANKED TABLES =====
-    const question_played = await Topscore.getQuestionScoresWithRank(questionType);
+    const question_played =
+      await Topscore.getQuestionScoresWithRank(questionType);
     const game_played = await Topscore.getGameScoresWithRank(questionType);
     const time_played = await Topscore.getTimeScoresWithRank(questionType);
 
@@ -397,8 +418,6 @@ app.get('/api/top-score', async (req, res) => {
     });
   }
 });
-
-
 
 // Connect to db
 // mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () =>

@@ -75,6 +75,7 @@
         font-size: 11px;
         margin-top: 10px;
         width: 50%;
+        border: none;
       }
 
       .button-btn {
@@ -84,7 +85,7 @@
       }
 
       /* WHITE ROUND BUTTONS */
-      .top-score-btn {
+      /* .top-score-btn {
         flex: 1;
         padding: 10px;
         border-radius: 8px;
@@ -98,7 +99,7 @@
 
       .top-score-btn:hover {
         box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);
-      }
+      } */
 
       /* FOOTER */
       .footer {
@@ -388,7 +389,10 @@
         </div>
 
         <div class="button-btn">
-          <button class="top-score-btn share-btn" onclick="shareAppLink()">
+          <button
+            class="top-score-btn share-btn flex align-center flex-1"
+            onclick="shareAppLink()"
+          >
             <span>Share</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
