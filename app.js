@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
 const User = require('./models/User');
+const Topscore = require('./models/Topscore');
 
 const mysql = require('mysql2'); // Use mysql2 instead of mongoose
 
@@ -164,9 +165,7 @@ app.get('/privacy-policy', (req, res) => {
 
 const questionRoutes = require('./routes/add_filequestions');
 
-app.use('/api/questions', questionRoutes);
-
-const Topscore = require('./models/Topscore'); // Import the Topscore class
+app.use('/api/questions', questionRoutes); // Import the Topscore class
 
 app.get('/api/scorecard', async (req, res) => {
   try {
@@ -207,15 +206,26 @@ app.get('/api/scorecard', async (req, res) => {
 
     // Params validation
     const question_type = req.query.question_type?.trim() || '';
-    const level = parseInt(req.query.level) || 0;
+    const rawLevel = req.query.level;
+    const level = Number.isInteger(Number(rawLevel))
+      ? parseInt(rawLevel, 10)
+      : null;
     const time = req.query.time
       ? decodeURIComponent(req.query.time)
       : '0 min 0 sec';
     const selected_level = req.query.selected_level || '';
 
-    if (!question_type || level < 0) {
-      return res.status(400).send('Missing question_type or invalid level');
+    if (!question_type || level === null) {
+      console.error('Invalid scorecard params:', req.query);
+      return res.redirect('/');
     }
+    console.log('Scorecard OK:', {
+      id,
+      username,
+      question_type,
+      level,
+      time,
+    });
 
     // Safe data defaults
     const safeObj = (obj, def = {}) => obj || def;

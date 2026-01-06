@@ -485,7 +485,6 @@
           fetch(`/api/get-user?id=${btoa(userId)}`)
             .then((res) => res.json())
             .then((data) => setUserDetails(data))
-            .then((data) => playGame(data))
             .catch((err) => console.error('Error fetching user:', err));
         }
       });

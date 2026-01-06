@@ -311,7 +311,7 @@ buttons.quit.forEach((button) => {
       dialogs.quitDialog.style.display = 'none';
       // dialogs.quitMessage.style.display = 'block';
       const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
+      const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get('id');
       const username = urlParams.get('username');
       const userType = urlParams.get('user_type');
@@ -759,9 +759,9 @@ function endGame() {
   }, 100);
 
   // Clear markers
-    document.querySelectorAll('.reached').forEach(marker => {
-        marker.style.visibility = 'hidden';
-    });
+  document.querySelectorAll('.reached').forEach((marker) => {
+    marker.style.visibility = 'hidden';
+  });
 }
 
 const lifelineAudio = new Audio('../audio/lifeline.wav');
