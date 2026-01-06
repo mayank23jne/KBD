@@ -364,6 +364,11 @@
           style="display: none; margin-top: 8px; width: 100%; padding: 6px"
         />
       </div>
+      <input
+        type="hidden"
+        id="session_user_id"
+        value="<%= req.session.user ? req.session.user.id : '' %>"
+      />
 
       <!-- LOGIN FORM -->
       <div id="login-form" style="margin-top: 10px">
@@ -443,6 +448,8 @@
     <!-- SCRIPT -->
 
     <script>
+      const userId = "<%= req.session.user ? req.session.user.id : '' %>";
+      console.log('User ID:', userId);
       // Always show buttons; no condition
       function setUserDetails(data) {
         if (!data) return;
@@ -472,8 +479,8 @@
       }
 
       window.addEventListener('DOMContentLoaded', () => {
-        const userId = "<%= req.session.user ? req.session.user.id : '' %>";
-
+        // const userId = "<%= req.session.user ? req.session.user.id : '' %>";
+        console.log('User ID:', userId);
         if (userId) {
           fetch(`/api/get-user?id=${btoa(userId)}`)
             .then((res) => res.json())
@@ -483,42 +490,51 @@
       });
 
       // Update username locally
-      function startEditUsername() {
-        const usernameText = document.getElementById('username_text');
-        const input = document.getElementById('update_user_name');
+      // function startEditUsername() {
+      //   console.log('Starting username edit...');
+      //   const usernameText = document.getElementById('username_text');
+      //   const input = document.getElementById('update_user_name');
 
-        // input me current name daalo
-        input.value = usernameText.textContent.trim();
+      //   // input me current name daalo
+      //   input.value = usernameText.textContent.trim();
 
-        // dono visible rakho
-        input.style.display = 'block';
+      //   // dono visible rakho
+      //   input.style.display = 'block';
 
-        document.getElementById('edit_btn').style.display = 'none';
-        document.getElementById('save_btn').style.display = 'block';
-      }
+      //   document.getElementById('edit_btn').style.display = 'none';
+      //   document.getElementById('save_btn').style.display = 'block';
+      //   console.log('Username edit started.');
+      // }
 
-      function saveUsername() {
-        const input = document.getElementById('update_user_name');
-        const newName = input.value.trim();
-        if (!newName) return;
+      // function saveUsername() {
+      //   console.log('Saving username...');
+      //   const input = document.getElementById('update_user_name');
+      //   const newName = input.value.trim();
+      //   console.log('New username:', newName);
+      //   if (!newName) return;
 
-        const userId = '<%= req.session.user.id %>';
+      //   // const userId = '<%= req.session.user.id %>';
 
-        const usernameText = document.getElementById('username_text');
-        usernameText.textContent = newName;
+      //   const usernameText = document.getElementById('username_text');
+      //   usernameText.textContent = newName;
 
-        input.style.display = 'none';
+      //   input.style.display = 'none';
 
-        document.getElementById('add_btn').style.display = 'none';
-        document.getElementById('edit_btn').style.display = 'block';
-        document.getElementById('save_btn').style.display = 'none';
+      //   document.getElementById('add_btn').style.display = 'none';
+      //   document.getElementById('edit_btn').style.display = 'block';
+      //   document.getElementById('save_btn').style.display = 'none';
+      //   console.log('User ID for update:', userId);
 
-        fetch('/api/update-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: userId, username: newName }),
-        }).catch(() => alert('Failed to update username'));
-      }
+      //   if(!userId) return;
+
+      //   console.log('Updating username for user ID:', userId);
+
+      //   fetch('/api/update-user', {
+      //     method: 'POST',
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify({ id: userId, username: newName }),
+      //   }).catch(() => alert('Failed to update username'));
+      // }
 
       function handleQuestionTypeChange() {
         const chhahdhalaRadio = document.getElementById('question-chhahdhala');
@@ -543,7 +559,7 @@
       }
       function playGame() {
         // Get user info from hidden inputs or session
-        const userId = '<%= req.session.user.id %>';
+        // const userId = '<%= req.session.user.id %>';
         const username = '<%= req.session.user.username %>';
 
         // Encode user info in base64
