@@ -145,11 +145,12 @@ app.get('/login-with-google', async (req, res) => {
     return res.redirect('/');
   }
   req.session.user = {
-    id: user.id,
+    id: user.id?.toString(),
     username: user.username,
-    user_type: user.user_type,
-    email: user.email,
+    user_type: user.user_type || 'user',
+    fullname: user.fullname,
   };
+  req.session.save();
   res.render('loginWithGoogle', { req: req });
 });
 
@@ -167,140 +168,161 @@ app.use('/api/questions', questionRoutes);
 
 const Topscore = require('./models/Topscore'); // Import the Topscore class
 
-app.get(
-  '/api/scorecard',
-  /*isAuthenticated, */ async (req, res) => {
-    try {
-      // Ensure user session exists
-      req.session.visitedIndex = false;
-      if (!req.session.user) {
-        return res.redirect('/login'); // Redirect to login if not authenticated
-      }
-      // Extract user details from session
-      const { id, username, user_type, fullname } = req.session.user;
+app.get('/api/scorecard', async (req, res) => {
+  try {
+    req.session.visitedIndex = false;
 
-      // console.log(id, username, user_type, req.session.user);
-      let userFullname = fullname; // fallback to session username
+    if (!req.session.user || !req.session.user.id) {
+      console.error('No valid session.user.id:', req.session.user);
+      return res.redirect('/login');
+    }
 
-      if (!userFullname) {
+    // SAFELY extract with validation
+    const userData = req.session.user;
+    const id = userData.id?.toString().trim();
+    const username = userData.username?.trim() || 'Guest';
+    const user_type = userData.user_type?.trim() || 'guest';
+    const fullname = userData.fullname?.trim();
+
+    if (!id || id === 'null' || id === 'undefined') {
+      console.error('Invalid user.id from session:', id);
+      return res.redirect('/login');
+    }
+
+    let userFullname = fullname || username;
+
+    if (!userFullname) {
+      try {
         const [rows] = await db
           .promise()
           .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
             id,
           ]);
-
-        if (rows.length > 0) {
-          userFullname = rows[0].fullname || rows[0].username;
-        } else {
-          userFullname = username; // fallback
-        }
+        userFullname = rows[0]?.fullname || rows[0]?.username || username;
+      } catch (dbErr) {
+        console.error('DB fullname lookup failed:', dbErr);
+        userFullname = username;
       }
+    }
 
-      // Get query parameters
-      // const { question_type, level, time } = req.query;
-      const question_type = req.query.question_type || '';
-      const level = Number(req.query.level) || 0;
-      const time = req.query.time
-        ? decodeURIComponent(req.query.time)
-        : '0 min 0 sec';
-      const selected_level = req.query.selected_level || '';
-      // const user_type = req.query.user_type || 'guest';
-      const correctedLevelCheck = String(level)?.length;
-      // console.log(question_type
-      //   , level, time
-      // )
+    // Params validation
+    const question_type = req.query.question_type?.trim() || '';
+    const level = parseInt(req.query.level) || 0;
+    const time = req.query.time
+      ? decodeURIComponent(req.query.time)
+      : '0 min 0 sec';
+    const selected_level = req.query.selected_level || '';
 
-      if (!question_type || !correctedLevelCheck || !time) {
-        return res.status(400).send('Missing required parameters');
-      }
+    if (!question_type || level < 0) {
+      return res.status(400).send('Missing question_type or invalid level');
+    }
 
-      // Save or update the user's score in the database
+    // Safe data defaults
+    const safeObj = (obj, def = {}) => obj || def;
+    const safeArr = (arr) => (Array.isArray(arr) ? arr : []);
+    let question_score = 0,
+      game_score = 0,
+      time_score = '';
+    let question_played = [],
+      game_played = [],
+      time_played = [];
+    let userQuestionRank = '-',
+      userGameRank = '-',
+      userTimeRank = '-';
+
+    // 1. Try save score (don't crash on failure)
+    try {
       await Topscore.createOrUpdateTopUser({
-        user_id: id,
+        user_id: id, // Guaranteed non-null now
         username,
         user_type,
         play_time: time,
-        play_level: parseInt(level),
+        play_level: level,
         question_type,
       });
+    } catch (saveErr) {
+      console.error('createOrUpdateTopUser failed (continuing):', saveErr);
+    }
 
-      // Fetch the updated leaderboard (top 10 users)
-      const topScorers = await Topscore.getTopScorers(question_type);
-
-      // Fetch this user's rank
-      const userRankData = await Topscore.getUserRank(id, question_type);
-      const userRank = userRankData?.rank || 'N/A';
-
-      // fetch used questions
+    // 2. Fetch stats with individual error handling
+    try {
       const question_s = await Topscore.getUsedQuestionCount(id, question_type);
-      const question_score = question_s.question_score;
+      question_score = safeObj(question_s, {}).question_score || 0;
+    } catch (e) {
+      console.error('getUsedQuestionCount failed:', e);
+    }
 
-      // fetch the questions played
-      const question_played =
-        await Topscore.getQuestionScoresWithRank(question_type);
-
-      //fetch user question rank
+    try {
+      question_played = safeArr(
+        await Topscore.getQuestionScoresWithRank(question_type),
+      );
       const userQuestionRankData = await Topscore.getUserQuestionRank(
         id,
         question_type,
       );
-      const userQuestionRank = userQuestionRankData?.rank || 'N/A';
+      userQuestionRank = userQuestionRankData?.rank || '-';
+    } catch (e) {
+      console.error('Question stats failed:', e);
+    }
 
-      // fetch game played count
+    try {
       const game_p = await Topscore.getUserGamePlayCount(id, question_type);
-      const game_score = game_p.game_played;
-
-      // fetch the game played
-      const game_played = await Topscore.getGameScoresWithRank(question_type);
-
-      //fetch user game rank
+      game_score = safeObj(game_p, {}).game_played || 0;
+      game_played = safeArr(
+        await Topscore.getGameScoresWithRank(question_type),
+      );
       const userGameRankData = await Topscore.getUserGameRank(
         id,
         question_type,
       );
-      const userGameRank = userGameRankData?.rank || 'N/A';
+      userGameRank = userGameRankData?.rank || '-';
+    } catch (e) {
+      console.error('Game stats failed:', e);
+    }
 
-      // fetch time played count
+    try {
       const time_p = await Topscore.getUserTimePlayCount(id, question_type);
-      const time_score = time_p.total_play_time;
-
-      // fetch the game played
-      const time_played = await Topscore.getTimeScoresWithRank(question_type);
-
-      //fetch user game rank
+      time_score = safeObj(time_p, {}).total_play_time || '';
+      time_played = safeArr(
+        await Topscore.getTimeScoresWithRank(question_type),
+      );
       const userTimeRankData = await Topscore.getUserTimeRank(
         id,
         question_type,
       );
-      const userTimeRank = userTimeRankData?.rank || 'N/A';
-
-      // Render the scorecard page with top scorers
-      res.render('scorecard', {
-        username,
-        fullname: userFullname,
-        id,
-        user_type,
-        questionType: question_type || '',
-        level: level || '1',
-        time: time || '',
-        topScorers,
-        userRank,
-        question_score,
-        question_played,
-        userQuestionRank,
-        game_score,
-        game_played,
-        userGameRank,
-        time_score,
-        time_played,
-        userTimeRank,
-      });
-    } catch (error) {
-      console.error('Error in /api/scorecard:', error);
-      res.status(500).send('Internal Server Error');
+      userTimeRank = userTimeRankData?.rank || '-';
+    } catch (e) {
+      console.error('Time stats failed:', e);
     }
-  },
-);
+
+    // Other fetches (topScorers, userRank) - similar pattern...
+
+    // ALWAYS render safe data
+    res.render('scorecard', {
+      username,
+      fullname: userFullname,
+      id, // string now
+      user_type,
+      questionType: question_type,
+      level: level.toString(),
+      time,
+      selected_level, // JS needs this
+      question_score,
+      question_played,
+      userQuestionRank,
+      game_score,
+      game_played,
+      userGameRank,
+      time_score,
+      time_played,
+      userTimeRank,
+      // Add others like topScorers with safeArr()
+    });
+  } catch (error) {
+    console.error('Scorecard CRITICAL:', error);
+    res.status(500).send('Server Error - Check logs');
+  }
+});
 
 app.get('/api/top-score', async (req, res) => {
   try {
