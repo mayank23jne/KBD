@@ -460,19 +460,19 @@
         const addBtn = document.getElementById('add_btn');
         const editBtn = document.getElementById('edit_btn');
 
-        const name = (data.fullname || data.username || '').trim();
+        const displayName =
+          (data.fullname && data.fullname.trim()) ||
+          (data.username && data.username.trim()) ||
+          '';
 
-        // Username set
-        usernameText.textContent = name || 'No Name';
-        updateUserInput.value = name;
+        usernameText.textContent = displayName || 'No Name';
+        updateUserInput.value = displayName;
 
         // 👇 CONDITION
-        if (!name) {
-          // First time user
+        if (!displayName) {
           addBtn.style.display = 'block';
           editBtn.style.display = 'none';
         } else {
-          // Existing user
           addBtn.style.display = 'none';
           editBtn.style.display = 'block';
         }
@@ -485,6 +485,7 @@
           fetch(`/api/get-user?id=${btoa(userId)}`)
             .then((res) => res.json())
             .then((data) => setUserDetails(data))
+            .then((data) => playGame(data))
             .catch((err) => console.error('Error fetching user:', err));
         }
       });
@@ -557,10 +558,13 @@
           ? 'कौन बनेगा धर्म शिरोमणि में आपका स्वागत है'
           : 'Welcome to KBDS';
       }
-      function playGame() {
+      function playGame(data) {
         // Get user info from hidden inputs or session
         // const userId = '<%= req.session.user.id %>';
-        const username = '<%= req.session.user.username %>';
+        const username = data
+          ? data.username
+          : '<%= req.session.user.username %>';
+        // const username = '<%= req.session.user.username %>';
 
         // Encode user info in base64
         const encodedId = btoa(userId);
