@@ -322,8 +322,9 @@
 
                             <% if(isUser.username){ %>
                                 <span id="username_text">
-                                    <%= isUser.username %>
+                                    <%= (isUser.username || '').toUpperCase() %>
                                 </span>
+
                                 <div class="action-btn">
                                     <p id="edit_btn" type="button" onclick="startEditUsername()">
                                         Update?

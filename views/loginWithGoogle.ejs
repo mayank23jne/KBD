@@ -465,7 +465,7 @@
           (data.username && data.username.trim()) ||
           '';
 
-        usernameText.textContent = displayName || 'No Name';
+        usernameText.textContent = (displayName || 'No Name').toUpperCase();
         updateUserInput.value = displayName;
 
         // 👇 CONDITION
