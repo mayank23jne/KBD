@@ -243,31 +243,38 @@ function handleCredentialResponse(response) {
 }
 
 async function shareAppLink() {
-  try {
-    // Your share message + Play Store link
-    const shareMessage =
-      'Hey! I am playing KBDS – an amazing Jain quiz game.\n\n' +
-      'Download the app from Play Store:';
+  const shareMessage =
+    'Hey! I am playing KBDS – an amazing Jain quiz game.\n\n' +
+    'Download the app from Play Store:\n' +
+    'https://play.google.com/store/apps/details?id=com.pepcus.kbds';
 
-    // Prepare payload WITHOUT image
-    const payload = {
-      type: 'share',
-      message: shareMessage,
-      image: null, // <- No image
-    };
+  const payload = {
+    type: 'share',
+    message: shareMessage,
+    image: null,
+  };
 
-    // Send to Ionic app via InAppBrowser
-    if (window.cordova_iab && window.cordova_iab.postMessage) {
-      window.cordova_iab.postMessage(JSON.stringify(payload));
-      console.log('App link shared to Ionic app:', payload);
-    } else {
-      console.warn('cordova_iab not available — probably running in browser.');
-      showToast('Sharing only works inside the KBDS app.');
-    }
-  } catch (error) {
-    console.error('Error sharing app link:', error);
+  // 🔥 InAppBrowser bridge
+  if (window.cordova_iab?.postMessage) {
+    console.log('📲 Sharing via Ionic bridge');
+    window.cordova_iab.postMessage(JSON.stringify(payload));
+    return;
   }
+
+  // 🌐 Web Share API fallback
+  if (navigator.share) {
+    await navigator.share({
+      title: 'KBDS Game',
+      text: shareMessage,
+    });
+    return;
+  }
+
+  // 📋 Clipboard fallback
+  await navigator.clipboard.writeText(shareMessage);
+  showToast('Link copied to clipboard');
 }
+
 function startEditUsername() {
   const text = document.getElementById('username_text');
   const input = document.getElementById('update_user_name');
@@ -286,6 +293,10 @@ function startEditUsername() {
 function saveUsername() {
   const userId = document.getElementById('session_user_id')?.value;
   console.log('User ID:', userId);
+  const params = new URLSearchParams(window.location.search);
+  const encodedId = params.get('id');
+  const id = encodedId ? atob(encodedId) : null;
+  const updatedUserId = userId || id;
   const input = document.getElementById('update_user_name');
   const text = document.getElementById('username_text');
   const editBtn = document.getElementById('edit_btn');
@@ -298,7 +309,7 @@ function saveUsername() {
   fetch(`/api/update-user`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id: userId, username: newName }),
+    body: JSON.stringify({ id: updatedUserId, username: newName }),
   })
     .then((res) => res.json())
     .then(() => {

@@ -395,6 +395,7 @@
 
         <div class="button-btn">
           <button
+            type="button"
             class="top-score-btn share-btn flex align-center flex-1"
             onclick="shareAppLink()"
           >
@@ -446,10 +447,35 @@
     </div>
 
     <!-- SCRIPT -->
+    <script>
+      document.addEventListener('resume', () => {
+        console.log('🔁 App resumed');
+
+        // Force re-check of cordova bridge
+        setTimeout(() => {
+          console.log('Rechecking cordova_iab:', !!window.cordova_iab);
+        }, 500);
+      });
+    </script>
+    <script>
+      (function () {
+        // Current page ko history me push kar do
+        history.pushState(null, '', window.location.href);
+
+        window.addEventListener('popstate', function () {
+          // Back button dabate hi /welcome par redirect
+          window.location.href = '/backtohome';
+        });
+      })();
+    </script>
 
     <script>
       const userId = "<%= req.session.user ? req.session.user.id : '' %>";
-      console.log('User ID:', userId);
+      const params = new URLSearchParams(window.location.search);
+      const encodedId = params.get('id');
+      const id = encodedId ? atob(encodedId) : null;
+      const updatedUserId = userId || id;
+      console.log('User ID:', updatedUserId);
       // Always show buttons; no condition
       function setUserDetails(data) {
         if (!data) return;
@@ -465,7 +491,7 @@
           (data.username && data.username.trim()) ||
           '';
 
-        usernameText.textContent = (displayName || 'No Name').toUpperCase();
+        usernameText.textContent = displayName || 'No Name';
         updateUserInput.value = displayName;
 
         // 👇 CONDITION
@@ -480,61 +506,14 @@
 
       window.addEventListener('DOMContentLoaded', () => {
         // const userId = "<%= req.session.user ? req.session.user.id : '' %>";
-        console.log('User ID:', userId);
-        if (userId) {
-          fetch(`/api/get-user?id=${btoa(userId)}`)
+        console.log('User ID:', updatedUserId);
+        if (updatedUserId) {
+          fetch(`/api/get-user?id=${btoa(updatedUserId)}`)
             .then((res) => res.json())
             .then((data) => setUserDetails(data))
             .catch((err) => console.error('Error fetching user:', err));
         }
       });
-
-      // Update username locally
-      // function startEditUsername() {
-      //   console.log('Starting username edit...');
-      //   const usernameText = document.getElementById('username_text');
-      //   const input = document.getElementById('update_user_name');
-
-      //   // input me current name daalo
-      //   input.value = usernameText.textContent.trim();
-
-      //   // dono visible rakho
-      //   input.style.display = 'block';
-
-      //   document.getElementById('edit_btn').style.display = 'none';
-      //   document.getElementById('save_btn').style.display = 'block';
-      //   console.log('Username edit started.');
-      // }
-
-      // function saveUsername() {
-      //   console.log('Saving username...');
-      //   const input = document.getElementById('update_user_name');
-      //   const newName = input.value.trim();
-      //   console.log('New username:', newName);
-      //   if (!newName) return;
-
-      //   // const userId = '<%= req.session.user.id %>';
-
-      //   const usernameText = document.getElementById('username_text');
-      //   usernameText.textContent = newName;
-
-      //   input.style.display = 'none';
-
-      //   document.getElementById('add_btn').style.display = 'none';
-      //   document.getElementById('edit_btn').style.display = 'block';
-      //   document.getElementById('save_btn').style.display = 'none';
-      //   console.log('User ID for update:', userId);
-
-      //   if(!userId) return;
-
-      //   console.log('Updating username for user ID:', userId);
-
-      //   fetch('/api/update-user', {
-      //     method: 'POST',
-      //     headers: { 'Content-Type': 'application/json' },
-      //     body: JSON.stringify({ id: userId, username: newName }),
-      //   }).catch(() => alert('Failed to update username'));
-      // }
 
       function handleQuestionTypeChange() {
         const chhahdhalaRadio = document.getElementById('question-chhahdhala');

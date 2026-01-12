@@ -55,7 +55,7 @@
 
                <label class="language-option">
                   <input type="radio" name="language" class="language-select" value="hi" id="lang-hi"
-                     onchange="changeLanguage()" checked />
+                     onchange="changeLanguage()" />
                   <span class="custom-radio">हिन्दी</span>
                </label>
             </div>
@@ -66,11 +66,8 @@
 
                <div id="id_username" class="mobile-tooltip" title="<%= fullname || username %>" onclick="showTooltip()">
                   <i class="fa-solid fa-user"></i>
-                  <span>
-                     <%= fullname || username %>
-                     <span id="username-tooltip" class="tooltip-text">
-                        <%= fullname || username %>
-                     </span>
+                  <span id="username-text">
+                   <span id="username-text"></span>
                   </span>
                </div>
 
@@ -529,6 +526,24 @@
    </aside>
 
    <script src="/js/play.js" type="text/javascript"></script>
+   <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const lang = params.get("lang") || "hi"; // default fallback
+
+    const radio = document.querySelector(
+      `input[name="language"][value="${lang}"]`
+    );
+
+    if (radio) {
+      radio.checked = true;
+      if (typeof changeLanguage === "function") {
+        changeLanguage();
+      }
+    }
+  });
+</script>
+
 
    <script>
       const queryString = window.location.search;
@@ -582,12 +597,12 @@
                     displayName = data.fullname && data.fullname.trim() !== "" ? data.fullname : data.username;
                 }
 
-                const usernameSpan = document.getElementById('id_username').querySelector('span');
-                const tooltipSpan = document.getElementById('username-tooltip');
+               const usernameText = document.getElementById("username-text");
+               const tooltipSpan = document.getElementById("username-tooltip");
 
-                // Set text correctly
-                usernameSpan.firstChild.textContent = displayName;
-                tooltipSpan.textContent = displayName;
+               usernameText.textContent = displayName;
+               tooltipSpan.textContent = displayName;
+
 
             })
             .catch(err => console.error('Error fetching user:', err));

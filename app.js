@@ -6,7 +6,6 @@ const cors = require('cors');
 const session = require('express-session');
 const User = require('./models/User');
 const Topscore = require('./models/Topscore');
-
 const mysql = require('mysql2'); // Use mysql2 instead of mongoose
 
 require('dotenv/config');
@@ -188,21 +187,27 @@ app.get('/api/scorecard', async (req, res) => {
       return res.redirect('/login');
     }
 
-    let userFullname = fullname || username;
+    console.log('FULL NAME WE GOT :- ', fullname);
+    console.log('USERNAME WE GOT :- ', username);
 
-    if (!userFullname) {
-      try {
-        const [rows] = await db
-          .promise()
-          .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
-            id,
-          ]);
-        userFullname = rows[0]?.fullname || rows[0]?.username || username;
-      } catch (dbErr) {
-        console.error('DB fullname lookup failed:', dbErr);
-        userFullname = username;
-      }
+    let userFullname ;
+
+    console.log('ID WE GOT : -', id);
+    const [rows] = await db
+      .promise()
+      .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [id]);
+
+    console.log('DB USER ROW =>', rows);
+
+    if (rows.length > 0) {
+      userFullname = rows[0].fullname || rows[0].username || 'Player';
+    } else {
+      userFullname = username || 'Player';
     }
+
+    console.log('USER FULL NAME WE GOT :- ', userFullname);
+    // Save fullname to session for future requests
+    req.session.user = { ...req.session.user, fullname: userFullname };
 
     // Params validation
     const question_type = req.query.question_type?.trim() || '';

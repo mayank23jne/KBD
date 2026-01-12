@@ -1,429 +1,496 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Donate | KBDS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
     <!-- Same CSS as login page -->
     <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
-    
+
     <!-- Same fonts as login page -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap" rel="stylesheet" />
-    
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Razorpay SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    
+
     <style>
-        * {
-           overflow: visible !important;
-        }
+      * {
+        overflow: visible !important;
+      }
 
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            align-items: self-start;
-        }
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        align-items: self-start;
+      }
 
-        .input-container label {
-            width: 100%;
-            margin: 0;
-            font-size: 14px !important;
-        }
-        
-        input[type='tel'] {
-            padding: 14px;
-            font-size: 16px;
-            color: #333;
-            border: none;
-            border-radius: 12px;
-            outline: none;
-            transition: box-shadow 0.3s ease, transform 0.2s ease;
-        }
+      .input-container label {
+        width: 100%;
+        margin: 0;
+        font-size: 14px !important;
+      }
 
-        .input-container input,
-        .input-container textarea {
-            width: 100%;
-            margin: 5px 0 15px 0;
-        }
+      input[type='tel'] {
+        padding: 14px;
+        font-size: 16px;
+        color: #333;
+        border: none;
+        border-radius: 12px;
+        outline: none;
+        transition:
+          box-shadow 0.3s ease,
+          transform 0.2s ease;
+      }
 
-        .input-container textarea {
-            min-height: 80px;
-            resize: vertical;
-            font-family: 'Poppins', sans-serif;
-        }
+      .input-container input,
+      .input-container textarea {
+        width: 100%;
+        margin: 5px 0 15px 0;
+      }
 
-        #header {
-            width: 100%;
-        }
+      .input-container textarea {
+        min-height: 80px;
+        resize: vertical;
+        font-family: 'Poppins', sans-serif;
+      }
 
-        /* Donate Button - Same gradient as login/signup */
-        button.donate-btn {
-            background: linear-gradient(135deg, #5762f8, #ff58fa);
-            color: white;
-            width: 100%;
-            padding: 12px 5px;
-            font-size: 16px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+      #header {
+        width: 100%;
+      }
 
-        button.donate-btn:hover {
-            background: linear-gradient(135deg, #3f4bf7, #f14dec);
-            box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
-            transform: translateY(-2px);
-        }
+      /* Donate Button - Same gradient as login/signup */
+      button.donate-btn {
+        background: linear-gradient(135deg, #5762f8, #ff58fa);
+        color: white;
+        width: 100%;
+        padding: 12px 5px;
+        font-size: 16px;
+        margin-top: 20px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
 
-        button.donate-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+      button.donate-btn:hover {
+        background: linear-gradient(135deg, #3f4bf7, #f14dec);
+        box-shadow: 0 12px 35px rgba(255, 126, 95, 0.7);
+        transform: translateY(-2px);
+      }
 
-        .donation-subtitle {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #fff;
-            opacity: 0.9;
-        }
+      button.donate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
-        /* Back button styling */
-        .back-btn {
-            background: linear-gradient(135deg, #6c757d, #495057);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-            width: 100%;
-            font-size: 14px;
-        }
+      .donation-subtitle {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
+        opacity: 0.9;
+      }
 
-        .back-btn:hover {
-            background: linear-gradient(135deg, #5a6268, #343a40);
-            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.5);
-        }
+      /* Back button styling */
+      .back-btn {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 15px;
+        width: 100%;
+        font-size: 14px;
+      }
 
-        /* Success message styling */
-        .success-message {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
+      .back-btn:hover {
+        background: linear-gradient(135deg, #5a6268, #343a40);
+        box-shadow: 0 8px 25px rgba(108, 117, 125, 0.5);
+      }
 
-        .error-message {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
+      /* Success message styling */
+      .success-message {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+      }
+
+      .error-message {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+        display: none;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="form">
-        <!-- Header -->
-        <div class="header-container">
-            <div id="header">Support KBDS 💝</div>
+      <!-- Header -->
+      <div class="header-container">
+        <div id="header">Support KBDS 💝</div>
+      </div>
+
+      <p class="donation-subtitle">
+        Your contribution helps us keep the platform running.
+      </p>
+
+      <!-- Success/Error Messages -->
+      <div id="successMessage" class="success-message"></div>
+      <div id="errorMessage" class="error-message"></div>
+
+      <!-- Donation Form -->
+      <form id="donationForm">
+        <div class="input-container">
+          <label for="name"
+            >Name:
+            <span style="opacity: 0.7; font-size: 12px">(Optional)</span></label
+          >
+          <input type="text" id="name" placeholder="Enter your full name" />
         </div>
 
-        <p class="donation-subtitle">Your contribution helps us keep the platform running.</p>
+        <div class="input-container">
+          <label for="email"
+            >Email:
+            <span style="opacity: 0.7; font-size: 12px">(Optional)</span></label
+          >
+          <input type="email" id="email" placeholder="Enter your email" />
+        </div>
 
-        <!-- Success/Error Messages -->
-        <div id="successMessage" class="success-message"></div>
-        <div id="errorMessage" class="error-message"></div>
+        <div class="input-container">
+          <label for="mobile"
+            >Mobile:
+            <span style="opacity: 0.7; font-size: 12px">(Optional)</span></label
+          >
+          <input
+            type="tel"
+            id="mobile"
+            maxlength="10"
+            placeholder="Enter mobile number"
+            pattern="[0-9]*"
+            inputmode="numeric"
+          />
+        </div>
 
-        <!-- Donation Form -->
-        <form id="donationForm">
-            <div class="input-container">
-                <label for="name">Name: <span style="opacity: 0.7; font-size: 12px;">(Optional)</span></label>
-                <input type="text" id="name" placeholder="Enter your full name" />
-            </div>
+        <div class="input-container">
+          <label for="amount"
+            >Amount (₹): <span style="color: red">*</span></label
+          >
+          <input
+            type="tel"
+            id="amount"
+            placeholder="Enter amount"
+            pattern="[0-9]*"
+            inputmode="numeric"
+            required
+          />
+        </div>
 
-            <div class="input-container">
-                <label for="email">Email: <span style="opacity: 0.7; font-size: 12px;">(Optional)</span></label>
-                <input type="email" id="email" placeholder="Enter your email" />
-            </div>
-
-            <div class="input-container">
-                <label for="mobile">Mobile: <span style="opacity: 0.7; font-size: 12px;">(Optional)</span></label>
-                <input type="tel" id="mobile" maxlength="10" placeholder="Enter mobile number" pattern="[0-9]*" inputmode="numeric" />
-            </div>
-
-            <div class="input-container">
-                <label for="amount">Amount (₹): <span style="color: red;">*</span></label>
-                <input type="tel" id="amount" placeholder="Enter amount" pattern="[0-9]*" inputmode="numeric" required />
-            </div>
-
-            <button type="submit" class="donate-btn" id="donateBtn">Donate Now</button>
-            <button type="button" class="back-btn" onclick="window.history.go(-1)">Back</button>
-        </form>
+        <button type="submit" class="donate-btn" id="donateBtn">
+          Donate Now
+        </button>
+        <button type="button" class="back-btn" onclick="window.history.go(-1)">
+          Back
+        </button>
+      </form>
     </div>
 
     <script>
-        // Razorpay configuration
-        const RAZORPAY_KEY = "<%= razor_key %>";
+      // Razorpay configuration
+      const RAZORPAY_KEY = '<%= razor_key %>';
 
-        // Load user data from localStorage on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            try {
+      // Load user data from localStorage on page load
+      window.addEventListener('DOMContentLoaded', function () {
+        try {
+          const userData = localStorage.getItem('user');
+          if (userData) {
+            const user = JSON.parse(userData);
+
+            // Auto-fill form fields if user data exists
+            if (user.username || user.name) {
+              document.getElementById('name').value =
+                user.username || user.name || '';
+            }
+            if (user.email) {
+              document.getElementById('email').value = user.email || '';
+            }
+            if (user.mobile) {
+              document.getElementById('mobile').value = user.mobile || '';
+            }
+          }
+        } catch (error) {
+          console.log('No user data found in localStorage');
+        }
+      });
+
+      // Allow only numbers in amount and mobile fields
+      document.getElementById('amount').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      document.getElementById('mobile').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+      });
+
+      // Show message helper
+      function showMessage(type, message) {
+        const successMsg = document.getElementById('successMessage');
+        const errorMsg = document.getElementById('errorMessage');
+
+        if (type === 'success') {
+          successMsg.textContent = message;
+          successMsg.style.display = 'block';
+          errorMsg.style.display = 'none';
+
+          // Hide after 5 seconds
+          setTimeout(() => {
+            successMsg.style.display = 'none';
+          }, 5000);
+        } else {
+          errorMsg.textContent = message;
+          errorMsg.style.display = 'block';
+          successMsg.style.display = 'none';
+
+          // Hide after 5 seconds
+          setTimeout(() => {
+            errorMsg.style.display = 'none';
+          }, 5000);
+        }
+      }
+
+      // Start Razorpay payment
+      async function startPayment(amount, user, onSuccess, onError) {
+        try {
+          // 1️⃣ Create order from backend
+          const orderRes = await fetch('/api/razorpay/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount }),
+          });
+
+          const orderData = await orderRes.json();
+
+          if (!orderData.success) {
+            showMessage('error', 'Unable to create order');
+            return;
+          }
+
+          // 2️⃣ Open Razorpay with ORDER ID
+          const options = {
+            key: atob(RAZORPAY_KEY),
+            amount: orderData.order.amount,
+            currency: 'INR',
+            name: 'KBDS',
+            description: 'Donation Payment',
+            order_id: orderData.order.id, // ✅ MOST IMPORTANT
+            image: '/img/LogoBG.png',
+
+            handler: function (response) {
+              onSuccess(response);
+            },
+
+            prefill: {
+              name: user.name || '',
+              email: user.email || '',
+              contact: user.mobile || '',
+            },
+
+            theme: {
+              color: '#5762f8',
+            },
+
+            modal: {
+              ondismiss: function () {
+                showMessage('error', 'Payment cancelled');
+                const donateBtn = document.getElementById('donateBtn');
+                donateBtn.disabled = false;
+                donateBtn.textContent = 'Donate Now';
+              },
+            },
+          };
+
+          const rzp = new Razorpay(options);
+
+          rzp.on('payment.failed', function (response) {
+            if (onError) onError(response);
+          });
+
+          rzp.open();
+        } catch (err) {
+          console.error(err);
+          showMessage('error', 'Something went wrong');
+        }
+      }
+
+      // Handle form submission
+      document
+        .getElementById('donationForm')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById('name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const mobile = document.getElementById('mobile').value.trim();
+          const amount = document.getElementById('amount').value.trim();
+          const donateBtn = document.getElementById('donateBtn');
+
+          // Amount validation (REQUIRED)
+          if (
+            !amount ||
+            amount === '' ||
+            isNaN(amount) ||
+            Number(amount) <= 0
+          ) {
+            showMessage(
+              'error',
+              'Please enter a valid donation amount (numbers only)',
+            );
+            return;
+          }
+
+          // Mobile validation (OPTIONAL - only if provided)
+          if (mobile && (mobile.length !== 10 || isNaN(mobile))) {
+            showMessage('error', 'Mobile number must be exactly 10 digits');
+            return;
+          }
+
+          // Email validation (OPTIONAL - only if provided)
+          if (email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+              showMessage('error', 'Please enter a valid email address');
+              return;
+            }
+          }
+
+          // Disable button to prevent multiple clicks
+          donateBtn.disabled = true;
+          donateBtn.textContent = 'Processing...';
+
+          // User data (with optional fields)
+          const user = {
+            name: name || 'Anonymous',
+            email: email || '',
+            mobile: mobile || '',
+          };
+
+          // Start Razorpay payment
+          startPayment(
+            Number(amount),
+            user,
+            // Success callback
+            function (response) {
+              console.log('Payment successful:', response);
+
+              // Show success message
+              showMessage(
+                'success',
+                `Thank you ${user.name}! Your donation of ₹${amount} was successful! Payment ID: ${response.razorpay_payment_id}`,
+              );
+
+              // Reset form
+              document.getElementById('donationForm').reset();
+
+              // Re-fill user data from localStorage after reset
+              try {
                 const userData = localStorage.getItem('user');
                 if (userData) {
-                    const user = JSON.parse(userData);
-                    
-                    // Auto-fill form fields if user data exists
-                    if (user.username || user.name) {
-                        document.getElementById('name').value = user.username || user.name || '';
-                    }
-                    if (user.email) {
-                        document.getElementById('email').value = user.email || '';
-                    }
-                    if (user.mobile) {
-                        document.getElementById('mobile').value = user.mobile || '';
-                    }
+                  const savedUser = JSON.parse(userData);
+                  if (savedUser.username || savedUser.name) {
+                    document.getElementById('name').value =
+                      savedUser.username || savedUser.name || '';
+                  }
+                  if (savedUser.email) {
+                    document.getElementById('email').value =
+                      savedUser.email || '';
+                  }
+                  if (savedUser.mobile) {
+                    document.getElementById('mobile').value =
+                      savedUser.mobile || '';
+                  }
                 }
-            } catch (error) {
-                console.log('No user data found in localStorage');
-            }
+              } catch (error) {
+                console.log('Could not re-fill user data');
+              }
+
+              // Re-enable button
+              donateBtn.disabled = false;
+              donateBtn.textContent = 'Donate Now';
+
+              // Here you can send payment details to your backend
+              savePaymentToBackend(response, user, amount, 'success');
+            },
+            // Error callback
+            function (error) {
+              console.error('Payment error:', error);
+              showMessage('error', 'Payment failed! Please try again.');
+
+              // Re-enable button
+              donateBtn.disabled = false;
+              donateBtn.textContent = 'Donate Now';
+              savePaymentToBackend(error, user, amount, 'failed');
+            },
+          );
         });
 
-        // Allow only numbers in amount and mobile fields
-        document.getElementById('amount').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-
-        document.getElementById('mobile').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-
-        // Show message helper
-        function showMessage(type, message) {
-            const successMsg = document.getElementById('successMessage');
-            const errorMsg = document.getElementById('errorMessage');
-            
-            if (type === 'success') {
-                successMsg.textContent = message;
-                successMsg.style.display = 'block';
-                errorMsg.style.display = 'none';
-                
-                // Hide after 5 seconds
-                setTimeout(() => {
-                    successMsg.style.display = 'none';
-                }, 5000);
-            } else {
-                errorMsg.textContent = message;
-                errorMsg.style.display = 'block';
-                successMsg.style.display = 'none';
-                
-                // Hide after 5 seconds
-                setTimeout(() => {
-                    errorMsg.style.display = 'none';
-                }, 5000);
-            }
-        }
-
-        // Start Razorpay payment
-       async function startPayment(amount, user, onSuccess, onError) {
+      // Optional: Function to save payment details to backend
+      async function savePaymentToBackend(
+        paymentResponse,
+        user,
+        amount,
+        status,
+      ) {
         try {
-            // 1️⃣ Create order from backend
-            const orderRes = await fetch('/api/razorpay/create-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ amount })
-            });
+          const response = await fetch('/api/save-donation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              payment_id: paymentResponse.razorpay_payment_id,
+              order_id: paymentResponse.razorpay_order_id,
+              signature: paymentResponse.razorpay_signature,
+              name: user.name,
+              email: user.email,
+              mobile: user.mobile,
+              amount: amount,
+              status: status,
+            }),
+          });
 
-            const orderData = await orderRes.json();
-
-            if (!orderData.success) {
-                showMessage('error', 'Unable to create order');
-                return;
-            }
-
-            // 2️⃣ Open Razorpay with ORDER ID
-            const options = {
-                key: atob(RAZORPAY_KEY),
-                amount: orderData.order.amount,
-                currency: "INR",
-                name: "KBDS",
-                description: "Donation Payment",
-                order_id: orderData.order.id,   // ✅ MOST IMPORTANT
-                image: "/img/LogoBG.png",
-
-                handler: function (response) {
-                    onSuccess(response);
-                },
-
-                prefill: {
-                    name: user.name || "",
-                    email: user.email || "",
-                    contact: user.mobile || "",
-                },
-
-                theme: {
-                    color: "#5762f8",
-                },
-
-                modal: {
-                    ondismiss: function () {
-                        showMessage('error', 'Payment cancelled');
-                        const donateBtn = document.getElementById('donateBtn');
-                        donateBtn.disabled = false;
-                        donateBtn.textContent = 'Donate Now';
-                    },
-                },
-            };
-
-            const rzp = new Razorpay(options);
-
-            rzp.on("payment.failed", function (response) {
-                if (onError) onError(response);
-            });
-
-            rzp.open();
-
-        } catch (err) {
-            console.error(err);
-            showMessage('error', 'Something went wrong');
+          const data = await response.json();
+        } catch (error) {
+          console.error('Error saving payment:', error);
         }
-    }
-
-
-        // Handle form submission
-        document.getElementById("donationForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-            
-            const name = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const mobile = document.getElementById("mobile").value.trim();
-            const amount = document.getElementById("amount").value.trim();
-            const donateBtn = document.getElementById('donateBtn');
-
-            // Amount validation (REQUIRED)
-            if (!amount || amount === '' || isNaN(amount) || Number(amount) <= 0) {
-                showMessage('error', 'Please enter a valid donation amount (numbers only)');
-                return;
-            }
-
-            // Mobile validation (OPTIONAL - only if provided)
-            if (mobile && (mobile.length !== 10 || isNaN(mobile))) {
-                showMessage('error', 'Mobile number must be exactly 10 digits');
-                return;
-            }
-
-            // Email validation (OPTIONAL - only if provided)
-            if (email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    showMessage('error', 'Please enter a valid email address');
-                    return;
-                }
-            }
-
-            // Disable button to prevent multiple clicks
-            donateBtn.disabled = true;
-            donateBtn.textContent = 'Processing...';
-
-            // User data (with optional fields)
-            const user = {
-                name: name || 'Anonymous',
-                email: email || '',
-                mobile: mobile || ''
-            };
-
-            // Start Razorpay payment
-            startPayment(
-                Number(amount),
-                user,
-                // Success callback
-                function(response) {
-                    console.log("Payment successful:", response);
-                    
-                    // Show success message
-                    showMessage('success', `Thank you ${user.name}! Your donation of ₹${amount} was successful! Payment ID: ${response.razorpay_payment_id}`);
-                    
-                    // Reset form
-                    document.getElementById("donationForm").reset();
-                    
-                    // Re-fill user data from localStorage after reset
-                    try {
-                        const userData = localStorage.getItem('user');
-                        if (userData) {
-                            const savedUser = JSON.parse(userData);
-                            if (savedUser.username || savedUser.name) {
-                                document.getElementById('name').value = savedUser.username || savedUser.name || '';
-                            }
-                            if (savedUser.email) {
-                                document.getElementById('email').value = savedUser.email || '';
-                            }
-                            if (savedUser.mobile) {
-                                document.getElementById('mobile').value = savedUser.mobile || '';
-                            }
-                        }
-                    } catch (error) {
-                        console.log('Could not re-fill user data');
-                    }
-                    
-                    // Re-enable button
-                    donateBtn.disabled = false;
-                    donateBtn.textContent = 'Donate Now';
-
-                    // Here you can send payment details to your backend
-                    savePaymentToBackend(response, user, amount , 'success');
-                },
-                // Error callback
-                function(error) {
-                    console.error("Payment error:", error);
-                    showMessage('error', 'Payment failed! Please try again.');
-                    
-                    // Re-enable button
-                    donateBtn.disabled = false;
-                    donateBtn.textContent = 'Donate Now';
-                    savePaymentToBackend(error, user, amount , 'failed');
-                }
-            );
-        });
-
-        // Optional: Function to save payment details to backend
-        async function savePaymentToBackend(paymentResponse, user, amount , status) {
-            try {
-                const response = await fetch('/api/save-donation', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                    payment_id: paymentResponse.razorpay_payment_id,
-                    order_id: paymentResponse.razorpay_order_id,
-                    signature: paymentResponse.razorpay_signature,
-                    name: user.name,
-                    email: user.email,
-                    mobile: user.mobile,
-                    amount: amount,
-                    status: status
-                })
-
-                });
-                
-                const data = await response.json();
-            } catch (error) {
-                console.error('Error saving payment:', error);
-            }
-        }
+      }
     </script>
-</body>
+    <script>
+      // Game page par aate hi
+      history.pushState({ page: 'game' }, '', location.href);
+
+      window.addEventListener('popstate', function (event) {
+        // Yaha direct redirect mat karo, sirf back ko cancel karo
+        history.go(-1);
+      });
+    </script>
+  </body>
 </html>

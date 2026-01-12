@@ -34,7 +34,7 @@ body {
   margin: auto;
   background: #222;
   border-radius: 16px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 0 20px rgba(255,165,0,0.4);
 }
 
@@ -60,7 +60,7 @@ body {
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 .top-buttons button {
@@ -205,129 +205,22 @@ tr:hover {
 <body>
 
 <div class="ranker-container">
-
-  <!-- <div class="ranker-header">
-    <h2>🏆 Top Rankers</h2>
-  </div> -->
-
-  <!-- TABS -->
-  <div class="top-buttons">
-    <button class="tab-btn active" onclick="showSection('myScores', this)">My Scores</button>
-    <button class="tab-btn" onclick="showSection('questionsPlayed', this)">Questions Played</button>
-    <button class="tab-btn" onclick="showSection('gamesPlayed', this)">Games Played</button>
-    <button class="tab-btn" onclick="showSection('timePlayed', this)">Time Played</button>
-  </div>
-
-  <!-- MY SCORES -->
- <!-- MY SCORES -->
-<div id="myScores" class="section active">
-<div class="container">
-  <div class="score-title">Your Score for <%= questionType %> Game</div>
-
-  <% if (isLoggedIn) { %>
-    <div class="username"><%= fullname || username || 'Player' %></div>
-    <div class="stats">
-      <div class="stat-box">Total Games <span><%= game_score %></span></div>
-      <div class="stat-box">Total Questions <span><%= question_score %></span></div>
-    </div>
-    <div class="footer-time">Total Time <span><%= time_score || '-' %></span></div>
-  <% } else { %>
-    <div class="username">Please login to show your score</div>
-  <% } %>
+  <%- include('partials/scorecard', {
+    fullname,
+    username,
+    questionType,
+    game_score,
+    question_score,
+    time_score,
+    question_played,
+    game_played,
+    time_played,
+    userQuestionRank,
+    userGameRank,
+    userTimeRank
+  }) %>
 </div>
 
-</div>
-
-
-  <!-- QUESTIONS -->
-  <div id="questionsPlayed" class="section">
-    <p id="user_rank">Your Rank : <%= userQuestionRank %></p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>🏅 Rank</th>
-            <th>User</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% question_played.forEach(s => { %>
-          <tr>
-            <td>#<%= s.rank %></td>
-            <td><%= s.fullname || s.username %></td>
-            <td><%= s.question_score %></td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- GAMES -->
-  <div id="gamesPlayed" class="section">
-    <p id="user_rank">Your Rank : <%= userGameRank %></p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>🏅 Rank</th>
-            <th>User</th>
-            <th>Games</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% game_played.forEach(s => { %>
-          <tr>
-            <td>#<%= s.rank %></td>
-            <td><%= s.fullname || s.username %></td>
-            <td><%= s.game_played %></td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- TIME -->
-  <div id="timePlayed" class="section">
-    <p id="user_rank">Your Rank : <%= userTimeRank %></p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>🏅 Rank</th>
-            <th>User</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% time_played.forEach(s => { %>
-          <tr>
-            <td>#<%= s.rank %></td>
-            <td><%= s.fullname || s.username %></td>
-            <td>
-                <%
-                  let formattedTime = s.total_play_time;
-                  if (s.total_play_time) {
-                    const timeParts = s.total_play_time.split(':'); // [00h, 01m, 24s]
-                    formattedTime =
-                      (timeParts[0] !== '00h' ? timeParts[0] + ':' : '') +
-                      (timeParts[1] !== '00m' ? timeParts[1] + ':' : '') +
-                      timeParts[2];
-                  }
-                %>
-                <%= formattedTime || '-' %>
-              </td>
-
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
 
 <script>
 function showSection(id, btn) {
@@ -337,6 +230,15 @@ function showSection(id, btn) {
   btn.classList.add('active');
 }
 </script>
+<script>
+      // Game page par aate hi
+      history.pushState({ page: 'game' }, '', location.href);
+
+      window.addEventListener('popstate', function (event) {
+        // Yaha direct redirect mat karo, sirf back ko cancel karo
+        history.go(-1);
+      });
+    </script>
 
 </body>
 </html>
