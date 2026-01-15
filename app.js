@@ -168,48 +168,67 @@ app.use('/api/questions', questionRoutes); // Import the Topscore class
 
 app.get('/api/scorecard', async (req, res) => {
   try {
+    // Prevent repeated visits flag
     req.session.visitedIndex = false;
 
-    if (!req.session.user || !req.session.user.id) {
-      console.error('No valid session.user.id:', req.session.user);
+    // 1️⃣ Session check
+    const userData = req.session.user;
+    // console.log('Scorecard Session User Data:', userData);
+
+    if (
+      !userData ||
+      !userData.id ||
+      !userData.username ||
+      !userData.user_type
+    ) {
       return res.redirect('/login');
     }
 
-    // SAFELY extract with validation
-    const userData = req.session.user;
+    // 2️⃣ Extract user data safely
     const id = userData.id?.toString().trim();
     const username = userData.username?.trim() || 'Guest';
     const user_type = userData.user_type?.trim() || 'guest';
-    const fullname = userData.fullname?.trim();
+    const fullname = userData.fullname?.trim() || username;
+
+    // ✅ FINAL display name (fullname optional)
 
     if (!id || id === 'null' || id === 'undefined') {
-      console.error('Invalid user.id from session:', id);
       return res.redirect('/login');
     }
 
-    console.log('FULL NAME WE GOT :- ', fullname);
-    console.log('USERNAME WE GOT :- ', username);
+    // 3️⃣ Fetch fullname from DB if not in session
+    // if (!userFullname) {
+    //   const [rows] = await db
+    //     .promise()
+    //     .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
+    //       id,
+    //     ]);
 
-    let userFullname ;
+    //   if (rows.length > 0) {
+    //     userFullname = rows[0].fullname || rows[0].username || 'Player';
+    //   } else {
+    //     userFullname = username || 'Player';
+    //   }
 
-    console.log('ID WE GOT : -', id);
-    const [rows] = await db
-      .promise()
-      .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [id]);
+    //   // update session safely
+    //   req.session.user = {
+    //     ...req.session.user,
+    //     fullname: userFullname,
+    //   };
 
-    console.log('DB USER ROW =>', rows);
+    //   // IMPORTANT: force save
+    //   await new Promise((resolve, reject) => {
+    //     req.session.save((err) => {
+    //       if (err) {
+    //         console.error('Session save failed:', err);
+    //         reject(err);
+    //       }
+    //       resolve();
+    //     });
+    //   });
+    // }
 
-    if (rows.length > 0) {
-      userFullname = rows[0].fullname || rows[0].username || 'Player';
-    } else {
-      userFullname = username || 'Player';
-    }
-
-    console.log('USER FULL NAME WE GOT :- ', userFullname);
-    // Save fullname to session for future requests
-    req.session.user = { ...req.session.user, fullname: userFullname };
-
-    // Params validation
+    // 4️⃣ Extract and validate query params
     const question_type = req.query.question_type?.trim() || '';
     const rawLevel = req.query.level;
     const level = Number.isInteger(Number(rawLevel))
@@ -219,22 +238,19 @@ app.get('/api/scorecard', async (req, res) => {
       ? decodeURIComponent(req.query.time)
       : '0 min 0 sec';
     const selected_level = req.query.selected_level || '';
+    // console.log('Scorecard Query Params:', {
+    //   question_type,
+    //   rawLevel,
+    //   level,
+    //   time,
+    //   selected_level,
+    // });
 
     if (!question_type || level === null) {
-      console.error('Invalid scorecard params:', req.query);
       return res.redirect('/');
     }
-    console.log('Scorecard OK:', {
-      id,
-      username,
-      question_type,
-      level,
-      time,
-    });
 
-    // Safe data defaults
-    const safeObj = (obj, def = {}) => obj || def;
-    const safeArr = (arr) => (Array.isArray(arr) ? arr : []);
+    // 5️⃣ Initialize stats with safe defaults
     let question_score = 0,
       game_score = 0,
       time_score = '';
@@ -245,83 +261,74 @@ app.get('/api/scorecard', async (req, res) => {
       userGameRank = '-',
       userTimeRank = '-';
 
-    // 1. Try save score (don't crash on failure)
+    // 6️⃣ Save or update top score (catch errors silently)
     try {
       await Topscore.createOrUpdateTopUser({
-        user_id: id, // Guaranteed non-null now
+        user_id: id,
         username,
         user_type,
         play_time: time,
         play_level: level,
         question_type,
       });
-    } catch (saveErr) {
-      console.error('createOrUpdateTopUser failed (continuing):', saveErr);
-    }
+    } catch {}
 
-    // 2. Fetch stats with individual error handling
+    // 7️⃣ Fetch Question stats
     try {
       const question_s = await Topscore.getUsedQuestionCount(id, question_type);
-      question_score = safeObj(question_s, {}).question_score || 0;
-    } catch (e) {
-      console.error('getUsedQuestionCount failed:', e);
-    }
+      question_score = question_s?.question_score || 0;
 
-    try {
-      question_played = safeArr(
-        await Topscore.getQuestionScoresWithRank(question_type),
-      );
+      const questionScores =
+        await Topscore.getQuestionScoresWithRank(question_type);
+      question_played = Array.isArray(questionScores) ? questionScores : [];
+
       const userQuestionRankData = await Topscore.getUserQuestionRank(
         id,
         question_type,
       );
       userQuestionRank = userQuestionRankData?.rank || '-';
-    } catch (e) {
-      console.error('Question stats failed:', e);
-    }
+    } catch {}
 
+    // 8️⃣ Fetch Game stats
     try {
       const game_p = await Topscore.getUserGamePlayCount(id, question_type);
-      game_score = safeObj(game_p, {}).game_played || 0;
-      game_played = safeArr(
-        await Topscore.getGameScoresWithRank(question_type),
-      );
+      game_score = game_p?.game_played || 0;
+
+      const gameScores = await Topscore.getGameScoresWithRank(question_type);
+      game_played = Array.isArray(gameScores) ? gameScores : [];
+
       const userGameRankData = await Topscore.getUserGameRank(
         id,
         question_type,
       );
       userGameRank = userGameRankData?.rank || '-';
-    } catch (e) {
-      console.error('Game stats failed:', e);
-    }
+    } catch {}
 
+    // 9️⃣ Fetch Time stats
     try {
       const time_p = await Topscore.getUserTimePlayCount(id, question_type);
-      time_score = safeObj(time_p, {}).total_play_time || '';
-      time_played = safeArr(
-        await Topscore.getTimeScoresWithRank(question_type),
-      );
+      time_score = time_p?.total_play_time || '';
+
+      const timeScores = await Topscore.getTimeScoresWithRank(question_type);
+      time_played = Array.isArray(timeScores) ? timeScores : [];
+
       const userTimeRankData = await Topscore.getUserTimeRank(
         id,
         question_type,
       );
       userTimeRank = userTimeRankData?.rank || '-';
-    } catch (e) {
-      console.error('Time stats failed:', e);
-    }
+    } catch {}
 
-    // Other fetches (topScorers, userRank) - similar pattern...
-
-    // ALWAYS render safe data
+    // 10️⃣ Render scorecard safely
     res.render('scorecard', {
       username,
-      fullname: userFullname,
-      id, // string now
-      user_type,
+      fullname: fullname,
+      id,
+      user_type: user_type,
       questionType: question_type,
       level: level.toString(),
       time,
-      selected_level, // JS needs this
+      selected_level: selected_level,
       question_score,
       question_played,
       userQuestionRank,
@@ -331,14 +338,16 @@ app.get('/api/scorecard', async (req, res) => {
       time_score,
       time_played,
       userTimeRank,
-      // Add others like topScorers with safeArr()
     });
-  } catch (error) {
-    console.error('Scorecard CRITICAL:', error);
+  } catch {
     res.status(500).send('Server Error - Check logs');
+    res.status(500).send(`
+    <h1>Server Error</h1>
+    <pre>${err.message}</pre>
+    <pre>${err.stack}</pre>
+  `);
   }
 });
-
 app.get('/api/top-score', async (req, res) => {
   try {
     // console.log('========== TOP SCORE API HIT ==========');
@@ -476,7 +485,7 @@ db.connect((err) => {
     console.error('Error connecting to MySQL:', err.message);
     return;
   }
-  console.log('✅ Connected to MySQL');
+  // console.log('✅ Connected to MySQL');
 });
 
 // Listen to server

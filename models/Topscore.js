@@ -366,7 +366,7 @@ class Topscore {
             FROM (
                 SELECT 
                     used_questions.user_id,
-                    users.username, v       
+                    users.username,     
                     users.fullname,      -- 👈 Select fullname from users table
                     users.user_type,
                     COUNT(*) AS question_score

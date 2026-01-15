@@ -737,28 +737,26 @@ function nextQuestion() {
 // const endgameAudio = new Audio('../audio/background.wav');
 function endGame() {
   let price = null;
+
   if (isQuit) {
-    price = `Level  ${slot - 1}`;
-    // console.log(`You have won Rs ${slots[slot - 1]}`);
+    price = `Level ${slot - 1}`;
     console.log(`You have completed the level ${slot - 1}`);
     flipTheQuestionMethod();
   } else {
-    price = `Level  ${slot - 1}`;
-
-    // console.log(`You have won Rs ${slots[slot]}`);
+    price = `Level ${slot - 1}`;
     console.log(`You have completed the level ${slot - 1}`);
   }
 
   dialogs.endGameDialog.style.display = 'block';
   dialogs.endGameDialog.innerHTML = price;
 
-  get_time = getTimeElapsed();
-  // console.log('sunccfully render the path :');
-  setTimeout(() => {
-    window.location.href = `${current_url}/api/scorecard?question_type=${question_type}&selected_level=${selected_level}&user_type=${user_type}&level=${slot - 1}&time=${encodeURIComponent(get_time)}`;
-  }, 100);
+  const finalLevel = Math.max(1, slot - 1);
+  const get_time = getTimeElapsed();
 
-  // Clear markers
+  setTimeout(() => {
+    window.location.href = `${current_url}/api/scorecard?question_type=${encodeURIComponent(question_type)}&selected_level=${selected_level}&user_type=${user_type}&level=${finalLevel}&time=${encodeURIComponent(get_time)}`;
+  }, 1000);
+
   document.querySelectorAll('.reached').forEach((marker) => {
     marker.style.visibility = 'hidden';
   });

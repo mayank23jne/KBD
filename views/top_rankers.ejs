@@ -30,7 +30,7 @@ body {
    MAIN CARD (MODAL STYLE)
 ========================= */
 .ranker-container {
-  max-width: 900px;
+  /* max-width: 900px; */
   margin: auto;
   background: #222;
   border-radius: 16px;
@@ -38,167 +38,14 @@ body {
   box-shadow: 0 0 20px rgba(255,165,0,0.4);
 }
 
-/* =========================
-   HEADER
-========================= */
-.ranker-header {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.ranker-header h2 {
-  color: orange;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-/* =========================
-   TABS (NO SCROLL)
-========================= */
-.top-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  /* margin-bottom: 15px; */
-}
-
-.top-buttons button {
-  border: 2px solid orange;
-  background: transparent;
-  color: orange;
-  font-weight: bold;
-  border-radius: 25px;
-  height: 40px;
-  width: 22%;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.top-buttons button.active {
-  background: orange;
-  color: #3d2b1f;
-  border: none;
-}
-
-@media (max-width: 700px) {
-  .top-buttons button {
-    width: 100%;
-  }
-}
-
-/* =========================
-   SECTIONS
-========================= */
-.section {
+/* .section {
   display: none;
 }
 .section.active {
   display: block;
-}
+} */
 
-/* =========================
-   MY SCORE SECTION
-========================= */
-.container {
-  text-align: center;
-}
 
-.score-title {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.username {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.stats {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.stat-box {
-  color: orange;
-  font-size: 22px;
-  margin: 10px;
-}
-
-.stat-box span {
-  display: block;
-  color: white;
-  font-size: 20px;
-  margin-top: 8px;
-}
-
-.footer-time {
-  color: orange;
-  font-size: 22px;
-  margin-top: 15px;
-}
-
-.footer-time span {
-  display: block;
-  color: white;
-  font-size: 20px;
-  margin-top: 8px;
-}
-
-/* =========================
-   USER RANK TEXT
-========================= */
-#user_rank {
-  color: orange;
-  font-size: 18px;
-  text-align: center;
-  margin: 10px 0;
-}
-
-/* =========================
-   TABLE (SCROLL ONLY TABLE)
-========================= */
-.table-wrap {
-  max-height: 420px;
-  overflow-y: auto;
-}
-
-.table-wrap::-webkit-scrollbar {
-  width: 6px;
-}
-.table-wrap::-webkit-scrollbar-thumb {
-  background: orange;
-  border-radius: 5px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-th, td {
-  padding: 10px;
-  border: 1px solid rgba(255,255,255,0.3);
-  text-align: center;
-}
-
-th {
-  background: #333;
-  color: gold;
-  position: sticky;
-  top: 0;
-}
-
-tr:nth-child(even) {
-  background: rgba(255,255,255,0.08);
-}
-
-tr:hover {
-  background: rgba(255,255,255,0.15);
-}
 </style>
 </head>
 

@@ -1,121 +1,178 @@
 <style>
-/* ===== TABS ===== */
+/* ================== TABS ================== */
 .top-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 10px !important;
   padding: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
-
-.top-buttons button {
+.tab-btn
+{
+ margin-top: 0px !important;
+}
+.top-buttons .tab-btn {
+  width: 100%;
   border: 2px solid orange;
   border-radius: 25px;
   background: transparent;
   color: orange;
-  font-weight: bold;
-  height: 40px;
-  width: 20%;
-  font-size: 14px;
+  font-weight: 600;
+  height: 50px;
+  /* min-width: 240px; */
   cursor: pointer;
-  margin: 5px;
   transition: 0.3s;
 }
 
-.top-buttons button.active {
+.top-buttons .tab-btn.active {
   background: orange;
   color: #3d2b1f;
-  border: none;
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 650px) {
-  .top-buttons {
-    display: block;
-  }
-  .top-buttons button {
-    width: 100%;
-    margin: 12px 0;
-  }
-  .stats {
-    margin-top: 20px;
-  }
-  .footer-time {
-    margin-top: 20px;
-  }
+/* ================== COMMON ================== */
+.container {
+  padding: 20px;
+  text-align: center;
 }
 
-/* ===== COMMON ===== */
-.section { display: none; }
-.section.active { display: block; }
-
-.container { padding: 20px; }
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}
 
 .score-title {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .username {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
-  color: white;
-  margin-top: 10px;
+  color: #fff;
+  margin: 10px 0;
 }
 
+/* ================== STATS ================== */
 .stats {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 30px;
   flex-wrap: wrap;
+  margin: 20px 0;
 }
 
 .stat-box {
   color: orange;
-  font-size: 24px;
-  margin: 10px;
+  font-size: 20px;
 }
 
 .stat-box span {
   display: block;
-  font-size: 22px;
   color: white;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .footer-time {
+  margin-top: 20px;
   color: orange;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .footer-time span {
   display: block;
   color: white;
-  font-size: 22px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 #user_rank {
+  text-align: center;
   color: orange;
-  font-size: 24px;
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
-/* ===== TABLE ===== */
-#winner-table {
+/* ================== TABLE ================== */
+.table-scroll {
   width: 100%;
-  border-collapse: collapse;
+  overflow-x: auto;
 }
 
-#winner-table th,
-#winner-table td {
+.table-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.table-scroll::-webkit-scrollbar-thumb {
+  background: orange;
+  border-radius: 4px;
+}
+table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  table-layout: fixed; /* 🔥 IMPORTANT */
+}
+
+
+th, td {
   padding: 10px;
   border: 1px solid rgba(255,255,255,0.3);
-  text-align: center;
+  text-align: left;
+  font-size: 14px;
+  word-break: break-word;
 }
 
-#winner-table th {
+th {
   background: rgba(255,255,255,0.08);
 }
+@media (max-width: 680px) {
+  .top-buttons {
+    flex-direction: column;
+  }
+
+  .top-buttons .tab-btn {
+    width: 100%;
+  }
+}
+
+/* ================== MOBILE ================== */
+@media (max-width: 500px) {
+  .top-buttons {
+    flex-direction: column;  
+  }
+
+  .top-buttons .tab-btn {
+    width: 100%;
+    min-width: 140px;
+  }
+
+  table {
+    min-width: 280px;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
+th:nth-child(1),
+td:nth-child(1) {
+  width: 20px;
+  max-width: 20px;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 50px;
+  max-width: 50px;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 30px;
+  max-width: 30px;
+}
+
 </style>
+
 <script>
 <%
 function formatTime(timeStr) {
@@ -135,11 +192,9 @@ function formatTime(timeStr) {
   return result.join(":");
 }
 %>
-
 </script>
 
-
-<!-- TABS -->
+<!-- ================== TABS ================== -->
 <div class="top-buttons">
   <button class="tab-btn active" onclick="showSection('myScores', this)">My Scores</button>
   <button class="tab-btn" onclick="showSection('questionsPlayed', this)">Questions Played</button>
@@ -147,16 +202,7 @@ function formatTime(timeStr) {
   <button class="tab-btn" onclick="showSection('timePlayed', this)">Time Played</button>
 </div>
 
-<script>
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
-</script>
-
-<!-- MY SCORES -->
+<!-- ================== MY SCORES ================== -->
 <div id="myScores" class="section active">
   <div class="container">
     <div class="score-title">Your Score for <%= questionType %> Game</div>
@@ -174,71 +220,77 @@ function showSection(id, btn) {
   </div>
 </div>
 
-<!-- QUESTIONS -->
+<!-- ================== QUESTIONS ================== -->
 <div id="questionsPlayed" class="section">
-  <p id="user_rank">Your Rank is : <%= userQuestionRank %></p>
-  <table id="winner-table">
-    <thead>
-      <tr>
-        <th>🏅 Rank</th>
-        <th> <i class="fa-solid fa-user"></i> Username</th>
-        <th>🚀 Score</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% question_played.forEach(s => { %>
-      <tr>
-        <td>#<%= s.rank %></td>
-        <td><%= s.fullname || s.username %></td>
-        <td><%= s.question_score %></td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+  <p id="user_rank">Your Rank : <%= userQuestionRank %></p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>🏅 Rank</th>
+          <th><i class="fa-solid fa-user"></i> Username</th>
+          <th>🚀 Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% question_played.forEach(s => { %>
+        <tr>
+          <td>#<%= s.rank %></td>
+          <td><%= s.fullname || s.username %></td>
+          <td><%= s.question_score %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<!-- GAMES -->
+<!-- ================== GAMES ================== -->
 <div id="gamesPlayed" class="section">
-  <p id="user_rank">Your Rank is : <%= userGameRank %></p>
-  <table id="winner-table">
-    <thead>
-      <tr>
-        <th>🏅 Rank</th>
-        <th> <i class="fa-solid fa-user"></i> Username</th>
-        <th> 🚀 Game</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% game_played.forEach(s => { %>
-      <tr>
-        <td>#<%= s.rank %></td>
-        <td><%= s.fullname || s.username %></td>
-        <td><%= s.game_played %></td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+  <p id="user_rank">Your Rank : <%= userGameRank %></p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>🏅 Rank</th>
+          <th><i class="fa-solid fa-user"></i> Username</th>
+          <th>🚀 Games</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% game_played.forEach(s => { %>
+        <tr>
+          <td>#<%= s.rank %></td>
+          <td><%= s.fullname || s.username %></td>
+          <td><%= s.game_played %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<!-- TIME -->
+<!-- ================== TIME ================== -->
 <div id="timePlayed" class="section">
-  <p id="user_rank">Your Rank is : <%= userTimeRank %></p>
-  <table id="winner-table">
-    <thead>
-      <tr>
-        <th>🏅 Rank</th>
-        <th> <i class="fa-solid fa-user"></i> Username</th>
-        <th>⏰ Play Time</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% time_played.forEach(s => { %>
-      <tr>
-        <td>#<%= s.rank %></td>
-        <td><%= s.fullname || s.username %></td>
-        <td><%= s.total_play_time ? formatTime(s.total_play_time) : '-' %></td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+  <p id="user_rank">Your Rank : <%= userTimeRank %></p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>🏅 Rank</th>
+          <th><i class="fa-solid fa-user"></i> Username</th>
+          <th>⏰ Play Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% time_played.forEach(s => { %>
+        <tr>
+          <td>#<%= s.rank %></td>
+          <td><%= s.fullname || s.username %></td>
+          <td><%= s.total_play_time ? formatTime(s.total_play_time) : '-' %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
