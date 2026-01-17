@@ -336,7 +336,7 @@ class Topscore {
                       AND used_questions.used_datetime IS NOT NULL
                       AND users.user_type != 'guest'
                     GROUP BY used_questions.user_id, users.username, users.fullname, users.user_type
-                    ORDER BY question_score DESC
+                    ORDER BY question_score DESC, users.username ASC
                 ) AS ordered_scores
                 CROSS JOIN (SELECT @rank := 0) AS vars
             ) AS ranked;
@@ -376,7 +376,7 @@ class Topscore {
                 WHERE used_questions.used_datetime IS NOT NULL
                   AND users.user_type != 'guest'
                 GROUP BY used_questions.user_id, users.username, users.fullname, users.user_type
-                ORDER BY question_score DESC
+                ORDER BY question_score DESC, users.username ASC
             ) AS ordered_scores
             CROSS JOIN (SELECT @rank := 0) AS vars
         ) AS ranked;
@@ -415,8 +415,9 @@ class Topscore {
                         INNER JOIN users ON users.id = used_questions.user_id
                         WHERE questions.question_type = ?
                         AND used_questions.used_datetime IS NOT NULL
+                        AND users.user_type != 'guest'
                         GROUP BY used_questions.user_id, users.username, users.fullname, users.user_type
-                        ORDER BY question_score DESC
+                        ORDER BY question_score DESC, users.username ASC
                     ) AS ordered_scores
                     CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked
@@ -472,7 +473,7 @@ class Topscore {
                     WHERE scorecard.question_type = ?
                     AND users.user_type != 'guest'
                     GROUP BY scorecard.user_id, users.username, users.fullname, users.user_type, scorecard.game_played
-                    ORDER BY game_played DESC
+                    ORDER BY game_played DESC, users.username ASC
                 ) AS ordered_scores
                 CROSS JOIN (SELECT @rank := 0) AS vars
             ) AS ranked;
@@ -509,8 +510,9 @@ class Topscore {
                         FROM scorecard 
                         INNER JOIN users ON users.id = scorecard.user_id
                         WHERE scorecard.question_type = ?
+                        AND users.user_type != 'guest'
                         GROUP BY scorecard.user_id, users.username, users.fullname, users.user_type, scorecard.game_played
-                        ORDER BY game_played DESC
+                        ORDER BY game_played DESC, users.username ASC
                     ) AS ordered_scores
                     CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked
@@ -566,7 +568,7 @@ class Topscore {
                         WHERE scorecard.question_type = ?
                         AND users.user_type != 'guest'
                         GROUP BY scorecard.user_id, users.username, users.fullname, users.user_type, scorecard.total_play_time
-                        ORDER BY total_play_time DESC
+                        ORDER BY total_play_time DESC, users.username ASC
                     ) AS ordered_scores
                     CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked;
@@ -603,8 +605,9 @@ class Topscore {
                         FROM scorecard 
                         INNER JOIN users ON users.id = scorecard.user_id
                         WHERE scorecard.question_type = ?
+                        AND users.user_type != 'guest'
                         GROUP BY scorecard.user_id, users.username, users.fullname, users.user_type, scorecard.total_play_time
-                        ORDER BY total_play_time DESC
+                        ORDER BY total_play_time DESC, users.username ASC
                     ) AS ordered_scores
                     CROSS JOIN (SELECT @rank := 0) AS vars
                 ) AS ranked

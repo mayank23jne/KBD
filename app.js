@@ -358,7 +358,7 @@ app.get('/api/top-score', async (req, res) => {
 
     const isLoggedIn = !!user_id; // true if user is logged in
 
-    // ===== MY SCORES =====
+    // ===== MY SCORES =====  
     const questionData = isLoggedIn
       ? await Topscore.getUsedQuestionCount(user_id, questionType)
       : { question_score: 0 };
