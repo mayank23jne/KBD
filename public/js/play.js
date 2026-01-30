@@ -23,6 +23,7 @@ const timer = {
   running: false,
   timeLeft: 45,
   timeTotal: 45,
+  timeoutHandle: null, // New handle for question timer
 };
 
 // Question Container
@@ -108,7 +109,18 @@ function updateTimer() {
 }
 
 // Start counting time when page loads
-const timerInterval = setInterval(updateTimer, 1000);
+let totalTimerInterval = setInterval(updateTimer, 1000);
+
+function startTotalTimer() {
+  if (!totalTimerInterval) {
+    totalTimerInterval = setInterval(updateTimer, 1000);
+  }
+}
+
+function stopTotalTimer() {
+  clearInterval(totalTimerInterval);
+  totalTimerInterval = null;
+}
 
 // Access time when needed
 function getTimeElapsed() {
@@ -1151,6 +1163,7 @@ function startResumeTimer() {
     }, 10000); // every 10 seconds
 
     decrementTimer(timer.timeLeft);
+    startTotalTimer();
   }
 }
 
@@ -1158,6 +1171,12 @@ function pauseTimer() {
   if (timer.running) {
     // Pause Timer
     timer.running = false;
+
+    // Clear question timer handle immediately
+    if (timer.timeoutHandle) {
+      clearTimeout(timer.timeoutHandle);
+      timer.timeoutHandle = null;
+    }
 
     // Stop Tick-Tick Sound
     tickAudio.pause();
@@ -1167,8 +1186,28 @@ function pauseTimer() {
     clearInterval(backgroundInterval);
     backgroundAudio.pause();
     backgroundAudio.currentTime = 0;
+
+    stopTotalTimer();
   }
 }
+
+// Handle Page Visibility Change
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    console.log('App moved to background, pausing timers...');
+    // Store the state of the question timer to know if we should resume it
+    window.wasTimerRunning = timer.running;
+    pauseTimer();
+    stopTotalTimer(); // Ensure total timer stops regardless of question timer state
+  } else {
+    console.log('App moved to foreground, resuming timers...');
+    startTotalTimer();
+    // Only resume the question timer if it was running before the app was hidden
+    if (window.wasTimerRunning) {
+      startResumeTimer();
+    }
+  }
+});
 
 // function decrementTimer() {
 //     if (timer.running) {
@@ -1196,7 +1235,16 @@ function pauseTimer() {
 
 function decrementTimer() {
   if (timer.running) {
-    setTimeout(() => {
+    // Clear any existing handle before scheduling a new one
+    if (timer.timeoutHandle) clearTimeout(timer.timeoutHandle);
+
+    timer.timeoutHandle = setTimeout(() => {
+      // CRITICAL: Double check that we are still running before updating UI
+      if (!timer.running) {
+        timer.timeoutHandle = null;
+        return;
+      }
+
       if (timer.timeLeft >= 1) {
         timer.timeLeft--;
         let progress =
@@ -1208,25 +1256,13 @@ function decrementTimer() {
         timer.span.innerHTML = timer.timeLeft;
 
         if (timer.timeLeft <= 10) {
-          // Show the elements
-          // document.getElementById('progress-bar-left').style.display = "block";
-          // document.getElementById('progress-bar-right').style.display = "block";
-          // timer.span.style.display = "block";
-
-          // Play ticking sound
           tickAudio.play();
         }
-        // else {
-        //     // Hide the elements before 10 seconds
-        //     document.getElementById('progress-bar-left').style.display = "none";
-        //     document.getElementById('progress-bar-right').style.display = "none";
-        //     timer.span.style.display = "none";
-        // }
 
         decrementTimer();
       } else {
         console.log('Time is up');
-        // buttons.lock.click();
+        timer.timeoutHandle = null;
         checkAnswer(null);
       }
     }, 1000);

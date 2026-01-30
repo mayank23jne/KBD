@@ -158,6 +158,10 @@ app.get('/api/question', (req, res) => {
   res.render('addquestion');
 });
 
+// app.get('/backtohome', (req, res) => {
+//   res.redirect('/');
+// });
+
 app.get('/privacy-policy', (req, res) => {
   res.render('privacy_policy');
 });
@@ -188,45 +192,19 @@ app.get('/api/scorecard', async (req, res) => {
     const id = userData.id?.toString().trim();
     const username = userData.username?.trim() || 'Guest';
     const user_type = userData.user_type?.trim() || 'guest';
-    const fullname = userData.fullname?.trim() || username;
+    // 3️⃣ Fetch fullname from DB directly
+    let userFullname = username;
+    try {
+      const [rows] = await db
+        .promise()
+        .query('SELECT fullname FROM users WHERE id = ? LIMIT 1', [id]);
 
-    // ✅ FINAL display name (fullname optional)
-
-    if (!id || id === 'null' || id === 'undefined') {
-      return res.redirect('/login');
+      if (rows.length > 0 && rows[0].fullname) {
+        userFullname = rows[0].fullname;
+      }
+    } catch (err) {
+      console.error('Error fetching fullname:', err);
     }
-
-    // 3️⃣ Fetch fullname from DB if not in session
-    // if (!userFullname) {
-    //   const [rows] = await db
-    //     .promise()
-    //     .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
-    //       id,
-    //     ]);
-
-    //   if (rows.length > 0) {
-    //     userFullname = rows[0].fullname || rows[0].username || 'Player';
-    //   } else {
-    //     userFullname = username || 'Player';
-    //   }
-
-    //   // update session safely
-    //   req.session.user = {
-    //     ...req.session.user,
-    //     fullname: userFullname,
-    //   };
-
-    //   // IMPORTANT: force save
-    //   await new Promise((resolve, reject) => {
-    //     req.session.save((err) => {
-    //       if (err) {
-    //         console.error('Session save failed:', err);
-    //         reject(err);
-    //       }
-    //       resolve();
-    //     });
-    //   });
-    // }
 
     // 4️⃣ Extract and validate query params
     const question_type = req.query.question_type?.trim() || '';
@@ -271,7 +249,7 @@ app.get('/api/scorecard', async (req, res) => {
         play_level: level,
         question_type,
       });
-    } catch {}
+    } catch { }
 
     // 7️⃣ Fetch Question stats
     try {
@@ -287,7 +265,7 @@ app.get('/api/scorecard', async (req, res) => {
         question_type,
       );
       userQuestionRank = userQuestionRankData?.rank || '-';
-    } catch {}
+    } catch { }
 
     // 8️⃣ Fetch Game stats
     try {
@@ -302,7 +280,7 @@ app.get('/api/scorecard', async (req, res) => {
         question_type,
       );
       userGameRank = userGameRankData?.rank || '-';
-    } catch {}
+    } catch { }
 
     // 9️⃣ Fetch Time stats
     try {
@@ -317,12 +295,12 @@ app.get('/api/scorecard', async (req, res) => {
         question_type,
       );
       userTimeRank = userTimeRankData?.rank || '-';
-    } catch {}
+    } catch { }
 
     // 10️⃣ Render scorecard safely
     res.render('scorecard', {
       username,
-      fullname: fullname,
+      fullname: userFullname,
       id,
       user_type: user_type,
       questionType: question_type,
@@ -350,13 +328,11 @@ app.get('/api/scorecard', async (req, res) => {
 });
 app.get('/api/top-score', async (req, res) => {
   try {
-    // console.log('========== TOP SCORE API HIT ==========');
-
     const user = req.session.user || {};
     const user_id = user.id || null;
-    const questionType = 'Basic';
+    const questionType = req.query.question_type || 'Basic';
 
-    const isLoggedIn = !!user_id; // true if user is logged in
+    const isLoggedIn = !!user_id;
 
     // ===== MY SCORES =====  
     const questionData = isLoggedIn
@@ -368,10 +344,6 @@ app.get('/api/top-score', async (req, res) => {
     const timeData = isLoggedIn
       ? await Topscore.getUserTimePlayCount(user_id, questionType)
       : { total_play_time: '00h:00m:00s' };
-
-    // console.log('QUESTION DATA =>', questionData);
-    // console.log('GAME DATA =>', gameData);
-    // console.log('TIME DATA =>', timeData);
 
     // ===== RANKED TABLES =====
     const question_played =
@@ -394,15 +366,11 @@ app.get('/api/top-score', async (req, res) => {
     let userFullname = user.fullname || null;
 
     if (!userFullname && isLoggedIn) {
-      // console.log('🔍 FULLNAME NOT IN SESSION, FETCHING FROM DB');
-
       const [rows] = await db
         .promise()
         .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
           user_id,
         ]);
-
-      // console.log('DB USER ROW =>', rows);
 
       if (rows.length > 0) {
         userFullname = rows[0].fullname || rows[0].username || 'Player';
@@ -410,31 +378,21 @@ app.get('/api/top-score', async (req, res) => {
         userFullname = user.username || 'Player';
       }
 
-      // Save fullname to session for future requests
       req.session.user = { ...req.session.user, fullname: userFullname };
     }
-
-    // console.log('✅ FINAL USER FULLNAME =>', userFullname);
 
     // ===== FINAL RENDER =====
     res.render('top_rankers', {
       questionType,
-
-      // MY SCORE
       game_score: gameData?.game_played || 0,
       question_score: questionData?.question_score || 0,
       time_score: timeData?.total_play_time || '00h:00m:00s',
-
       fullname: userFullname,
-      username: user.username || null, // important: null if not logged in
-      isLoggedIn, // boolean flag for template
-
-      // TABLE DATA
+      username: user.username || null,
+      isLoggedIn,
       question_played,
       game_played,
       time_played,
-
-      // RANKS
       userQuestionRank: userQuestionRank?.rank || '-',
       userGameRank: userGameRank?.rank || '-',
       userTimeRank: userTimeRank?.rank || '-',
@@ -442,22 +400,17 @@ app.get('/api/top-score', async (req, res) => {
   } catch (err) {
     console.error('❌ TOP SCORE ERROR:', err);
 
-    // Render fallback if error occurs
     res.render('top_rankers', {
-      questionType: 'Basic',
-
+      questionType: req.query.question_type || 'Basic',
       game_score: 0,
       question_score: 0,
       time_score: '00h:00m:00s',
-
       fullname: null,
       username: null,
       isLoggedIn: false,
-
       question_played: [],
       game_played: [],
       time_played: [],
-
       userQuestionRank: '-',
       userGameRank: '-',
       userTimeRank: '-',

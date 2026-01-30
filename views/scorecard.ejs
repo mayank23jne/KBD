@@ -1,204 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>Welcome to KBD</title>
-        <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
-        <link
-            href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            body {
-                margin: 0;
-                overflow-x: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                background: linear-gradient(135deg, #1a1a40, #3a1c71);
-                color: white;
-                font-family: 'Montserrat', sans-serif;
-            }
 
-            .bottom-tag-line {
-                text-align: center;
-                font-size: 12px;
-                margin-top: 2rem;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Welcome to KBD</title>
+    <link rel="stylesheet" type="text/css" href="/styles/addquestion.css" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Poppins|Raleway&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a40, #3a1c71);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+        }
 
-            .scorecard-container {
-                padding: 2rem;
-                border-radius: 20px;
-                box-shadow: 0 10px 40px rgba(255, 105, 180, 0.3);
-                background: rgba(30, 30, 60, 0.95);
-                width: 100%;
-                max-width: 600px;
-                /* text-align: center; */
-                z-index: 2;
-            }
+        .bottom-tag-line {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 2rem;
+        }
 
-            .score-item {
-                display: flex;
-                justify-content: space-between;
-                padding: 7px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-                font-size: 1.1rem;
-            }
+        .scorecard-container {
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 105, 180, 0.3);
+            background: rgba(30, 30, 60, 0.95);
+            width: 100%;
+            max-width: 600px;
+            /* text-align: center; */
+            z-index: 2;
+        }
 
-            /* .score-item:last-child {
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.1rem;
+        }
+
+        /* .score-item:last-child {
                 border-bottom: none;
             } */
 
-            #btn-home {
-                margin-top: 1rem;
-                padding: 10px 20px;
-                font-size: 1rem;
-                font-weight: 600;
-                color: #fff;
-                background: #4e54c8;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background 0.3s ease;
+        #btn-home {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: #4e54c8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #btn-home:hover {
+            background: #6a11cb;
+        }
+
+        #btn-play-again,
+        #donate_button {
+            margin-top: 1rem;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: #4e54c8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #btn-play-again:hover,
+        #donate_button:hover {
+            background: #6a11cb;
+        }
+
+        #language-select {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Mobile responsiveness */
+        /* @media (max-width: 768px) { */
+        @media (max-width: 400px) {
+            .scorecard-container {
+                padding: 1rem;
             }
 
-            #btn-home:hover {
-                background: #6a11cb;
+            #header {
+                font-size: 1.2rem;
             }
 
-            #btn-play-again , #donate_button {
-                margin-top: 1rem;
-                padding: 10px 20px;
-                font-size: 1rem;
-                font-weight: 600;
-                color: #fff;
-                background: #4e54c8;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background 0.3s ease;
+            .score-item {
+                font-size: 0.9rem;
             }
 
-            #btn-play-again:hover , #donate_button:hover {
-                background: #6a11cb;
+            #btn-home,
+            #btn-play-again,
+            #donate_button {
+                padding: 8px 12px;
+                font-size: 0.85rem;
             }
+        }
 
-            #language-select {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                padding: 5px 10px;
-                border-radius: 5px;
-                font-size: 1rem;
-            }
+        label {
+            margin: 15px 0 8px !important;
+        }
 
-            #fireworksCanvas {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                pointer-events: none;
-                z-index: 1;
-            }
+        /* Landscape Mode */
+        @media screen and (orientation: landscape) {
+            @media (max-height: 600px) {
+                body {
+                    height: auto;
+                    padding: 12px 25px;
+                }
 
-            /* Mobile responsiveness */
-            /* @media (max-width: 768px) { */
-            span {
-                margin: 15px 0 8px !important;
-            }
-            /* } */
+                .scorecard-container {
+                    padding: 1rem 3rem;
+                }
 
-            label {
-                margin: 15px 0 8px !important;
-            }
+                #btn-winner {
+                    margin-top: -20px;
+                    font-weight: 500;
+                    left: 85%;
+                    height: 30px;
+                    width: 25%;
+                }
 
-            /* Landscape Mode */
-            @media screen and (orientation: landscape) {
-                @media (max-height: 600px) {
-                    body{
-                        height: auto;
-                        padding: 12px 25px;
-                    }
-                    .scorecard-container{
-                        padding: 1rem 3rem;
-                    }
-                    #btn-winner{
-                        margin-top: -20px;
-                        font-weight: 500;
-                        left: 85%;
-                        height: 30px;
-                        width: 25%;
-                    }
-                    .score-item {
-                        padding: 2px 0;
-                    }
-                    #btn-play-again{
-                        left: 70%;
-                        margin-top: -40px;
-                    }
-                    #btn-home{
-                        left: 30%;
-                        margin-top: 1rem;
-                    }
+                .score-item {
+                    padding: 2px 0;
+                }
 
-                    #share_button{
-                        margin-top: -30px !important;
-                        font-weight: 500;
-                        left: 98%;
-                        height: 30px;
-                        width: 30px;
-                        margin-left: 25px;
-                        border: none;
-                    }
+                #btn-play-again {
+                    left: 70%;
+                    margin-top: -40px;
+                }
 
-                    #share-popup{
-                        justify-content: flex-end !important;
-                        position: absolute !important;
-                        left: 70% !important;
-                        top: 1% !important;
-                        gap: 0.5rem !important;
-                    }
-                    
-                    #popup_buttons {
-                        width: 35px !important;
-                        left: 18px !important;
-                        margin-top: 0px !important;
-                        padding: 0px !important;
-                        height: 30px !important;
-                    }
-                    .scorecard{
-                        background-size: 30% 100% !important;
-                    }
+                #btn-home {
+                    left: 30%;
+                    margin-top: 1rem;
+                }
+
+                #share_button {
+                    margin-top: -30px !important;
+                    font-weight: 500;
+                    left: 98%;
+                    height: 30px;
+                    width: 30px;
+                    margin-left: 25px;
+                    border: none;
+                }
+
+                #share-popup {
+                    justify-content: flex-end !important;
+                    position: absolute !important;
+                    left: 70% !important;
+                    top: 1% !important;
+                    gap: 0.5rem !important;
+                }
+
+                #popup_buttons {
+                    width: 35px !important;
+                    left: 18px !important;
+                    margin-top: 0px !important;
+                    padding: 0px !important;
+                    height: 30px !important;
+                }
+
+                .scorecard {
+                    background-size: 30% 100% !important;
                 }
             }
+        }
 
-            @media (max-width: 350px) {
-                #play-time{
-                    width: 80px !important;
-                }
+        @media (max-width: 350px) {
+            #play-time {
+                /* width: 80px !important; */
             }
+        }
 
-            #popup_buttons{
-                width: 30px;
-                margin-top: 5px;
-                padding: 5px;
-            }
+        #popup_buttons {
+            width: 30px;
+            margin-top: 5px;
+            padding: 5px;
+        }
 
-            #share-popup{
-                justify-content: center;
-            }
+        #share-popup {
+            justify-content: center;
+        }
 
-            #share_button{
-                margin-top: 10px;
-                height: 35px;
-                padding: 5px;
-                border: none;
-            }
+        #share_button {
+            margin-top: 10px;
+            height: 35px;
+            padding: 5px;
+            border: none;
+        }
 
-            .custom-spinner {
+        .custom-spinner {
             width: 16px;
             height: 16px;
             border: 2px solid #ccc;
@@ -207,445 +229,417 @@
             animation: spin 0.8s linear infinite;
             margin: auto;
             display: none;
+        }
+
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
             }
+        }
+
+        .scorecard {
+            background: url('./../img/trophy.png') no-repeat center;
+            background-size: 40% 55%;
+        }
+
+        #label-question-type {
+            display: inline-block;
+            max-width: 100px;
+            /* or any small width */
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        #label-play-time {
+            display: inline-block;
+            max-width: 100px;
+            /* or any small width */
+            white-space: normal;
+            word-break: break-word;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 
-            @keyframes spin {
-            to { transform: rotate(360deg); }
-            }
+</head>
 
-            .scorecard{
-                background: url('./../img/trophy.png') no-repeat center;
-                background-size: 40% 55%;
-            }
-
-            #label-question-type {
-                display: inline-block;
-                max-width: 100px; /* or any small width */
-                white-space: normal;
-                word-break: break-word;
-            }
-            #label-play-time {
-                display: inline-block;
-                max-width: 100px; /* or any small width */
-                white-space: normal;
-                word-break: break-word;
-            }
-
-        </style>
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-        
-
-    </head>
-    <body>
-        <!-- Fireworks Canvas -->
-        <canvas id="fireworksCanvas"></canvas>
+<body>
+    <!-- Fireworks Canvas -->
+    <canvas id="fireworksCanvas"></canvas>
 
 
-        <div class="scorecard-container">
-          
-            
-            <div id="header">Scorecard</div>
-            <button id="btn-winner" onclick="showWinners()">
-                <i class="fa-solid fa-trophy"></i> Top Scorers
-            </button>
+    <div class="scorecard-container">
 
-            <button id="share_button" onclick="shareImage()" class="btn-light">
-                <i class="bi bi-share-fill" id="id_share_icon"></i>
-                <div class="custom-spinner" id="spinner_id"></div>
-            </button>
 
-            
+        <div id="header">Scorecard</div>
+        <button id="btn-winner" onclick="window.location.href='/api/top-score'">
+            <i class="fa-solid fa-trophy"></i> Top Scorers
+        </button>
 
-            <!-- <div id="share-popup" style="display: none; gap: 1rem;">
+        <button id="share_button" onclick="shareImage()" class="btn-light">
+            <i class="bi bi-share-fill" id="id_share_icon"></i>
+            <div class="custom-spinner" id="spinner_id"></div>
+        </button>
+
+
+
+        <!-- <div id="share-popup" style="display: none; gap: 1rem;">
                 <button id="popup_buttons" onclick="shareImage('whatsapp')" class="btn btn-success btn-sm"><i class="bi bi-whatsapp"></i></button>
                 <button id="popup_buttons" onclick="shareImage('facebook')" class="btn btn-primary btn-sm"><i class="bi bi-facebook"></i></button>
                 <button id="popup_buttons" onclick="shareImage('instagram')" class="btn btn-danger btn-sm"><i class="bi bi-instagram"></i></button>
             </div> -->
-              
-            <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 
-            <script>
-                function toggleSharePopup() {
-                  const popup = document.getElementById("share-popup");
-                  popup.style.display = popup.style.display === "none" ? "flex" : "none";
+        <script>
+            function toggleSharePopup() {
+                const popup = document.getElementById("share-popup");
+                popup.style.display = popup.style.display === "none" ? "flex" : "none";
+            }
+
+            async function shareImage() {
+                const scorecard = document.querySelector(".scorecard-container");
+                let timeTaken = "<%= time %>";
+
+                const timesec = timeTaken
+                    // sec → second / seconds
+                    .replace(/\b(\d+)\s*sec\b/gi, (match, num) => {
+                        return num === "1" ? `${num} second` : `${num} seconds`;
+                    })
+                    // min → minute / minutes
+                    .replace(/\b(\d+)\s*min\b/gi, (match, num) => {
+                        return num === "1" ? `${num} minute` : `${num} minutes`;
+                    });
+
+                // console.log(timesec);
+
+                // Hide extra UI elements for a clean screenshot
+                document.getElementById("id_share_icon").style.display = "none";
+                document.getElementById("btn-home").style.display = "none";
+                document.getElementById("btn-play-again").style.display = "none";
+                document.getElementById("btn-winner").style.display = "none";
+                document.getElementById("share_button").style.visibility = "hidden";
+                document.getElementById("donate_button").style.display = "none";
+                document.getElementById("spinner_id").style.display = "block";
+
+                try {
+                    // Capture the scorecard as canvas
+                    const canvas = await html2canvas(scorecard, {
+                        scale: window.devicePixelRatio * 2,
+                        useCORS: true,
+                        backgroundColor: null,
+                        allowTaint: true,
+                        removeContainer: true
+                    });
+
+                    // Convert to Base64 image (data URL)
+                    const base64Image = canvas.toDataURL("image/png");
+
+                    // Create your custom share message
+                    const shareMessage = `Yey, I played KBDS and finished the game in ${timesec} ! It's amazing. You should also try this Amazing Jain Game.\n\nDownload from Play Store`;
+
+                    // Prepare the payload
+                    const payload = {
+                        type: "share",
+                        message: shareMessage,
+                        image: base64Image
+                    };
+
+                    // ✅ Send the message to Ionic app
+                    if (window.cordova_iab && window.cordova_iab.postMessage) {
+                        window.cordova_iab.postMessage(JSON.stringify(payload));
+                        // console.log("Message sent to Ionic app:", payload);
+                    } else {
+                        console.warn("cordova_iab not available — probably running in browser, not InAppBrowser.");
+                        alert("Sharing only works inside the KBDS app.");
+                    }
+                } catch (err) {
+                    console.error("Error capturing or sharing:", err);
+                } finally {
+                    // Restore UI elements
+                    document.getElementById("spinner_id").style.display = "none";
+                    document.getElementById("btn-home").style.display = "block";
+                    document.getElementById("btn-play-again").style.display = "block";
+                    document.getElementById("id_share_icon").style.display = "block";
+                    document.getElementById("btn-winner").style.display = "block";
+                    document.getElementById("share_button").style.visibility = "visible";
+                    document.getElementById("donate_button").style.display = "block";
                 }
-                
-                async function shareImage() {
-                        const scorecard = document.querySelector(".scorecard-container");
-                        let timeTaken = "<%= time %>";
-
-                        const timesec = timeTaken
-                        // sec → second / seconds
-                        .replace(/\b(\d+)\s*sec\b/gi, (match, num) => {
-                            return num === "1" ? `${num} second` : `${num} seconds`;
-                        })
-                        // min → minute / minutes
-                        .replace(/\b(\d+)\s*min\b/gi, (match, num) => {
-                            return num === "1" ? `${num} minute` : `${num} minutes`;
-                        });
-
-                        // console.log(timesec);
-
-                        // Hide extra UI elements for a clean screenshot
-                        document.getElementById("id_share_icon").style.display = "none";
-                        document.getElementById("btn-home").style.display = "none";
-                        document.getElementById("btn-play-again").style.display = "none";
-                        document.getElementById("btn-winner").style.display = "none";
-                        document.getElementById("share_button").style.visibility = "hidden";
-                        document.getElementById("donate_button").style.display = "none";
-                        document.getElementById("spinner_id").style.display = "block";
-
-                        try {
-                            // Capture the scorecard as canvas
-                            const canvas = await html2canvas(scorecard, {
-                            scale: window.devicePixelRatio * 2,
-                            useCORS: true,
-                            backgroundColor: null,
-                            allowTaint: true,
-                            removeContainer: true
-                            });
-
-                            // Convert to Base64 image (data URL)
-                            const base64Image = canvas.toDataURL("image/png");
-
-                            // Create your custom share message
-                            const shareMessage = `Yey, I played KBDS and finished the game in ${timesec} ! It's amazing. You should also try this Amazing Jain Game.\n\nDownload from Play Store`;
-
-                            // Prepare the payload
-                            const payload = {
-                            type: "share",
-                            message: shareMessage,
-                            image: base64Image
-                            };
-
-                            // ✅ Send the message to Ionic app
-                            if (window.cordova_iab && window.cordova_iab.postMessage) {
-                            window.cordova_iab.postMessage(JSON.stringify(payload));
-                            // console.log("Message sent to Ionic app:", payload);
-                            } else {
-                            console.warn("cordova_iab not available — probably running in browser, not InAppBrowser.");
-                            alert("Sharing only works inside the KBDS app.");
-                            }
-                        } catch (err) {
-                            console.error("Error capturing or sharing:", err);
-                        } finally {
-                            // Restore UI elements
-                            document.getElementById("spinner_id").style.display = "none";
-                            document.getElementById("btn-home").style.display = "block";
-                            document.getElementById("btn-play-again").style.display = "block";
-                            document.getElementById("id_share_icon").style.display = "block";
-                            document.getElementById("btn-winner").style.display = "block";
-                            document.getElementById("share_button").style.visibility = "visible";
-                            document.getElementById("donate_button").style.display = "block";
-                        }
-                        }
+            }
 
 
 
-            </script>
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                    const timeStr = "<%= time %>"; // e.g. "45sec" | "1min 5sec" | "2min"
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const timeStr = "<%= time %>"; // e.g. "45sec" | "1min 5sec" | "2min"
 
-                    let min = 0;
-                    let sec = 0;
+                let min = 0;
+                let sec = 0;
 
-                    const minMatch = timeStr.match(/(\d+)\s*min/i);
-                    const secMatch = timeStr.match(/(\d+)\s*sec/i);
+                const minMatch = timeStr.match(/(\d+)\s*min/i);
+                const secMatch = timeStr.match(/(\d+)\s*sec/i);
 
-                    if (minMatch) min = parseInt(minMatch[1], 10);
-                    if (secMatch) sec = parseInt(secMatch[1], 10);
+                if (minMatch) min = parseInt(minMatch[1], 10);
+                if (secMatch) sec = parseInt(secMatch[1], 10);
 
-                    let displayTime = "-";
+                let displayTime = "-";
 
-                    if (min > 0) {
+                if (min > 0) {
                     displayTime = `${min} m${min > 1 ? "" : ""}`;
                     if (sec > 0) {
                         displayTime += ` ${sec} se${sec > 1 ? "c" : ""}`;
                     }
-                    } else if (sec > 0) {
+                } else if (sec > 0) {
                     displayTime = `${sec} se${sec > 1 ? "c" : ""}`;
-                    }
+                }
 
-                    document.getElementById("play-time").textContent = displayTime;
-                });
-                </script>
-
-                
+                document.getElementById("play-time").textContent = displayTime;
+            });
+        </script>
 
 
-            <div class="scorecard">
-                <div class="score-item">
-                    <label id="label-username">Player:</label>
-                    <!-- <span id="username" ><%= username %></span> -->
-                    <span id="username" style="margin: 20px 0 8px;">
-                        <%= typeof fullname !== "undefined" && fullname ? fullname : username %>
-                        </span>
 
 
-                </div>  
+        <div class="scorecard">
+            <div class="score-item">
+                <label id="label-username">Player:</label>
+                <!-- <span id="username" ><%= username %></span> -->
+                <span id="username" style="margin: 20px 0 8px;">
+                    <%= typeof fullname !=="undefined" && fullname ? fullname : username %>
+                </span>
 
-                <div class="score-item">
-                    <label id="label-question-type">Level Played:</label>
-                    <span id="question-type"><%= questionType %></span>
-                </div>
 
-                <div class="score-item">
-                    <label id="label-play-time">Play Time:</label>
-                    <span id="play-time" style="margin-left: 20px; "></span>
-                </div>
-
-                <div class="score-item">
-                    <label id="label-play-level">Question Cleared:</label>
-                    <span id="play-level"><%= level %></span>
-                </div>
             </div>
 
-            <button id="btn-home" onclick="goHome()">Back to Home</button>
-            <button id="btn-play-again" onclick="playAgain()">Play Again</button>
-            <button id="donate_button" onclick="window.location.href ='/donate'">Donate</button>
-
-
-            <p class="bottom-tag-line">Directed by Vikas Jain</p>
-            
-            
-            <!-- Winner Popup Modal -->
-         <div id="winner-modal" class="modal" style="display:none">
-            <div class="modal-content">
-             <span class="close" onclick="closeModal()">&times;</span>
-
-                <%- include('partials/scorecard', {
-                fullname,
-                username,
-                questionType,
-                game_score,
-                question_score,
-                time_score,
-                question_played,
-                game_played,
-                time_played,
-                userQuestionRank,
-                userGameRank,
-                userTimeRank
-                }) %>
-
+            <div class="score-item">
+                <label id="label-question-type">Level Played:</label>
+                <span id="question-type">
+                    <%= questionType %>
+                </span>
             </div>
-         </div>
 
+            <div class="score-item">
+                <label id="label-play-time">Play Time:</label>
+                <span id="play-time" style="margin-left: 20px; "></span>
+            </div>
 
-            <div id="score_overlay" style="display: none;"></div>
-
+            <div class="score-item">
+                <label id="label-play-level">Question Cleared:</label>
+                <span id="play-level">
+                    <%= level %>
+                </span>
+            </div>
         </div>
 
+        <button id="btn-home" onclick="goHome()">Back to Home</button>
+        <button id="btn-play-again" onclick="playAgain()">Play Again</button>
+        <button id="donate_button" onclick="window.location.href ='/donate'">Donate</button>
 
-        <script>
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
-    const selected_level = getQueryParam('selected_level') || ''; 
-    const user_type = getQueryParam('user_type') || ''; 
 
-    function goHome() {
-        let user = localStorage.getItem("last_user");
-        
-        // Check if user exists and has valid user data (not guest)
-        if (user) {
-            try {
-                user = JSON.parse(user);
-                // Check if user has proper id and username (guest won't have these)
-                if (user?.id && user?.username && user.id !== "guest") {
-                    window.location.href = `${window.location.origin}/?id=${user.id}&username=${user.username}`;
-                    return;
+        <p class="bottom-tag-line">Directed by Vikas Jain</p>
+
+
+
+    </div>
+
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        const selected_level = getQueryParam('selected_level') || '';
+        const user_type = getQueryParam('user_type') || '';
+
+        function goHome() {
+            let user = localStorage.getItem("last_user");
+
+            // Check if user exists and has valid user data (not guest)
+            if (user) {
+                try {
+                    user = JSON.parse(user);
+                    // Check if user has proper id and username (guest won't have these)
+                    if (user?.id && user?.username && user.id !== "guest") {
+                        window.location.href = `${window.location.origin}/?id=${user.id}&username=${user.username}`;
+                        return;
+                    }
+                } catch (e) {
+                    // Invalid JSON, treat as guest
+                    localStorage.removeItem("last_user");
                 }
-            } catch (e) {
-                // Invalid JSON, treat as guest
-                localStorage.removeItem("last_user");
             }
-        }
-        
-        // Guest user or no valid user → redirect to login/home
-        window.location.href = '/';
-    }
 
-    function playAgain() {
-        // For guests: Allow play again WITHOUT login
-        const urlParams = new URLSearchParams(window.location.search);
-        const userType = urlParams.get('user_type');
-        
-        if (userType === 'guest') {
-            // Guest can play again directly
-            let question_type = document.getElementById('question-type').innerText;
-            window.location.href = `/play?lang=hi` +
-                `&user_type=guest` +
-                `&q_type=${encodeURIComponent(question_type)}` +
-                `&level=${encodeURIComponent(selected_level)}` +
-                `&action=playagain`;
-            return;
-        }
-
-        // Registered user logic
-        let user = localStorage.getItem("last_user");
-        if (!user) {
+            // Guest user or no valid user → redirect to login/home
             window.location.href = '/';
-            return;
         }
 
-        try {
-            user = JSON.parse(user);
-            if (!user?.id || !user?.username || user.id === "guest" || user.username === "guest") {
+        function playAgain() {
+            // For guests: Allow play again WITHOUT login
+            const urlParams = new URLSearchParams(window.location.search);
+            const userType = urlParams.get('user_type');
+
+            if (userType === 'guest') {
+                // Guest can play again directly
+                let question_type = document.getElementById('question-type').innerText;
+                window.location.href = `/play?lang=hi` +
+                    `&user_type=guest` +
+                    `&q_type=${encodeURIComponent(question_type)}` +
+                    `&level=${encodeURIComponent(selected_level)}` +
+                    `&action=playagain`;
+                return;
+            }
+
+            // Registered user logic
+            let user = localStorage.getItem("last_user");
+            if (!user) {
                 window.location.href = '/';
                 return;
             }
-        } catch (e) {
-            window.location.href = '/';
-            return;
+
+            try {
+                user = JSON.parse(user);
+                if (!user?.id || !user?.username || user.id === "guest" || user.username === "guest") {
+                    window.location.href = '/';
+                    return;
+                }
+            } catch (e) {
+                window.location.href = '/';
+                return;
+            }
+
+            let question_type = document.getElementById('question-type').innerText;
+            window.location.href = `/play?lang=hi` +
+                `&id=${encodeURIComponent(user.id)}` +
+                `&username=${encodeURIComponent(user.username)}` +
+                `&q_type=${encodeURIComponent(question_type)}` +
+                `&level=${encodeURIComponent(selected_level)}` +
+                `&user_type=${encodeURIComponent(user_type)}` +
+                `&action=playagain`;
         }
 
-        let question_type = document.getElementById('question-type').innerText;
-        window.location.href = `/play?lang=hi` +
-            `&id=${encodeURIComponent(user.id)}` +
-            `&username=${encodeURIComponent(user.username)}` +
-            `&q_type=${encodeURIComponent(question_type)}` +
-            `&level=${encodeURIComponent(selected_level)}` +
-            `&user_type=${encodeURIComponent(user_type)}` +
-            `&action=playagain`;
-    }
-    
-    // Fireworks Animation
-    const canvas = document.getElementById('fireworksCanvas');
-    const ctx = canvas.getContext('2d');
+        // Fireworks Animation
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    const particles = [];
+        const particles = [];
 
-    function createFirework(x, y) {
-        for (let i = 0; i < 80; i++) {
-            particles.push({
-                x: x,
-                y: y,
-                speedX: Math.random() * 4 - 2,
-                speedY: Math.random() * 4 - 2,
-                color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-                life: 100
-            });
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (let i = particles.length - 1; i >= 0; i--) {
-            const p = particles[i];
-            p.x += p.speedX;
-            p.y += p.speedY;
-            p.life--;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.fill();
-
-            if (p.life <= 0) {
-                particles.splice(i, 1);
+        function createFirework(x, y) {
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    speedX: Math.random() * 4 - 2,
+                    speedY: Math.random() * 4 - 2,
+                    color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+                    life: 100
+                });
             }
         }
 
-        requestAnimationFrame(animate);
-    }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Create fireworks at intervals
-    setInterval(() => {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height * 0.5;
-        createFirework(x, y);
-    }, 700);
-    
-    const level ="<%= level %>"
-    // console.log(level ,'level');
-    if(level == 10){
-        animate();
-    }
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.life--;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
 
-    function showWinners() {
-        document.getElementById("winner-modal").style.display = "block";
-        document.getElementById("score_overlay").style.display = "block";
-    }
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
 
-    function closeModal() {
-        document.getElementById("winner-modal").style.display = "none";
-        document.getElementById("score_overlay").style.display = "none";
-    }
+            requestAnimationFrame(animate);
+        }
 
-    document.getElementById("score_overlay").addEventListener('click',()=>{
-        closeModal();
-    });
+        // Create fireworks at intervals
+        setInterval(() => {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.5;
+            createFirework(x, y);
+        }, 700);
 
-      window.addEventListener("DOMContentLoaded", () => {
-    const usernameEl = document.getElementById("username");
-    const userData = localStorage.getItem("last_user");
+        const level = "<%= level %>"
+        // console.log(level ,'level');
+        if (level == 10) {
+            animate();
+        }
 
-    if (!usernameEl) return;
 
-    // Default fallback (EJS already rendered username)
-    if (!userData) return;
+        window.addEventListener("DOMContentLoaded", () => {
+            const usernameEl = document.getElementById("username");
+            const userData = localStorage.getItem("last_user");
 
-    let user;
-    try {
-        user = JSON.parse(userData);
-    } catch {
-        return;
-    }
+            if (!usernameEl) return;
 
-    // ✅ Guest handling (MOST IMPORTANT)
-    if (
-        user.user_type === "guest" ||
-        user.id === "guest" ||
-        !user.id
-    ) {
-        usernameEl.textContent = "Guest";
-        return;
-    }
+            // Default fallback (EJS already rendered username)
+            if (!userData) return;
 
-    // ✅ Registered user
-    fetch(`/api/get-user?id=${user.id}`)
-        .then(res => res.json())
-        .then(data => {
-            const displayName =
-                data?.fullname && data.fullname.trim() !== ""
-                    ? data.fullname
-                    : data?.username || "Player";
+            let user;
+            try {
+                user = JSON.parse(userData);
+            } catch {
+                return;
+            }
 
-            usernameEl.textContent = displayName;
-        })
-        .catch(err => {
-            console.error("User fetch failed:", err);
+            // ✅ Guest handling (MOST IMPORTANT)
+            if (
+                user.user_type === "guest" ||
+                user.id === "guest" ||
+                !user.id
+            ) {
+                usernameEl.textContent = "Guest";
+                return;
+            }
+
+            // ✅ Registered user
+            fetch(`/api/get-user?id=${user.id}`)
+                .then(res => res.json())
+                .then(data => {
+                    const displayName =
+                        data?.fullname && data.fullname.trim() !== ""
+                            ? data.fullname
+                            : data?.username || "Player";
+
+                    usernameEl.textContent = displayName;
+                })
+                .catch(err => {
+                    console.error("User fetch failed:", err);
+                });
         });
-});
-</script>
-<audio id="endgameAudio" src="/audio/gamewin.wav"></audio>
+    </script>
+    <audio id="endgameAudio" src="/audio/gamewin.wav"></audio>
 
-<script>
-  window.addEventListener("load", () => {
-    const audio = document.getElementById("endgameAudio");
+    <script>
+        window.addEventListener("load", () => {
+            const level = "<%= level %>";
+            if (level == "10") {
+                const audio = document.getElementById("endgameAudio");
+                audio.currentTime = 0;
+                audio.volume = 1;
+                audio.play().catch(err => {
+                    console.log("Audio blocked:", err);
+                });
+            }
+        });
+    </script>
 
-    audio.currentTime = 0;
-    audio.volume = 1;
 
-    audio.play().catch(err => {
-      console.log("Audio blocked:", err);
-    });
-  });
-</script>
-
-
-        <!-- <script>
+    <!-- <script>
             // Now push the real page back into history
             history.pushState({}, '', location.href);
 
@@ -660,113 +654,29 @@
         </script> -->
 
 
-  
-  
-  
 
-        <style>
-    
-            /* Winner Button */
-            #btn-winner {
-                background: #d14d00;
-                color: white;
-                border: none;
-                padding: 8px 15px;
-                font-size: 1rem;
-                font-weight: 600;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
 
-            #btn-winner:hover {
-                background: #b34201;
-            }
 
-            #score_overlay{
-                position: fixed;
-                z-index: 9;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.6);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
 
-            /* Modal Styles */
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 10;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100vh;
-                background: rgba(0, 0, 0, 0.6);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                overflow: scroll;
-                /* padding: 10px; */
-            }
+    <style>
+        /* Winner Button */
+        #btn-winner {
+            background: #d14d00;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-            .modal-content {
-                background: #222;
-                margin-top: 25px;
-                padding: 20px;
-                border-radius: 10px;
-                text-align: center;
-                color: white;
-                min-width: 350px;
-                box-shadow: 0px 0px 10px white;
-                position: relative;
-                overflow: scroll;
-            }
-
-            .modal-content h2 {
-                margin-top: 0px;
-            }
-
-            .close {
-                position: absolute;
-                top: -25px;
-                right: 15px;
-                font-size: 30px;
-                cursor: pointer;
-                color: white;
-            }
-
-            /* Table Styling */
-            #winner-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 10px;
-                font-size: 0.8rem;
-            }
-
-            #winner-table th, #winner-table td {
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                padding: 10px;
-                text-align: center;
-            }
-
-            #winner-table th {
-                background: #333;
-                color: gold;
-            }
-
-            #winner-table tr:nth-child(even) {
-                background: rgba(255, 255, 255, 0.1);
-            }
-
-            #winner-table tr:hover {
-                background: rgba(255, 255, 255, 0.2);
-            }
-        </style>
-       <!-- <script>
+        #btn-winner:hover {
+            background: #b34201;
+        }
+    </style>
+    <!-- <script>
             (function () {
             // Current page ko history me lock kar do
             history.pushState(null, null, location.href);
@@ -777,23 +687,24 @@
             });
             })();
         </script> -->
-        <script>
-  // Game page par aate hi
-  history.pushState({ page: "game" }, "", location.href);
+    <script>
+        // Game page par aate hi
+        history.pushState({ page: "game" }, "", location.href);
 
-  window.addEventListener("popstate", function (event) {
-    // Yaha direct redirect mat karo, sirf back ko cancel karo
-    history.go(1);
-  });
-</script>
-<script>
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-}
-</script>
+        window.addEventListener("popstate", function (event) {
+            // Yaha direct redirect mat karo, sirf back ko cancel karo
+            history.go(1);
+        });
+    </script>
+    <script>
+        function showSection(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
 
-    </body>
+</body>
+
 </html>

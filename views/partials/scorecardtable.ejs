@@ -1,0 +1,357 @@
+<style>
+  /* ================== TABS ================== */
+  .top-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px !important;
+    padding: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .tab-btn {
+    margin-top: 0px !important;
+  }
+
+  .top-buttons .tab-btn {
+    width: 100%;
+    border: 2px solid orange;
+    border-radius: 25px;
+    background: transparent;
+    color: orange;
+    font-weight: 600;
+    height: 50px;
+    /* min-width: 240px; */
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .top-buttons .tab-btn.active {
+    background: orange;
+    color: #3d2b1f;
+  }
+
+  /* ================== COMMON ================== */
+  .container {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .section {
+    display: none;
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  .score-title {
+    font-size: 18px;
+  }
+
+  .username {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    margin: 10px 0;
+  }
+
+  /* ================== STATS ================== */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .stat-box {
+    color: orange;
+    font-size: 20px;
+  }
+
+  .stat-box span {
+    display: block;
+    color: white;
+    margin-top: 6px;
+  }
+
+  .footer-time {
+    margin-top: 20px;
+    color: orange;
+    font-size: 20px;
+  }
+
+  .footer-time span {
+    display: block;
+    color: white;
+    margin-top: 6px;
+  }
+
+  #user_rank {
+    text-align: center;
+    color: orange;
+    margin: 10px 0;
+  }
+
+  /* ================== TABLE ================== */
+  .table-scroll {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .table-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .table-scroll::-webkit-scrollbar-thumb {
+    background: orange;
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 480px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* 🔥 IMPORTANT */
+  }
+
+
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: left;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  th {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 680px) {
+    .top-buttons {
+      flex-direction: column;
+    }
+
+    .top-buttons .tab-btn {
+      width: 100%;
+    }
+  }
+
+  /* ================== MOBILE ================== */
+  @media (max-width: 500px) {
+    .top-buttons {
+      flex-direction: column;
+    }
+
+    .top-buttons .tab-btn {
+      width: 100%;
+      min-width: 140px;
+    }
+
+    table {
+      min-width: 280px;
+    }
+
+    th,
+    td {
+      font-size: 12px;
+      padding: 6px;
+    }
+  }
+
+  @media (max-width: 350px) {
+    .username {
+      font-size: 18px;
+    }
+
+    .stat-box {
+      font-size: 16px;
+    }
+
+    th,
+    td {
+      font-size: 11px;
+      padding: 4px;
+    }
+
+    .tab-btn {
+      height: 40px;
+      font-size: 12px;
+    }
+  }
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 20px;
+    max-width: 20px;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 50px;
+    max-width: 50px;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 30px;
+    max-width: 30px;
+  }
+</style>
+
+<script>
+<%
+    function formatTime(timeStr) {
+      if (!timeStr) return "-";
+
+      const parts = timeStr.split(":");
+      let h = parts[0];
+      let m = parts[1];
+      let s = parts[2];
+
+      let result = [];
+
+      if (h && h !== "00h") result.push(h);
+      if (m && m !== "00m") result.push(m);
+      if (s) result.push(s);
+
+      return result.join(":");
+    }
+    %>
+</script>
+
+<!-- ================== TABS ================== -->
+<div class="top-buttons">
+  <% if (isLoggedIn) { %>
+    <button class="tab-btn active" onclick="showSection('myScores', this)">My Scores</button>
+    <button class="tab-btn" onclick="showSection('questionsPlayed', this)">Questions Played</button>
+    <% } else { %>
+      <button class="tab-btn active" onclick="showSection('questionsPlayed', this)">Questions Played</button>
+      <% } %>
+        <button class="tab-btn" onclick="showSection('gamesPlayed', this)">Games Played</button>
+        <button class="tab-btn" onclick="showSection('timePlayed', this)">Time Played</button>
+</div>
+
+<% if (isLoggedIn) { %>
+  <!-- ================== MY SCORES ================== -->
+  <div id="myScores" class="section active">
+    <div class="container">
+      <div class="score-title">Your Score for <%= questionType %> Game</div>
+      <div class="username">
+        <%= fullname || username %>
+      </div>
+
+      <div class="stats">
+        <div class="stat-box">Total Games <span>
+            <%= game_score %>
+          </span></div>
+        <div class="stat-box">Total Questions <span>
+            <%= question_score %>
+          </span></div>
+      </div>
+
+      <div class="footer-time">
+        Total Time
+        <span>
+          <%= time_score ? formatTime(time_score) : '-' %>
+        </span>
+      </div>
+    </div>
+  </div>
+  <% } %>
+
+    <!-- ================== QUESTIONS ================== -->
+    <div id="questionsPlayed" class="section <%= isLoggedIn ? '' : 'active' %>">
+      <p id="user_rank">Your Rank : <%= userQuestionRank %>
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>🏅 Rank</th>
+              <th><i class="fa-solid fa-user"></i> Username</th>
+              <th>🚀 Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% question_played.forEach(s=> { %>
+              <tr>
+                <td>#<%= s.rank %>
+                </td>
+                <td>
+                  <%= s.fullname || s.username %>
+                </td>
+                <td>
+                  <%= s.question_score %>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================== GAMES ================== -->
+    <div id="gamesPlayed" class="section">
+      <p id="user_rank">Your Rank : <%= userGameRank %>
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>🏅 Rank</th>
+              <th><i class="fa-solid fa-user"></i> Username</th>
+              <th>🚀 Games</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% game_played.forEach(s=> { %>
+              <tr>
+                <td>#<%= s.rank %>
+                </td>
+                <td>
+                  <%= s.fullname || s.username %>
+                </td>
+                <td>
+                  <%= s.game_played %>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================== TIME ================== -->
+    <div id="timePlayed" class="section">
+      <p id="user_rank">Your Rank : <%= userTimeRank %>
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>🏅 Rank</th>
+              <th><i class="fa-solid fa-user"></i> Username</th>
+              <th>⏰ Play Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% time_played.forEach(s=> { %>
+              <tr>
+                <td>#<%= s.rank %>
+                </td>
+                <td>
+                  <%= s.fullname || s.username %>
+                </td>
+                <td>
+                  <%= s.total_play_time ? formatTime(s.total_play_time) : '-' %>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>

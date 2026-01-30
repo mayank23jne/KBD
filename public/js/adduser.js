@@ -243,14 +243,14 @@ function handleCredentialResponse(response) {
 }
 
 async function shareAppLink() {
-  const shareMessage =
-    'Hey! I am playing KBDS – an amazing Jain quiz game.\n\n' +
-    'Download the app from Play Store:\n' +
-    'https://play.google.com/store/apps/details?id=com.pepcus.kbds';
+  const shareMessage = 'Hey! I am playing KBDS – an amazing Jain quiz game.\nDownload the app from Play Store:';
+  const shareUrl = 'https://play.google.com/store/apps/details?id=com.pepcus.kbds';
+  const fullMessage = `${shareMessage}\n${shareUrl}`;
 
   const payload = {
     type: 'share',
     message: shareMessage,
+    url: shareUrl, // Separate URL for the bridge to handle
     image: null,
   };
 
@@ -263,16 +263,26 @@ async function shareAppLink() {
 
   // 🌐 Web Share API fallback
   if (navigator.share) {
-    await navigator.share({
-      title: 'KBDS Game',
-      text: shareMessage,
-    });
-    return;
+    try {
+      await navigator.share({
+        title: 'KBDS Game',
+        text: shareMessage,
+        url: shareUrl,
+      });
+      return;
+    } catch (err) {
+      console.log('Share cancelled or failed:', err);
+      if (err.name === 'AbortError') return; // Don't fallback to clipboard if cancelled
+    }
   }
 
   // 📋 Clipboard fallback
-  await navigator.clipboard.writeText(shareMessage);
-  showToast('Link copied to clipboard');
+  try {
+    await navigator.clipboard.writeText(fullMessage);
+    showToast('Link copied to clipboard');
+  } catch (err) {
+    console.error('Clipboard failed:', err);
+  }
 }
 
 function startEditUsername() {
