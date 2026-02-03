@@ -361,6 +361,7 @@ if (question_type === 'Chhahdhala') {
 }
 
 function changeLanguage() {
+  if (questionId === 0) return; // Prevent call if no question is loaded
   let price = slots[slot];
   // Lock Buttons and Lifelines
   lockButtons(buttons);

@@ -1,6 +1,4 @@
 
-
-
 // for mysql database
 
 const express = require('express');
@@ -45,7 +43,9 @@ router.post('/register', async (req, res) => {
         req.session.user = {
             id: user.id,
             username: user_name,
-            user_type: user.user_type
+            user_type: user.user_type || 'registered',
+            fullname: user.fullname,
+            email: user.email
         };
         req.session.language = user.language_select;
 
@@ -143,7 +143,9 @@ router.post('/login', async (req, res) => {
         req.session.user = {
             id: user.id,
             username: user.username,
-            user_type: user.user_type
+            user_type: user.user_type || 'registered',
+            fullname: user.fullname,
+            email: user.email
         };
         req.session.language = user.language_select;
 

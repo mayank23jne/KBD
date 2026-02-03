@@ -4,9 +4,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
+const pool = require('./db'); // Use pool from ./db
 const User = require('./models/User');
 const Topscore = require('./models/Topscore');
-const mysql = require('mysql2'); // Use mysql2 instead of mongoose
 
 require('dotenv/config');
 
@@ -182,8 +182,7 @@ app.get('/api/scorecard', async (req, res) => {
     if (
       !userData ||
       !userData.id ||
-      !userData.username ||
-      !userData.user_type
+      !userData.username
     ) {
       return res.redirect('/login');
     }
@@ -191,19 +190,19 @@ app.get('/api/scorecard', async (req, res) => {
     // 2️⃣ Extract user data safely
     const id = userData.id?.toString().trim();
     const username = userData.username?.trim() || 'Guest';
-    const user_type = userData.user_type?.trim() || 'guest';
+    const user_type = userData.user_type?.trim() || 'registered';
     // 3️⃣ Fetch fullname from DB directly
     let userFullname = username;
-    try {
-      const [rows] = await db
-        .promise()
-        .query('SELECT fullname FROM users WHERE id = ? LIMIT 1', [id]);
+    console.log('🔍 SCORECARD - User ID:', id, 'Username:', username, 'User Type:', user_type);
 
+    try {
+      const [rows] = await pool.query('SELECT fullname FROM users WHERE id = ? LIMIT 1', [id]);
       if (rows.length > 0 && rows[0].fullname) {
         userFullname = rows[0].fullname;
       }
+      console.log('🔍 SCORECARD - Fullname resolved:', userFullname);
     } catch (err) {
-      console.error('Error fetching fullname:', err);
+      console.error('⚠️ SCORECARD - Error fetching fullname (check if column exists):', err.message);
     }
 
     // 4️⃣ Extract and validate query params
@@ -265,7 +264,9 @@ app.get('/api/scorecard', async (req, res) => {
         question_type,
       );
       userQuestionRank = userQuestionRankData?.rank || '-';
-    } catch { }
+    } catch (err) {
+      console.error('⚠️ SCORECARD - Error fetching Question stats:', err.message);
+    }
 
     // 8️⃣ Fetch Game stats
     try {
@@ -280,7 +281,9 @@ app.get('/api/scorecard', async (req, res) => {
         question_type,
       );
       userGameRank = userGameRankData?.rank || '-';
-    } catch { }
+    } catch (err) {
+      console.error('⚠️ SCORECARD - Error fetching Game stats:', err.message);
+    }
 
     // 9️⃣ Fetch Time stats
     try {
@@ -295,7 +298,9 @@ app.get('/api/scorecard', async (req, res) => {
         question_type,
       );
       userTimeRank = userTimeRankData?.rank || '-';
-    } catch { }
+    } catch (err) {
+      console.error('⚠️ SCORECARD - Error fetching Time stats:', err.message);
+    }
 
     // 10️⃣ Render scorecard safely
     res.render('scorecard', {
@@ -317,13 +322,15 @@ app.get('/api/scorecard', async (req, res) => {
       time_played,
       userTimeRank,
     });
-  } catch {
-    res.status(500).send('Server Error - Check logs');
-    res.status(500).send(`
-    <h1>Server Error</h1>
-    <pre>${err.message}</pre>
-    <pre>${err.stack}</pre>
-  `);
+  } catch (err) {
+    console.error('❌ SCORECARD ERROR:', err);
+    if (!res.headersSent) {
+      res.status(500).send(`
+          <h1>Server Error</h1>
+          <pre>${err.message}</pre>
+          <pre>${err.stack}</pre>
+        `);
+    }
   }
 });
 app.get('/api/top-score', async (req, res) => {
@@ -331,6 +338,8 @@ app.get('/api/top-score', async (req, res) => {
     const user = req.session.user || {};
     const user_id = user.id || null;
     const questionType = req.query.question_type || 'Basic';
+    console.error('🏆 TOP SCORE - User ID:', user_id, 'Question Type:', questionType);
+    console.error('🏆 TOP SCORE - User Session Data:', user);
 
     const isLoggedIn = !!user_id;
 
@@ -344,6 +353,10 @@ app.get('/api/top-score', async (req, res) => {
     const timeData = isLoggedIn
       ? await Topscore.getUserTimePlayCount(user_id, questionType)
       : { total_play_time: '00h:00m:00s' };
+
+    console.error("Question Data:", questionData);
+    console.error("Game Data:", gameData);
+    console.error("Time Data:", timeData);
 
     // ===== RANKED TABLES =====
     const question_played =
@@ -365,9 +378,11 @@ app.get('/api/top-score', async (req, res) => {
     // ===== USER FULLNAME RESOLVE =====
     let userFullname = user.fullname || null;
 
+    console.error("Initial User Fullname:", userFullname);
+    console.error("Is Logged In:", isLoggedIn);
+
     if (!userFullname && isLoggedIn) {
-      const [rows] = await db
-        .promise()
+      const [rows] = await pool
         .query('SELECT fullname, username FROM users WHERE id = ? LIMIT 1', [
           user_id,
         ]);
@@ -418,28 +433,7 @@ app.get('/api/top-score', async (req, res) => {
   }
 });
 
-// Connect to db
-// mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () =>
-//     console.log('Connected to DB')
-// );
-
-// Connect to MySQL
-const db = mysql.createConnection({
-  host: process.env.DB_HOST, // MySQL host (e.g., localhost)
-  user: process.env.DB_USER, // MySQL username
-  password: process.env.DB_PASS, // MySQL password
-  database: process.env.DB_NAME, // MySQL database name
-  port: process.env.DB_PORT,
-});
-
-// Connect to MySQL Database
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL:', err.message);
-    return;
-  }
-  // console.log('✅ Connected to MySQL');
-});
+// Connection handled by pool in db.js
 
 // Listen to server
 app.listen(process.env.PORT, () =>

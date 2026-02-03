@@ -203,24 +203,11 @@
 </style>
 
 <script>
-<%
-    function formatTime(timeStr) {
-      if (!timeStr) return "-";
-
-      const parts = timeStr.split(":");
-      let h = parts[0];
-      let m = parts[1];
-      let s = parts[2];
-
-      let result = [];
-
-      if (h && h !== "00h") result.push(h);
-      if (m && m !== "00m") result.push(m);
-      if (s) result.push(s);
-
-      return result.join(":");
-    }
-    %>
+<% function formatTime(timeStr) {
+    if (!timeStr) return "-"; const parts = timeStr.split(":"); let h = parts[0]; let
+      m = parts[1]; let s = parts[2]; let result = []; if (h && h !== "00h") result.push(h); if (m && m !== "00m") result.push(m);
+    if (s) result.push(s); return result.join(":");
+  } %>
 </script>
 
 <!-- ================== TABS ================== -->

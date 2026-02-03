@@ -237,7 +237,7 @@ class Topscore {
                         play_level,
                         question_type
                     FROM scorecard
-                    WHERE question_type = "Basic"
+                    WHERE question_type = ?
                     AND user_type != "guest"
                     GROUP BY user_id, username, user_type, question_type, play_time, play_level
                     ORDER BY play_level DESC, play_time ASC
