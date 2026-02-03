@@ -413,6 +413,7 @@ app.get('/api/top-score', async (req, res) => {
       userTimeRank: userTimeRank?.rank || '-',
     });
   } catch (err) {
+    res.send(err);
     console.error('❌ TOP SCORE ERROR:', err);
 
     res.render('top_rankers', {
