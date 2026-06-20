@@ -15,7 +15,12 @@ router.post('/create-order', async (req, res) => {
     const order = await razorpay.orders.create({
       amount: amount * 100, // INR to paise
       currency: 'INR',
-      payment_capture: 1
+      payment_capture: 1,
+      notes: {
+        "App Name": "KBDS",
+        "App ID": "com.kbds.app",
+        "Platform": "App"
+      }
     });
 
     res.json({

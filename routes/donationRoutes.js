@@ -6,35 +6,40 @@ const RazorpayLib = require('razorpay');
 const Razorpay = RazorpayLib.default ? RazorpayLib.default : RazorpayLib;
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
+    key_id: process.env.RAZORPAY_KEY,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
 router.post('/razorpay/create-order', async (req, res) => {
     // console.log(process.env.RAZORPAY_KEY);
-  try {
-    const { amount } = req.body;
+    try {
+        const { amount } = req.body;
 
-    const order = await razorpay.orders.create({
-      amount: amount * 100, // INR to paise
-      currency: 'INR',
-      payment_capture: 1
-    });
+        const order = await razorpay.orders.create({
+            amount: amount * 100, // INR to paise
+            currency: 'INR',
+            payment_capture: 1,
+            notes: {
+                "App Name": "KBDS",
+                "App ID": "com.kbds.app",
+                "Platform": "App"
+            }
+        });
 
-    res.json({
-      success: true,
-      order
-    });
-  } catch (err) {
-    // console.log(err,"errerere")
-    res.status(500).json({ success: false, error: err.message });
-  }
+        res.json({
+            success: true,
+            order
+        });
+    } catch (err) {
+        // console.log(err,"errerere")
+        res.status(500).json({ success: false, error: err.message });
+    }
 });
 
 // Save donation after successful payment
 router.post('/save-donation', async (req, res) => {
     try {
-        const { payment_id, name, email, mobile, amount , status } = req.body;
+        const { payment_id, name, email, mobile, amount, status } = req.body;
 
         // Validation
         if (!payment_id) {
