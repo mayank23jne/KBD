@@ -295,6 +295,12 @@
           }
 
           // 2️⃣ Open Razorpay with ORDER ID
+          const prefillData = {
+            name: user.name || '',
+          };
+          if (user.email) prefillData.email = user.email;
+          if (user.mobile) prefillData.contact = user.mobile;
+
           const options = {
             key: atob(RAZORPAY_KEY),
             amount: orderData.order.amount,
@@ -304,15 +310,44 @@
             order_id: orderData.order.id, // ✅ MOST IMPORTANT
             image: '/img/LogoBG.png',
 
+            // Explicitly config blocks to ensure UPI, QR, PhonePe, and other methods are visible
+            config: {
+              display: {
+                blocks: {
+                  upi: {
+                    name: "Pay via UPI / QR",
+                    instruments: [
+                      { method: "upi" }
+                    ]
+                  },
+                  wallets: {
+                    name: "Wallets (PhonePe, Paytm, etc.)",
+                    instruments: [
+                      { method: "wallet" }
+                    ]
+                  },
+                  other: {
+                    name: "Other Payment Modes",
+                    instruments: [
+                      { method: "card" },
+                      { method: "netbanking" },
+                      { method: "paylater" },
+                      { method: "emi" }
+                    ]
+                  }
+                },
+                sequence: ["block.upi", "block.wallets", "block.other"],
+                preferences: {
+                  show_default_blocks: true
+                }
+              }
+            },
+
             handler: function (response) {
               onSuccess(response);
             },
 
-            prefill: {
-              name: user.name || '',
-              email: user.email || '',
-              contact: user.mobile || '',
-            },
+            prefill: prefillData,
 
             theme: {
               color: '#5762f8',
