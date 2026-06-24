@@ -295,11 +295,13 @@
           }
 
           // 2️⃣ Open Razorpay with ORDER ID
+          // Razorpay STRICTLY requires a valid email and phone number to show UPI and Wallet options.
+          // If the user doesn't provide them, we pass dummy values to ensure all payment methods are visible.
           const prefillData = {
-            name: user.name || '',
+            name: user.name || 'Anonymous',
+            email: user.email || 'support@kbds.com',
+            contact: user.mobile || '9999999999'
           };
-          if (user.email) prefillData.email = user.email;
-          if (user.mobile) prefillData.contact = user.mobile;
 
           const options = {
             key: atob(RAZORPAY_KEY),
